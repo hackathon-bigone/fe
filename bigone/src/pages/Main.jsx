@@ -6,7 +6,7 @@ const Main = () => {
   return (
     <M.Container>
       <M.Header></M.Header>
-    </M.Container>
+    </M.Container> /* 하하 */
   );
 };
 
