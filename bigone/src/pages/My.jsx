@@ -9,6 +9,22 @@ const My = () => {
     navigate(`/home`);
   };
 
+  const goPur = () => {
+    navigate(`/purchase`);
+  };
+
+  const goRec = () => {
+    navigate(`/recipe`);
+  };
+
+  const goRef = () => {
+    navigate(`/refrigerator`);
+  };
+
+  const goWro = () => {
+    navigate(`/my/wrote/recipe`);
+  };
+
   return (
     <M.Container>
       <M.Header>
@@ -33,7 +49,7 @@ const My = () => {
       <M.Activity>
         <M.ATitle>나의 활동 내역</M.ATitle>
         <M.AList>
-          <M.Write>
+          <M.Write onClick={goWro}>
             <img
               src={`${process.env.PUBLIC_URL}/images/pencil.png`}
               alt="write"

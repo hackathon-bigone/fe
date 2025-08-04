@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as H from "../styles/StyledHome";
+import * as R from "../styles/StyledRefri";
 
-const Home = () => {
+const Refri = () => {
   const navigate = useNavigate();
 
   const goMy = () => {
     navigate(`/my`);
+  };
+
+  const goHome = () => {
+    navigate(`/home`);
   };
 
   const goPur = () => {
@@ -17,15 +21,11 @@ const Home = () => {
     navigate(`/recipe`);
   };
 
-  const goRef = () => {
-    navigate(`/refrigerator`);
-  };
-
   return (
-    <H.Container>
-      <H.Header>
-        <H.Title>로고</H.Title>
-        <H.Icons>
+    <R.Container>
+      <R.Header>
+        <R.Title>로고</R.Title>
+        <R.Icons>
           <img
             id="scrap"
             src={`${process.env.PUBLIC_URL}/images/scrap.svg`}
@@ -36,42 +36,42 @@ const Home = () => {
             src={`${process.env.PUBLIC_URL}/images/bar.svg`}
             alt="bar"
           />
-        </H.Icons>
-      </H.Header>
+        </R.Icons>
+      </R.Header>
 
-      <H.Nav>
-        <H.NHome>
-          <img src={`${process.env.PUBLIC_URL}/images/home_b.svg`} alt="home" />
+      <R.Nav>
+        <R.NHome onClick={goHome}>
+          <img src={`${process.env.PUBLIC_URL}/images/home_w.svg`} alt="home" />
           <div>홈</div>
-        </H.NHome>
-        <H.NRefri onClick={goRef}>
+        </R.NHome>
+        <R.NRefri>
           <img
-            src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
+            src={`${process.env.PUBLIC_URL}/images/refrigerator_b.svg`}
             alt="refrigerator"
           />
           <div>냉장고</div>
-        </H.NRefri>
-        <H.NRecipe onClick={goRec}>
+        </R.NRefri>
+        <R.NRecipe onClick={goRec}>
           <img
             src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
             alt="recipe"
           />
           <div>레시피</div>
-        </H.NRecipe>
-        <H.NPur onClick={goPur}>
+        </R.NRecipe>
+        <R.NPur onClick={goPur}>
           <img
             src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`}
             alt="purchase"
           />
           <div>공동구매</div>
-        </H.NPur>
-        <H.NMy onClick={goMy}>
+        </R.NPur>
+        <R.NMy onClick={goMy}>
           <img src={`${process.env.PUBLIC_URL}/images/my_w.svg`} alt="my" />
           <div>마이</div>
-        </H.NMy>
-      </H.Nav>
-    </H.Container>
+        </R.NMy>
+      </R.Nav>
+    </R.Container>
   );
 };
 
-export default Home;
+export default Refri;

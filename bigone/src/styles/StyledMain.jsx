@@ -10,7 +10,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  width: 393px;
+  width: 390px;
   flex-shrink: 0;
   padding-bottom: 200px;
 `;
