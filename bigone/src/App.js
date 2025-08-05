@@ -9,6 +9,8 @@ import Recipe from "./pages/Recipe";
 import Refri from "./pages/Refri";
 import Wrote from "./pages/Wrote";
 import PurHistory from "./pages/PurHistory";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <GlobalStyle />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/my" element={<My />} />
         <Route path="/home" element={<Home />} />
         <Route path="/purchase" element={<Purchase />} />
