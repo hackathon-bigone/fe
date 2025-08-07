@@ -19,6 +19,12 @@ const Wrote = () => {
     setIsScrapped((prev) => !prev);
   };
 
+  const [isHeart, setIsHeart] = useState(false);
+
+  const handleHeart = () => {
+    setIsHeart((prev) => !prev);
+  };
+
   return (
     <W.Container>
       <W.Header>
@@ -57,8 +63,11 @@ const Wrote = () => {
               <W.Icons>
                 <img
                   id="heart"
-                  src={`${process.env.PUBLIC_URL}/images/heart_w.svg`}
+                  src={`${process.env.PUBLIC_URL}/images/${
+                    isHeart ? "heart_b.png" : "heart_w.svg"
+                  }`}
                   alt="heart"
+                  onClick={handleHeart}
                 />
                 <div id="hnum">105</div>
                 <img
