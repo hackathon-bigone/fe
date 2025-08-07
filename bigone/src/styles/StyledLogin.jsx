@@ -45,11 +45,11 @@ export const Input = styled.div`
   input {
     width: 280px;
     border: none;
-    color: #969696;
+    color: #000;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
   }
 

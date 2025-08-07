@@ -49,6 +49,7 @@ export const Icons = styled.div`
 export const InputCon = styled.div`
   padding: 10px 30px;
   flex-direction: row;
+  position: relative;
 
   #title {
     color: #000;
@@ -68,19 +69,28 @@ export const InputCon = styled.div`
     flex-shrink: 0;
     border-radius: 5px;
     background: rgba(196, 196, 196, 0.3);
-    color: #969696;
+    color: #000;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
-    border: 1px solid rgba(196, 196, 196, 0.3);
+    border: 1px solid #fff;
   }
 
   input:focus {
     outline: none;
     box-shadow: none;
     border-color: #ff4f26;
+  }
+
+  img {
+    position: absolute;
+    right: 50px;
+    top: 58px;
+    width: 21.532px;
+    height: 19.5px;
+    flex-shrink: 0;
   }
 
   #inputDetail {
@@ -110,8 +120,6 @@ export const InputCon = styled.div`
     line-height: normal;
   }
 `;
-
-export const IdChechBtn = styled.div``;
 
 export const SignUpBtn = styled.div`
   position: fixed;
