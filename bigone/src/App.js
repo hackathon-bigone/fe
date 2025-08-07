@@ -5,6 +5,8 @@ import Main from "./pages/Main";
 import My from "./pages/My";
 import Home from "./pages/Home.";
 import Purchase from "./pages/Purchase";
+import P_Detail from "./pages/PurDetail";
+import PurWrite from "./pages/PurWrite";
 import Recipe from "./pages/Recipe";
 import Refri from "./pages/Refri";
 import Wrote from "./pages/Wrote";
@@ -22,6 +24,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/my" element={<My />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/purchase/detail" element={<P_Detail />} />
+        <Route path="/purchase/write" element={<PurWrite />} />
         <Route path="/purchase" element={<Purchase />} />
         <Route path="/recipe" element={<Recipe />} />
         <Route path="/refrigerator" element={<Refri />} />

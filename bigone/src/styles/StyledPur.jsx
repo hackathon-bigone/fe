@@ -26,32 +26,19 @@ export const Header = styled.div`
 `;
 
 export const Title = styled.div`
-  margin-top: 6px;
   color: #000;
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.8px; /*자간*/
 `;
 
 export const Icons = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-
-  #scrap {
-    width: 23px;
-    height: 22px;
-    flex-shrink: 0;
-  }
-
-  #bar {
-    width: 21px;
-    height: 18px;
-    flex-shrink: 0;
-  }
 `;
 
 export const Nav = styled.div`
