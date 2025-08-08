@@ -4,16 +4,15 @@ import * as P from "../styles/StyledPurD";
 
 const P_Detail = () => {
   const navigate = useNavigate();
-
-  //   const goMy = () => {
-  //     navigate(`/my`);
-  //   };
+  const goPur = () => {
+    navigate(`/purchase`);
+  };
 
   return (
     <P.Container>
       <P.Header>
         <P.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goPur} />
           <P.Title>공동구매 상세</P.Title>
         </P.Icons>
         <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" />
