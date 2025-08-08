@@ -1,56 +1,116 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurW.jsx";
+import Modal from "./Modal.jsx";
 
 const PurWrite = () => {
   const navigate = useNavigate();
 
-  const goMy = () => {
-    navigate(`/my`);
+  const goPur = () => {
+    navigate(`/purchase`);
   };
 
-  const goHome = () => {
-    navigate(`/home`);
+  const [isOpen, setIsOpen] = useState(false);
+  const modalOpen = () => {
+    setIsOpen(true);
+  };
+  const modalClose = () => {
+    setIsOpen(false);
   };
 
-  const goRec = () => {
-    navigate(`/recipe`);
+  const fileInputRef = useRef(null);
+  const [pic, setPic] = useState(null);
+
+  const [title, setTitle] = useState("");
+  const [member, setMember] = useState("");
+  const [detail, setDetail] = useState("");
+  const [links, setLinks] = useState([""]);
+
+  const isActive = title.length > 0 && member.length > 0 && detail.length > 0 && links.every((link) => link.trim().length > 0); // 모든 공동구매 링크가 채워져야 동작하도록 구현
+
+  const onClickAddLinkBtn = () => {
+    setLinks([...links, ""]);
   };
 
-  const goRef = () => {
-    navigate(`/refrigerator`);
+  const handleInPicClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPic(file);
+    }
   };
 
   return (
     <P.Container>
       <P.Header>
         <P.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
           <P.Title>공동구매 글쓰기</P.Title>
         </P.Icons>
-        <img id="out" src={`${process.env.PUBLIC_URL}/images/Out.svg`} alt="out" />
       </P.Header>
       <P.Content>
         <P.InputWrapper>
           <P.InTitle>대표사진</P.InTitle>
-          <P.InPic>
-            <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
-            <p>게시물의 대표 사진을 업로드해 주세요.</p>
+          <P.InPic onClick={handleInPicClick} style={{ cursor: "pointer" }}>
+            {pic ? (
+              <img src={URL.createObjectURL(pic)} alt="Selected" style={{ width: 350, height: 350, objectFit: "cover", borderRadius: 5 }} />
+            ) : (
+              <>
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
+                <p>게시물의 대표 사진을 업로드해 주세요.</p>
+              </>
+            )}
           </P.InPic>
+          <input type="file" accept="image/*" style={{ display: "none" }} ref={fileInputRef} onChange={handleFileChange} />
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>제목</P.InTitle>
-          <P.Input></P.Input>
+          <P.Input value={title} onChange={(e) => setTitle(e.target.value)}></P.Input>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>모집인원</P.InTitle>
-          <P.Input placeholder="0명"></P.Input>
+          <P.Input placeholder="0명" value={member} onChange={(e) => setMember(e.target.value)}></P.Input>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>상세 설명</P.InTitle>
-          <P.Textarea></P.Textarea>
+          <P.Textarea value={detail} onChange={(e) => setDetail(e.target.value)}></P.Textarea>
         </P.InputWrapper>
+
+        {links.map((linkValue, index) => (
+          <P.LinkWrapper>
+            {index === 0 && <P.InTitle>공동구매 링크</P.InTitle>}
+            <P.Input
+              key={index}
+              value={linkValue}
+              onChange={(e) => {
+                const newLinks = [...links];
+                newLinks[index] = e.target.value;
+                setLinks(newLinks);
+              }}
+            />
+          </P.LinkWrapper>
+        ))}
+        <P.AddLinkBtn onClick={onClickAddLinkBtn}>
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`} alt="plus" />
+          <div>링크 추가</div>
+        </P.AddLinkBtn>
+        <P.UploadBtn style={{ background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }}>게시물 업로드</P.UploadBtn>
       </P.Content>
+      <Modal
+        title="게시물 작성을 그만둘까요?"
+        content="게시물 작성 페이지를 벗어나면 작성된 내용은 저장되지 않고 사라집니다."
+        isOpen={isOpen}
+        onClose={modalClose}
+        onConfirm={() => {
+          modalClose();
+          goPur();
+        }}
+      ></Modal>
     </P.Container>
   );
 };
