@@ -16,8 +16,15 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
+  /* 스크롤 만들기 위해 추가 */
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+
   height: 80px;
-  width: 100%;
+  width: 393px;
   display: flex;
   flex-direction: row;
   padding: 20px;
@@ -54,11 +61,13 @@ export const Icons = styled.div`
 `;
 
 export const Content = styled.div`
+  margin-top: 60px;
   padding: 20px;
 
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
+  }
 `;
 
 export const Pic = styled.div`
