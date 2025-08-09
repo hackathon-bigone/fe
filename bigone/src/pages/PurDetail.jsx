@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurD";
+import BottomSheet from "./BottomSheet";
 
 const P_Detail = () => {
   const navigate = useNavigate();
   const goPur = () => {
     navigate(`/purchase`);
   };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <P.Container>
@@ -53,11 +56,12 @@ const P_Detail = () => {
           <p>공동구매 링크</p>
           <a href="https://open.kakao.com/o/szqBpBlh">https://open.kakao.com/o/szqBpBlh</a>
         </P.PostURL>
-        <P.Comment>
+        <P.Comment onClick={() => setIsOpen(true)}>
           <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
           <div id="comment_cnt">21</div>
         </P.Comment>
       </P.Content>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}></BottomSheet>
     </P.Container>
   );
 };

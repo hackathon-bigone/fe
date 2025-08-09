@@ -16,8 +16,15 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
+  /* 스크롤 만들기 위해 추가 */
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+
   height: 80px;
-  width: 100%;
+  width: 393px;
   display: flex;
   flex-direction: row;
   padding: 17px; /* 아이콘 여백 조절으로 인해 변경 */
@@ -42,7 +49,14 @@ export const Icons = styled.div`
 `;
 
 export const Content = styled.div`
+  margin-top: 60px;
   padding: 20px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const InputWrapper = styled.div`
