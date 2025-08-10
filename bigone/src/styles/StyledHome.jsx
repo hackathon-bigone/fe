@@ -21,19 +21,19 @@ export const Header = styled.div`
   display: flex;
   flex-direction: row;
   padding: 20px;
-  align-items: end;
+  align-items: center;
   justify-content: space-between;
 `;
 
 export const Title = styled.div`
-  margin-top: 6px;
-  color: #000;
-  font-family: Pretendard;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.8px;
+  display: flex;
+  align-items: center;
+
+  #logo {
+    width: 91px;
+    height: 32px;
+    flex-shrink: 0;
+  }
 `;
 
 export const Icons = styled.div`
@@ -52,6 +52,238 @@ export const Icons = styled.div`
     height: 18px;
     flex-shrink: 0;
   }
+`;
+
+export const Up = styled.div`
+  width: 390px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin-top: 5px;
+`;
+
+export const Date = styled.div`
+  width: 390px;
+  text-align: left;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.8px;
+`;
+
+export const Box = styled.div`
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 200px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(255, 79, 38, 0.1);
+`;
+
+export const BUp = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+
+  #detail {
+    color: #000;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  #product {
+    color: #000;
+    text-align: right;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+`;
+
+export const BDown = styled.div`
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+
+  img {
+    width: 109.712px;
+    height: 109.712px;
+    transform: scaleX(-1) rotate(10deg); /* hover 시 회전 각도 변경 */
+    flex-shrink: 0;
+    margin-left: 7px;
+  }
+
+  #date {
+    color: #ff4f26;
+    font-family: Pretendard;
+    font-size: 130px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: -16px;
+  }
+`;
+
+export const Popular = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  width: 390px;
+  align-items: center;
+`;
+
+export const PTitle = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.8px;
+  width: 390px;
+  padding-left: 20px;
+  text-align: left;
+`;
+
+export const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 6px;
+`;
+
+export const Component = styled.div`
+  width: 390px;
+  padding: 10px 20px 10px 20px;
+  display: flex;
+  flex-direction: row;
+  justity-content: center;
+  align-items: center;
+`;
+
+export const Top = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+`;
+
+export const PDetail = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 341px;
+`;
+
+export const Image = styled.div`
+  margin-left: 21px;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+`;
+
+export const Detail = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+export const CUp = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 20px;
+`;
+
+export const CTitle = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  width: 167px;
+`;
+
+export const Scrap = styled.div`
+  width: 23px;
+  height: 22px;
+  flex-shrink: 0;
+`;
+
+export const Down = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const Icon = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  #heart {
+    width: 17px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  #comment {
+    margin-left: 10px;
+    width: 17px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  #hnum {
+    margin-left: 5px;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  #cnum {
+    margin-left: 5px;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+`;
+
+export const CDate = styled.div`
+  color: #000;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 `;
 
 export const Nav = styled.div`

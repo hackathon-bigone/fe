@@ -13,6 +13,7 @@ import Wrote from "./pages/Wrote";
 import PurHistory from "./pages/PurHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Menu from "./pages/Menu";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/refrigerator" element={<Refri />} />
         <Route path="/my/wrote/recipe" element={<Wrote />} />
         <Route path="/my/wrote/purchase" element={<PurHistory />} />
+        <Route path="/menu" element={<Menu />} />
       </Routes>
     </BrowserRouter>
   );
