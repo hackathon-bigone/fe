@@ -14,6 +14,9 @@ import PurHistory from "./pages/PurHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Menu from "./pages/Menu";
+import Edit from "./pages/Edit";
+import Nick from "./pages/NickEdit";
+import Password from "./pages/Password";
 
 function App() {
   return (
@@ -33,6 +36,9 @@ function App() {
         <Route path="/my/wrote/recipe" element={<Wrote />} />
         <Route path="/my/wrote/purchase" element={<PurHistory />} />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/my/edit" element={<Edit />} />
+        <Route path="/my/edit/nickname" element={<Nick />} />
+        <Route path="/my/edit/password" element={<Password />} />
       </Routes>
     </BrowserRouter>
   );

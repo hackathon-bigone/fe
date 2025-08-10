@@ -25,6 +25,14 @@ const My = () => {
     navigate(`/my/wrote/recipe`);
   };
 
+  const goEdit = () => {
+    navigate(`/my/edit`);
+  };
+
+  const goPw = () => {
+    navigate(`/my/edit/password`);
+  };
+
   return (
     <M.Container>
       <M.Header>
@@ -42,7 +50,9 @@ const My = () => {
         <M.Image></M.Image>
       </M.Profile>
       <M.Button>
-        <div id="edit">프로필 수정</div>
+        <div id="edit" onClick={goEdit}>
+          프로필 수정
+        </div>
         <div id="logout">로그아웃</div>
       </M.Button>
 
@@ -109,21 +119,21 @@ const My = () => {
           <img src={`${process.env.PUBLIC_URL}/images/home_w.svg`} alt="home" />
           <div>홈</div>
         </M.NHome>
-        <M.NRefri>
+        <M.NRefri onClick={goRef}>
           <img
             src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
             alt="refrigerator"
           />
           <div>냉장고</div>
         </M.NRefri>
-        <M.NRecipe>
+        <M.NRecipe onClick={goRec}>
           <img
             src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
             alt="recipe"
           />
           <div>레시피</div>
         </M.NRecipe>
-        <M.NPur>
+        <M.NPur onClick={goPur}>
           <img
             src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`}
             alt="purchase"
