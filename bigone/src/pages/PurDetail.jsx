@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurD";
-import BottomSheet from "./BottomSheet";
+import BottomSheet from "../pages/components/BottomSheet";
 
 const P_Detail = () => {
   const navigate = useNavigate();

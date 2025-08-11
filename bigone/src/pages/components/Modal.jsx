@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import * as P from "../styles/StyledPurW.jsx";
+import * as P from "../../styles/StyledPurW";
 
 const Modal = ({ isOpen, onClose, onConfirm, title, content }) => {
   if (!isOpen) return null;

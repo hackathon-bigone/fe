@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurW.jsx";
-import Modal from "./Modal.jsx";
+import Modal from "../pages/components/Modal.jsx";
 
 const PurWrite = () => {
   const navigate = useNavigate();
@@ -92,7 +92,13 @@ const PurWrite = () => {
                 newLinks[index] = e.target.value;
                 setLinks(newLinks);
               }}
+              // style={{ width: index > 0 ? "300px" : "350px" }}
             />
+            {/* {index > 0 && (
+              <buttom>
+                <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Trash.svg`} alt="plus" />
+              </buttom>
+            )} */}
           </P.LinkWrapper>
         ))}
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
