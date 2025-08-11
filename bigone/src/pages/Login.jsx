@@ -29,7 +29,9 @@ const Login = () => {
 
   return (
     <L.Container>
-      <L.Logo>순삭</L.Logo>
+      <L.Logo>
+        <img src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+      </L.Logo>
 
       <L.Input>
         <img src={`${process.env.PUBLIC_URL}/images/Id.svg`} />

@@ -18,13 +18,12 @@ export const Container = styled.div`
 `;
 
 export const Logo = styled.div`
-  color: #ff4f26;
-  font-family: Pretendard;
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 800;
-  line-height: normal;
-  margin: 60px;
+  img {
+    width: 151px;
+    height: 53px;
+    margin-top: 160px;
+    margin-bottom: 50px;
+  }
 `;
 
 export const Input = styled.div`

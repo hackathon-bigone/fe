@@ -108,11 +108,11 @@ export const Input = styled.input`
   width: 350px;
   height: 50px;
   flex-shrink: 0;
+
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
   padding: 15px;
-
   color: #000;
   font-family: Pretendard;
   font-size: 15px;
