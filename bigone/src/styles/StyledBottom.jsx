@@ -19,7 +19,6 @@ export const Overlay = styled.div`
 `;
 
 export const BottomSheet = styled.div`
-  display: relative;
   position: fixed;
   bottom: 0;
   background-color: #fff;
@@ -43,6 +42,7 @@ export const CommentList = styled.div`
   width: 393px;
   padding: 20px;
   display: flex;
+  flex-direction: column;
 `;
 
 export const CommentBar = styled.div`
@@ -59,7 +59,6 @@ export const CommentBar = styled.div`
 `;
 
 export const CommentInput = styled.div`
-  display: relative;
   width: 291px;
   height: 50px;
   flex-shrink: 0;
@@ -118,6 +117,32 @@ export const CommentInput = styled.div`
   }
 `;
 
+export const CommentInform = styled.div`
+  width: 390px;
+  height: 70px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  color: #000;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  #roundBar {
+    width: 50px;
+    height: 5px;
+    flex-shrink: 0;
+    background: #969696;
+    border-radius: 999px;
+    margin: 15px 0px;
+  }
+`;
+
 export const Circle = styled.div`
   position: absolute;
   right: 32px;
@@ -156,14 +181,20 @@ export const Profile = styled.div`
 `;
 
 export const Comment = styled.div`
-  display: relative;
+  width: 360px;
+  height: 60px;
+  position: relative;
+  align-items: center;
+
+  #username-date {
+    display: flex;
+    gap: 8px;
+  }
 
   #username {
-    width: 150px;
-    margin: 0px 10px;
     color: #000;
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -188,6 +219,9 @@ export const Comment = styled.div`
   }
 
   #cat {
+    position: absolute;
+    left: 6px;
+    top: 4px;
     width: 27.2px;
     height: 32.217px;
     flex-shrink: 0;
@@ -203,5 +237,10 @@ export const Comment = styled.div`
   #profile-wrapper {
     display: flex;
     position: absolute;
+    gap: 5px;
+  }
+
+  #comment-wrapper {
+    margin-left: 50px;
   }
 `;
