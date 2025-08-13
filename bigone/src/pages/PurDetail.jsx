@@ -20,6 +20,7 @@ const P_Detail = () => {
         </P.Icons>
         <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" />
       </P.Header>
+
       <P.Content>
         <P.Pic>
           <img alt="pic"></img>
