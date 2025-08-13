@@ -45,51 +45,21 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-`;
-
-export const Detail = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 25px 20px 14px 20px;
-  justify-content: space-between;
-`;
-
-export const Status = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-
-  #circle {
-    width: 10px;
-    height: 10px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background-color: #00b40f;
-  }
-
-  #all {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-`;
-
-export const Delete = styled.div`
-  color: #000;
-  text-align: right;
-  font-family: Pretendard;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: normal;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 export const Title = styled.div`
-  padding-left: 20px;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+export const Detail = styled.div`
+  margin-top: 14px;
   display: flex;
   flex-direction: row;
 
@@ -113,13 +83,13 @@ export const Title = styled.div`
   }
 
   #date {
+    margin-left: 44px;
     color: #000;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
-    margin-left: 44px;
   }
 `;
 
@@ -127,15 +97,15 @@ export const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 10px;
 `;
 
 export const Input = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 10px;
+  align-items: center;
+  position: relative;
 `;
 
 export const Name = styled.div`
@@ -145,19 +115,21 @@ export const Name = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
-  padding: 14px 10px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   input {
-    color: #000;
+    // margin-left: 10px;
+    width: 90px;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: normal;
     border: none;
     outline: none;
-    width: 80px;
-    text-align: left;
+    color: black;
   }
 `;
 export const Num = styled.div`
@@ -167,66 +139,85 @@ export const Num = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
-  padding: 14px 10px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   input {
-    color: #000;
+    width: 40px;
     font-family: Pretendard;
     font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     line-height: normal;
     border: none;
     outline: none;
-    width: 35px;
-    text-align: left;
+    color: black;
   }
 `;
-
 export const Date = styled.div`
-  width: 160px;
+  width: ${({ hasDelete }) => (hasDelete ? "140px" : "160px")};
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
-  padding: 14px 10px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   input {
-    color: #000;
+    width: 100%;
     font-family: Pretendard;
     font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+    font-weight: 500;
     border: none;
     outline: none;
-    width: 130px;
-    text-align: left;
+    color: black;
+    background: transparent;
+    padding-left: 10px;
   }
 `;
 
-export const Enter = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 390px;
-  height: 104px;
+export const DeleteIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
   flex-shrink: 0;
-  background: #fff;
-  box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.2);
-  padding: 20px 20px 44px 20px;
-  z-index: 100; // 다른 컴포넌트보다 위에 보이게
+`;
+
+export const Plus = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+  }
+
+  div {
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
 `;
 
 export const Button = styled.div`
-  border-radius: 5px;
-  background: #ff4f26;
+  margin-top: 30px;
   width: 350px;
   height: 40px;
   flex-shrink: 0;
-  text-align: center;
+  border-radius: 5px;
+  background: ${({ active }) => (active ? "#ff4f26" : "#c4c4c4")};
   color: #fff;
   text-align: center;
   font-family: Pretendard;
@@ -235,9 +226,11 @@ export const Button = styled.div`
   font-weight: 600;
   line-height: normal;
   letter-spacing: -0.6px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  display: flex;
+  cursor: ${({ active }) => (active ? "pointer" : "default")};
+  transition: background-color 0.3s ease;
 `;
 
 export const ModalOverlay = styled.div`

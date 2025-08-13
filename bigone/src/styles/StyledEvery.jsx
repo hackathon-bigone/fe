@@ -54,6 +54,49 @@ export const Icons = styled.div`
   }
 `;
 
+export const Popup = styled.div`
+  position: absolute;
+  top: 60px; // 아이콘 기준 위치 조정
+  right: 45px;
+  width: 200px;
+  height: 110px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(255, 79, 38, 0.8);
+  display: flex;
+  gap: 13px;
+  flex-direction: column;
+  padding-top: 18px;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+export const PopupItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding-left: 19px;
+  padding-right: 20px;
+
+  img {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+`;
+
+export const Hr = styled.div`
+  width: 200px;
+  height: 0.5px;
+  background: #fff;
+`;
+
 export const Category = styled.div`
   height: 36px;
   display: flex;
@@ -61,7 +104,7 @@ export const Category = styled.div`
   margin-top: 10px;
 
   #recipe {
-    color: #000;
+    color: #969696;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;
@@ -76,7 +119,7 @@ export const Category = styled.div`
   }
 
   #purchase {
-    color: #969696;
+    color: #000;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;

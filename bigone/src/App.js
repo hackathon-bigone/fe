@@ -21,6 +21,11 @@ import Nick from "./pages/NickEdit";
 import Password from "./pages/Password";
 import RefEv from "./pages/RefriEv";
 import RefPlus from "./pages/RefriPlus";
+import RefDel from "./pages/RefDel";
+import Receipt from "./pages/Receipt";
+import RefWrite from "./pages/RefWrite";
+import Scan from "./pages/Scan";
+import ScanCom from "./pages/ScanCom";
 
 function App() {
   return (
@@ -47,6 +52,17 @@ function App() {
         <Route path="/my/edit/password" element={<Password />} />
         <Route path="/refrigerator/ingredients" element={<RefEv />} />
         <Route path="/refrigerator/ingredients/edit" element={<RefPlus />} />
+        <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
+        <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
+        <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan"
+          element={<Scan />}
+        />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/complete"
+          element={<ScanCom />}
+        />
       </Routes>
     </BrowserRouter>
   );

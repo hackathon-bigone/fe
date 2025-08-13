@@ -44,7 +44,7 @@ export const Body = styled.div`
   width: 390px;
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  // margin-top: 10px;
 `;
 
 export const Detail = styled.div`
@@ -94,6 +94,7 @@ export const Title = styled.div`
   flex-direction: row;
 
   #name {
+    margin-left: 30px;
     color: #000;
     font-family: Pretendard;
     font-size: 15px;
@@ -136,74 +137,64 @@ export const Input = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 10px;
+  align-items: center;
+`;
+
+export const Check = styled.div`
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid #ff4f26;
+  background-color: ${({ checked }) => (checked ? "#ff4f26" : "#fff")};
+  cursor: pointer;
 `;
 
 export const Name = styled.div`
-  width: 110px;
+  width: 101px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
   padding: 14px 10px 16px 10px;
-
-  input {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    border: none;
-    outline: none;
-    width: 80px;
-    text-align: left;
-  }
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 export const Num = styled.div`
-  width: 60px;
+  width: 55px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
   padding: 14px 10px 16px 10px;
-
-  input {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    border: none;
-    outline: none;
-    width: 35px;
-    text-align: left;
-  }
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 export const Date = styled.div`
-  width: 160px;
+  width: 146px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   background: #fff;
   padding: 14px 10px 16px 10px;
-
-  input {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    border: none;
-    outline: none;
-    width: 130px;
-    text-align: left;
-  }
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 export const Enter = styled.div`
@@ -218,16 +209,20 @@ export const Enter = styled.div`
   box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.2);
   padding: 20px 20px 44px 20px;
   z-index: 100; // 다른 컴포넌트보다 위에 보이게
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
 `;
 
-export const Button = styled.div`
-  border-radius: 5px;
-  background: #ff4f26;
-  width: 350px;
+export const All = styled.div`
+  width: 170px;
   height: 40px;
   flex-shrink: 0;
-  text-align: center;
-  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #ff4f26;
+  background: #fff;
+  color: #ff4f26;
   text-align: center;
   font-family: Pretendard;
   font-size: 15px;
@@ -235,9 +230,31 @@ export const Button = styled.div`
   font-weight: 600;
   line-height: normal;
   letter-spacing: -0.6px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+`;
+
+export const Del = styled.div`
+  width: 170px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #ff4f26;
+  background: ${({ selected }) => (selected ? "#ff4f26" : "#fff")};
+  color: ${({ selected }) => (selected ? "#fff" : "#ff4f26")};
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.6px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  display: flex;
+  cursor: pointer;
 `;
 
 export const ModalOverlay = styled.div`

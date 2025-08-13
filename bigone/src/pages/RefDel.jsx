@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as E from "../styles/StyledRPlus";
+import * as E from "../styles/StyledDelete";
 
-const RefPlus = () => {
+const RefDel = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -19,18 +19,16 @@ const RefPlus = () => {
     setShowModal(false);
   };
 
-  const goDel = () => {
-    navigate(`/refrigerator/ingredients/delete`);
+  const [checked, setChecked] = useState(false);
+
+  const toggleCheck = () => {
+    setChecked(!checked);
   };
 
   return (
     <E.Container>
       <E.Header>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/back.svg`}
-          alt="back"
-          onClick={goBack}
-        />
+        <img src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" />
         <div>식품 목록 수정</div>
       </E.Header>
       <E.Body>
@@ -39,7 +37,6 @@ const RefPlus = () => {
             <div id="circle" />
             <div id="all">식품 전체</div>
           </E.Status>
-          <E.Delete onClick={goDel}>삭제</E.Delete>
         </E.Detail>
         <E.Title>
           <div id="name">식품명</div>
@@ -48,31 +45,26 @@ const RefPlus = () => {
         </E.Title>
         <E.List>
           <E.Input>
-            <E.Name>
-              <input type="text" />
-            </E.Name>
-            <E.Num>
-              <input type="text" />
-            </E.Num>
-            <E.Date>
-              <input type="text" />
-            </E.Date>
+            <E.Check checked={checked} onClick={toggleCheck} />
+            <E.Name>감자</E.Name>
+            <E.Num>3개</E.Num>
+            <E.Date>25.08.24</E.Date>
           </E.Input>
         </E.List>
       </E.Body>
 
       <E.Enter>
-        <E.Button>수정 완료</E.Button>
+        <E.All>전체 선택</E.All>
+        <E.Del selected={checked} onClick={goBack}>
+          삭제
+        </E.Del>
       </E.Enter>
 
       {showModal && (
         <E.ModalOverlay>
           <E.ModalContent>
-            <p>식품 목록 수정을 그만둘까요?</p>
-            <div>
-              식품 목록 수정 페이지를 벗어나면 <br />
-              작성된 내용은 저장되지 않고 사라집니다.
-            </div>
+            <p>선택한 항목을 삭제할까요?</p>
+            <div>삭제된 항목은 복구할 수 없습니다.</div>
             <E.ModalButtons>
               <button onClick={handleCancel}>취소</button>
               <button onClick={handleConfirm}>확인</button>
@@ -84,4 +76,4 @@ const RefPlus = () => {
   );
 };
 
-export default RefPlus;
+export default RefDel;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as R from "../styles/StyledEvery";
 
@@ -25,6 +25,31 @@ const RefEv = () => {
     navigate(`/refrigerator/ingredients/edit`);
   };
 
+  const goExp = () => {
+    navigate(`/refrigerator`);
+  };
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (popupRef.current && !popupRef.current.contains(e.target)) {
+      setShowPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const goToReceipt = () => {
+    navigate(`/refrigerator/ingredients/receipt`);
+  };
+
+  const goToManual = () => {
+    navigate(`/refrigerator/ingredients/write`);
+  };
+
   return (
     <R.Container>
       <R.Header>
@@ -33,16 +58,36 @@ const RefEv = () => {
           <img
             id="scrap"
             src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`}
-            alt="scrap"
+            alt="plus"
+            onClick={() => setShowPopup(!showPopup)}
           />
+          {showPopup && (
+            <R.Popup ref={popupRef}>
+              <R.PopupItem onClick={goToReceipt}>
+                영수증 인식
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/receipt.svg`}
+                  alt="receipt"
+                />
+              </R.PopupItem>
+              <R.Hr />
+              <R.PopupItem onClick={goToManual}>
+                직접 입력
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/write.svg`}
+                  alt="edit"
+                />
+              </R.PopupItem>
+            </R.Popup>
+          )}
         </R.Icons>
       </R.Header>
 
       <R.Category>
-        <div id="recipe">유통기한 임박</div>
-        <div id="purchase" onClick={goPur}>
-          식품 전체
+        <div id="recipe" onClick={goExp}>
+          유통기한 임박
         </div>
+        <div id="purchase">식품 전체</div>
       </R.Category>
 
       <R.Body>
