@@ -9,6 +9,7 @@ import P_Detail from "./pages/PurDetail";
 import PurWrite from "./pages/PurWrite";
 import Recipe from "./pages/Recipe";
 import R_Detail from "./pages/ReDetail";
+import ReWrite from "./pages/ReWrite";
 import Refri from "./pages/Refri";
 import Wrote from "./pages/Wrote";
 import PurHistory from "./pages/PurHistory";
@@ -34,6 +35,7 @@ function App() {
         <Route path="/purchase" element={<Purchase />} />
         <Route path="/recipe" element={<Recipe />} />
         <Route path="/recipe/detail" element={<R_Detail />} />
+        <Route path="/recipe/write" element={<ReWrite />} />
         <Route path="/refrigerator" element={<Refri />} />
         <Route path="/my/wrote/recipe" element={<Wrote />} />
         <Route path="/my/wrote/purchase" element={<PurHistory />} />
