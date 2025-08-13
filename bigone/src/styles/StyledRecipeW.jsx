@@ -22,6 +22,7 @@ export const Header = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
+  z-index: 5;
 
   height: 80px;
   width: 393px;
@@ -62,13 +63,49 @@ export const Content = styled.div`
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px 0;
+  padding: 10px 0;
+  width: 100%;
+`;
+
+export const TwinInputWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 5px 0;
 `;
 
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+`;
+
+export const CategoryWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 100%;
+`;
+
+export const Category = styled.div`
+  height: 35px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid #ff4f26;
+  background: ${({ $selected }) => ($selected ? "#FF4F26" : "#fff")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${({ $selected }) => ($selected ? "#fff" : "#FF4F26")};
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 0 5px;
 `;
 
 export const AddLinkBtn = styled.div`
@@ -180,6 +217,77 @@ export const InPic = styled.div`
   }
 `;
 
+export const StepWrapper = styled.div`
+  height: 500px;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const InputStep = styled.div`
+  width: 350px;
+  height: 480px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  #step {
+    margin: 15px 0;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  #delete {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  &:focus-within {
+    border-color: #ff4f26;
+
+    #step {
+      color: #ff4f26;
+    }
+  }
+`;
+
+export const Explanation = styled.textarea`
+  width: 310px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  resize: none;
+  outline: none;
+  margin-top: 10px;
+  padding: 10px;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 133.333% */
+
+  &:focus {
+    border-color: #ff4f26;
+  }
+`;
+
 export const UploadBtn = styled.div`
   width: 350px;
   height: 50px;
@@ -197,100 +305,4 @@ export const UploadBtn = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-`;
-
-export const Modal = styled.div`
-  z-index: 10;
-
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-wrapper {
-    width: 310px;
-    height: 200px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
-    padding: 30px;
-  }
-
-  .modal-text {
-    color: #000;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
-
-  .modal-detail {
-    color: #969696;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-  }
-
-  .modal-btn-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    margin: 10px;
-  }
-
-  .modal-close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 130px;
-    height: 50px;
-    flex-shrink: 0;
-    border-radius: 5px;
-    border: 1px solid #ff4f26;
-    background: #fff;
-
-    color: #ff4f26;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-
-  .modal-ok {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 130px;
-    height: 50px;
-    flex-shrink: 0;
-    border-radius: 5px;
-    background: #ff4f26;
-
-    color: #fff;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
 `;
