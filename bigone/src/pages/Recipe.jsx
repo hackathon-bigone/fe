@@ -21,6 +21,10 @@ const Recipe = () => {
     navigate(`/refrigerator`);
   };
 
+  const goWrite = () => {
+    navigate(`/recipe/write`);
+  };
+
   const [isScrapped, setIsScrapped] = useState(false);
 
   const handleScrapClick = () => {
@@ -59,6 +63,7 @@ const Recipe = () => {
             id="bar"
             src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`}
             alt="pencil"
+            onClick={goWrite}
           />
         </R.Icons>
       </R.Header>

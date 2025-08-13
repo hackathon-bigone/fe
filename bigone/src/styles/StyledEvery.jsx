@@ -54,6 +54,49 @@ export const Icons = styled.div`
   }
 `;
 
+export const Popup = styled.div`
+  position: absolute;
+  top: 60px; // 아이콘 기준 위치 조정
+  right: 45px;
+  width: 200px;
+  height: 110px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(255, 79, 38, 0.8);
+  display: flex;
+  gap: 13px;
+  flex-direction: column;
+  padding-top: 18px;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+export const PopupItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding-left: 19px;
+  padding-right: 20px;
+
+  img {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+`;
+
+export const Hr = styled.div`
+  width: 200px;
+  height: 0.5px;
+  background: #fff;
+`;
+
 export const Category = styled.div`
   height: 36px;
   display: flex;
@@ -61,7 +104,7 @@ export const Category = styled.div`
   margin-top: 10px;
 
   #recipe {
-    color: #000;
+    color: #969696;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;
@@ -72,11 +115,11 @@ export const Category = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 2px 0px 0px #ff4f26;
+    box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.2);
   }
 
   #purchase {
-    color: #969696;
+    color: #000;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;
@@ -84,7 +127,7 @@ export const Category = styled.div`
     font-weight: 600;
     line-height: normal;
     width: 195px;
-    box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 0px 0px #ff4f26;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,9 +159,17 @@ export const Detail = styled.div`
   display: flex;
   flex-direction: row;
   padding-left: 20px;
+  padding-right: 20px;
   margin-top: 4px;
-  text-align: left;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const L = styled.div`
+  display: flex;
+  flex-direction: row;
   gap: 10px;
+  text-align: left;
   align-items: center;
 
   #circle {
@@ -126,7 +177,7 @@ export const Detail = styled.div`
     height: 10px;
     flex-shrink: 0;
     border-radius: 50%;
-    background-color: #ff4f26;
+    background-color: #00b40f;
   }
 
   #date {
@@ -137,6 +188,16 @@ export const Detail = styled.div`
     font-weight: 500;
     line-height: normal;
   }
+`;
+
+export const R = styled.div`
+  color: #000;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 `;
 
 export const List = styled.div`
@@ -148,51 +209,70 @@ export const List = styled.div`
   align-items: center;
 `;
 
-export const Component = styled.div`
-  width: 350px;
-  height: 61px;
-  flex-shrink: 0;
-  border-radius: 5px;
-  background: rgba(255, 79, 38, 0.1);
-  display: flex;
-  flex-direction: row;
-  padding: 10px 19px 10px 20px;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-export const Left = styled.div`
-  color: #ff4f26;
+export const CDate = styled.div`
+  width: 390px;
+  padding-left: 20px;
+  color: #000;
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
+  text-align: left;
 `;
 
-export const Name = styled.div`
+export const Component = styled.div`
+  width: 350px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(196, 196, 196, 0.2);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  text-align: left;
-  gap: 5px;
-  width: 200px;
+  gap: 20px;
+  align-items: center;
+`;
 
-  #ingre {
-    color: #000;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
+export const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* 남은 폭을 받기 위해 필수 */
+`;
 
-  #date {
-    color: #969696;
-    font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+export const Ing = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: normal;
+  white-space: nowrap;
+  align-items: center;
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* 핵심: 남은 공간을 받음 */
+  min-width: 0; /* 일부 브라우저에서 수축 허용 */
+
+  &::after {
+  content: "";
+  flex: 1 1 auto;
+  margin: 0 8px;
+
+  /* 점선 커스텀 */
+  height: 1px; /* 점선 두께 */
+  background-image: repeating-linear-gradient(
+    to right,
+    #969696 0px,
+    #969696 2px,        /* 점 길이 */
+    transparent 8px  /* 점 간격 */
+  );
+
+  /* 세로 위치 맞추기 */
+  align-self: center; /* 부모 flex 기준 중앙 정렬 */
+}
+
   }
 `;
 
