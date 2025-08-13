@@ -21,6 +21,10 @@ const RefEv = () => {
     navigate(`/recipe`);
   };
 
+  const goEdit = () => {
+    navigate(`/refrigerator/ingredients/edit`);
+  };
+
   return (
     <R.Container>
       <R.Header>
@@ -48,10 +52,18 @@ const RefEv = () => {
             <div id="circle" />
             <div id="date">식품 전체</div>
           </R.L>
-          <R.R>수정</R.R>
+          <R.R onClick={goEdit}>수정</R.R>
         </R.Detail>
 
-        <R.List></R.List>
+        <R.List>
+          <R.CDate>25.08.24</R.CDate>
+          <R.Component>
+            <R.Content>
+              <R.Ing>감자</R.Ing>
+              <R.Num>3개</R.Num>
+            </R.Content>
+          </R.Component>
+        </R.List>
       </R.Body>
 
       <R.Nav>

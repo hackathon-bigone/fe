@@ -166,6 +166,83 @@ export const List = styled.div`
   align-items: center;
 `;
 
+export const CDate = styled.div`
+  width: 390px;
+  padding-left: 20px;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: left;
+`;
+
+export const Component = styled.div`
+  width: 350px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: rgba(196, 196, 196, 0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* 남은 폭을 받기 위해 필수 */
+`;
+
+export const Ing = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: normal;
+  white-space: nowrap;
+  align-items: center;
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* 핵심: 남은 공간을 받음 */
+  min-width: 0; /* 일부 브라우저에서 수축 허용 */
+
+  &::after {
+  content: "";
+  flex: 1 1 auto;
+  margin: 0 8px;
+
+  /* 점선 커스텀 */
+  height: 1px; /* 점선 두께 */
+  background-image: repeating-linear-gradient(
+    to right,
+    #969696 0px,
+    #969696 2px,        /* 점 길이 */
+    transparent 8px  /* 점 간격 */
+  );
+
+  /* 세로 위치 맞추기 */
+  align-self: center; /* 부모 flex 기준 중앙 정렬 */
+}
+
+  }
+`;
+
+export const Num = styled.div`
+  color: #000;
+  text-align: right;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
 export const Nav = styled.div`
   width: 390px;
   height: 104px;
