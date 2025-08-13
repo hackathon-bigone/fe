@@ -17,6 +17,7 @@ const Login = () => {
     type: "password",
     visible: false,
   });
+
   const handlePasswordType = (e) => {
     setpwType(() => {
       if (!pwType.visible) {
