@@ -22,6 +22,7 @@ export const Header = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
+  z-index: 10;
 
   height: 80px;
   width: 393px;

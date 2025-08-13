@@ -98,6 +98,56 @@ const R_Detail = () => {
           레시피
         </R.Tap>
       </R.ContentBar>
+
+      {/* 조건부 렌더링 */}
+      {isSelected === "ingredients" && (
+        <R.Ingredients>
+          <div id="wrapper">
+            <span id="title">크래커</span>
+            <img id="line" src={`${process.env.PUBLIC_URL}/images/Line_in.png`} alt="line" />
+            <span id="count">6개</span>
+          </div>
+          <div id="wrapper">
+            <span id="title">마쉬멜로우(대)</span>
+            <img id="line" src={`${process.env.PUBLIC_URL}/images/Line_in.png`} alt="line" />
+            <span id="count">3개</span>
+          </div>
+        </R.Ingredients>
+      )}
+
+      {isSelected === "recipe" && (
+        <R.Recipe>
+          <div id="count">총 10단계</div>
+          <R.RecipeStep>
+            <R.PicStep>
+              <img alt="pic" />
+            </R.PicStep>
+            <div id="step">STEP 01</div>
+            <div id="explanation">요리에 필요한 재료를 모두 준비해 줍니다.</div>
+          </R.RecipeStep>
+          <R.RecipeStep>
+            <R.PicStep>
+              <img alt="pic" />
+            </R.PicStep>
+            <div id="step">STEP 02</div>
+            <div id="explanation">에어프라이어 온도를 180도로 설정한 후, 3분 동안 예열해 줍니다.</div>
+          </R.RecipeStep>
+          <R.RecipeStep>
+            <R.PicStep>
+              <img alt="pic" />
+            </R.PicStep>
+            <div id="step">STEP 03</div>
+            <div id="explanation">에어프라이어를 예열하는 동안, 크래커를 꺼내 하나씩 올려 둡니다. 올려 둔 각각의 크래커 위에 초콜릿을 조각으로 잘라 하나씩 얹어 줍니다.</div>
+          </R.RecipeStep>
+          <R.RecipeStep>
+            <R.PicStep>
+              <img alt="pic" />
+            </R.PicStep>
+            <div id="step">STEP 04</div>
+            <div id="explanation">크래커에 얹어진 각각의 초콜릿 위에 마시멜로우를 한 개씩 얹어 줍니다.</div>
+          </R.RecipeStep>
+        </R.Recipe>
+      )}
       <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}></BottomSheet>
     </R.Container>
   );

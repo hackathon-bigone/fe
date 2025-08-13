@@ -60,7 +60,116 @@ const Purchase = () => {
             최신순
           </P.Recent>
         </P.Bar>
-
+        <P.Component>
+          <P.Img>
+            <img alt="임시"></img>
+          </P.Img>
+          <P.ImformBox>
+            <P.CTitle>
+              <div id="title" onClick={goDetail}>
+                2L 생수 나눠 사실 분 구해요~
+              </div>
+              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+            </P.CTitle>
+            <P.Detail>
+              <div style={{ display: "flex", gap: "2px" }}>
+                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
+                <div id="comment-num">2</div>
+                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
+                <P.D_State>모집중</P.D_State>
+              </div>
+              <P.D_Date>1시간 전</P.D_Date>
+            </P.Detail>
+          </P.ImformBox>
+        </P.Component>
+        <P.Component>
+          <P.Img>
+            <img alt="임시"></img>
+          </P.Img>
+          <P.ImformBox>
+            <P.CTitle>
+              <div id="title" onClick={goDetail}>
+                2L 생수 나눠 사실 분 구해요~
+              </div>
+              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+            </P.CTitle>
+            <P.Detail>
+              <div style={{ display: "flex", gap: "2px" }}>
+                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
+                <div id="comment-num">2</div>
+                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
+                <P.D_State>모집중</P.D_State>
+              </div>
+              <P.D_Date>1시간 전</P.D_Date>
+            </P.Detail>
+          </P.ImformBox>
+        </P.Component>
+        <P.Component>
+          <P.Img>
+            <img alt="임시"></img>
+          </P.Img>
+          <P.ImformBox>
+            <P.CTitle>
+              <div id="title" onClick={goDetail}>
+                2L 생수 나눠 사실 분 구해요~
+              </div>
+              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+            </P.CTitle>
+            <P.Detail>
+              <div style={{ display: "flex", gap: "2px" }}>
+                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
+                <div id="comment-num">2</div>
+                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
+                <P.D_State>모집중</P.D_State>
+              </div>
+              <P.D_Date>1시간 전</P.D_Date>
+            </P.Detail>
+          </P.ImformBox>
+        </P.Component>
+        <P.Component>
+          <P.Img>
+            <img alt="임시"></img>
+          </P.Img>
+          <P.ImformBox>
+            <P.CTitle>
+              <div id="title" onClick={goDetail}>
+                2L 생수 나눠 사실 분 구해요~
+              </div>
+              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+            </P.CTitle>
+            <P.Detail>
+              <div style={{ display: "flex", gap: "2px" }}>
+                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
+                <div id="comment-num">2</div>
+                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
+                <P.D_State>모집중</P.D_State>
+              </div>
+              <P.D_Date>1시간 전</P.D_Date>
+            </P.Detail>
+          </P.ImformBox>
+        </P.Component>
+        <P.Component>
+          <P.Img>
+            <img alt="임시"></img>
+          </P.Img>
+          <P.ImformBox>
+            <P.CTitle>
+              <div id="title" onClick={goDetail}>
+                2L 생수 나눠 사실 분 구해요~
+              </div>
+              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+            </P.CTitle>
+            <P.Detail>
+              <div style={{ display: "flex", gap: "2px" }}>
+                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
+                <div id="comment-num">2</div>
+                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
+                <P.D_State>모집중</P.D_State>
+              </div>
+              <P.D_Date>1시간 전</P.D_Date>
+            </P.Detail>
+          </P.ImformBox>
+        </P.Component>
         <P.Component>
           <P.Img>
             <img alt="임시"></img>

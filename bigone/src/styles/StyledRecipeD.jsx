@@ -22,6 +22,7 @@ export const Header = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
+  z-index: 10;
 
   height: 80px;
   width: 393px;
@@ -294,4 +295,111 @@ export const Tap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const Ingredients = styled.div`
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  position: relative;
+
+  #wrapper {
+    display: flex;
+    position: relative;
+    padding: 20px;
+    width: 393px;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #title {
+    display: inline-block;
+    position: relative;
+    padding-right: 11px;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    background-color: #fff;
+    z-index: 10;
+  }
+
+  #count {
+    display: inline-block;
+    position: relative;
+    padding-left: 11px;
+    color: #000;
+    text-align: right;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background: #fff;
+    z-index: 10;
+  }
+
+  #line {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    width: 307px;
+    height: 1px;
+  }
+`;
+
+export const Recipe = styled.div`
+  background: rgba(196, 196, 196, 0.1);
+  padding: 20px;
+
+  #count {
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+`;
+
+export const RecipeStep = styled.div`
+  width: 350px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  margin: 20px 0;
+
+  #step {
+    color: #ff4f26;
+    font-family: Pretendard;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  #explanation {
+    margin-top: 5px;
+    color: #000;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 133.333% */
+  }
+`;
+
+export const PicStep = styled.div`
+  width: 310px;
+  height: 310px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
 `;
