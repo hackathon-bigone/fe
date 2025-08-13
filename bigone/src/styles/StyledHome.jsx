@@ -119,6 +119,7 @@ export const BDown = styled.div`
   margin-top: 4px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 
   img {
     width: 109.712px;
@@ -129,13 +130,14 @@ export const BDown = styled.div`
   }
 
   #date {
+    margin-right: 20px;
     color: #ff4f26;
     font-family: Pretendard;
-    font-size: 130px;
+    font-size: 110px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    margin-top: -16px;
+    margin-top: -6px;
   }
 `;
 

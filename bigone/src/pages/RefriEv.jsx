@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as R from "../styles/StyledRefri";
+import * as R from "../styles/StyledEvery";
 
-const Refri = () => {
+const RefEv = () => {
   const navigate = useNavigate();
 
   const goMy = () => {
@@ -21,10 +21,6 @@ const Refri = () => {
     navigate(`/recipe`);
   };
 
-  const goEver = () => {
-    navigate(`/refrigerator/ingredients`);
-  };
-
   return (
     <R.Container>
       <R.Header>
@@ -40,7 +36,7 @@ const Refri = () => {
 
       <R.Category>
         <div id="recipe">유통기한 임박</div>
-        <div id="purchase" onClick={goEver}>
+        <div id="purchase" onClick={goPur}>
           식품 전체
         </div>
       </R.Category>
@@ -48,19 +44,14 @@ const Refri = () => {
       <R.Body>
         <R.Date>2025년 8월 25일</R.Date>
         <R.Detail>
-          <div id="circle" />
-          <div id="date">유통기한 임박</div>
+          <R.L>
+            <div id="circle" />
+            <div id="date">식품 전체</div>
+          </R.L>
+          <R.R>수정</R.R>
         </R.Detail>
-        <R.List>
-          <R.Component>
-            <R.Left>D+1</R.Left>
-            <R.Name>
-              <div id="ingre">감자</div>
-              <div id="date">25.08.24</div>
-            </R.Name>
-            <R.Num>3개</R.Num>
-          </R.Component>
-        </R.List>
+
+        <R.List></R.List>
       </R.Body>
 
       <R.Nav>
@@ -98,4 +89,4 @@ const Refri = () => {
   );
 };
 
-export default Refri;
+export default RefEv;

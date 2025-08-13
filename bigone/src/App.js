@@ -18,6 +18,7 @@ import Menu from "./pages/Menu";
 import Edit from "./pages/Edit";
 import Nick from "./pages/NickEdit";
 import Password from "./pages/Password";
+import RefEv from "./pages/RefriEv";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/my/edit" element={<Edit />} />
         <Route path="/my/edit/nickname" element={<Nick />} />
         <Route path="/my/edit/password" element={<Password />} />
+        <Route path="/refrigerator/ingredients" element={<RefEv />} />
       </Routes>
     </BrowserRouter>
   );
