@@ -26,6 +26,10 @@ import Receipt from "./pages/Receipt";
 import RefWrite from "./pages/RefWrite";
 import Scan from "./pages/Scan";
 import ScanCom from "./pages/ScanCom";
+import Inform from "./pages/Information";
+import Inform_Detail from "./pages/InformationD";
+import QnA from "./pages/QnA";
+import QnADetail from "./pages/QnADetail";
 
 function App() {
   return (
@@ -50,19 +54,17 @@ function App() {
         <Route path="/my/edit" element={<Edit />} />
         <Route path="/my/edit/nickname" element={<Nick />} />
         <Route path="/my/edit/password" element={<Password />} />
+        <Route path="/my/inform" element={<Inform />} />
+        <Route path="/my/inform/detail" element={<Inform_Detail />} />
+        <Route path="/my/question" element={<QnA />} />
+        <Route path="/my/question/detail" element={<QnADetail />} />
         <Route path="/refrigerator/ingredients" element={<RefEv />} />
         <Route path="/refrigerator/ingredients/edit" element={<RefPlus />} />
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
         <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
         <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
-        <Route
-          path="/refrigerator/ingredients/receipt/scan"
-          element={<Scan />}
-        />
-        <Route
-          path="/refrigerator/ingredients/receipt/scan/complete"
-          element={<ScanCom />}
-        />
+        <Route path="/refrigerator/ingredients/receipt/scan" element={<Scan />} />
+        <Route path="/refrigerator/ingredients/receipt/scan/complete" element={<ScanCom />} />
       </Routes>
     </BrowserRouter>
   );
