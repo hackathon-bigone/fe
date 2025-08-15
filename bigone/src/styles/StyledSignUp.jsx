@@ -102,6 +102,15 @@ export const InputCon = styled.div`
     line-height: normal;
   }
 
+  #inputError {
+    color: #ff4f26;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+
   #IdCheckBtn {
     display: flex;
     justify-content: center;
