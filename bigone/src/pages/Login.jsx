@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as L from "../styles/StyledLogin";
-import { login } from "../redux/modules/userSlice";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const Login = ({ setLoginAuth }) => {
@@ -14,7 +12,6 @@ const Login = ({ setLoginAuth }) => {
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
-  const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState("");
 
   const isActive = id.length > 0 && pw.length > 0;
@@ -34,30 +31,22 @@ const Login = ({ setLoginAuth }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isActive) return;
-    setErrorMsg("");
-
     try {
-      const res = await axios.post("/user/login", {
+      const response = await axios.post("http://43.203.179.188/user/login", {
         username: id,
         password: pw,
       });
-      console.log("서버 응답:", res);
-      dispatch(
-        login({
-          grantType: res.data.grantType,
-          accessToken: res.data.accessToken,
-          refreshToken: res.data.refreshToken,
-        })
-      );
-      navigate("/home"); // 로그인 성공 후 메인 페이지 이동
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
+      navigate(`/home`);
     } catch (error) {
-      console.error(error);
-      setId("");
-      setPw("");
+      console.log(error.response.data.message);
       if (error.response && error.response.status === 401) {
-        setErrorMsg(error.response.data.message);
+        setErrorMsg(error.response.data.message); // 서버 메시지
+        setId("");
+        setPw("");
+      } else {
+        console.log("로그인 실패");
       }
     }
   };
@@ -77,7 +66,7 @@ const Login = ({ setLoginAuth }) => {
         <input placeholder="비밀번호(8자 이상)" type={pwType.type} value={pw} onChange={(e) => setPw(e.target.value)}></input>
         <img src={`${process.env.PUBLIC_URL}/images/${pwType.visible ? "Eye-open.svg" : "Eye-off.svg"}`} onClick={handlePasswordType} />
       </L.Input>
-      <L.ErrorMsg>{errorMsg}</L.ErrorMsg>
+      <L.ErrorMsg visible={!!errorMsg}>{errorMsg}</L.ErrorMsg>
       <L.LoginBtn style={{ marginTop: "30px", background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }} onClick={handleSubmit}>
         로그인
       </L.LoginBtn>
