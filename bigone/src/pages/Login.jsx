@@ -36,6 +36,8 @@ const Login = ({ setLoginAuth }) => {
         username: id,
         password: pw,
       });
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
       navigate(`/home`);
     } catch (error) {
       console.log(error.response.data.message);
