@@ -50,6 +50,7 @@ export const Input = styled.div`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    background: transparent;
   }
 
   input:focus {
@@ -94,4 +95,16 @@ export const SignUpBtn = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+`;
+
+export const ErrorMsg = styled.div`
+  color: #ff4f26;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 100%;
+  padding: 0 20px;
+  visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
 `;
