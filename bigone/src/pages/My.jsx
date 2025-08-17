@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as M from "../styles/StyledMy";
+import axios from "axios";
 
 const My = () => {
   const navigate = useNavigate();
@@ -33,6 +34,32 @@ const My = () => {
     navigate(`/my/edit/password`);
   };
 
+  const handleLogout = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      alert("이미 로그아웃 상태입니다.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://43.203.179.188/user/logout", null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("✅ 로그아웃 성공:", res.data);
+      localStorage.removeItem("access_token");
+      alert("로그아웃 되었습니다.");
+      navigate("/login");
+    } catch (err) {
+      console.error("❌ 로그아웃 실패:", err.response || err);
+      alert("서버 에러로 로그아웃에 실패했습니다.");
+    }
+  };
+
   return (
     <M.Container>
       <M.Header>
@@ -53,7 +80,9 @@ const My = () => {
         <div id="edit" onClick={goEdit}>
           프로필 수정
         </div>
-        <div id="logout">로그아웃</div>
+        <div id="logout" onClick={handleLogout}>
+          로그아웃
+        </div>
       </M.Button>
 
       <M.Activity>
