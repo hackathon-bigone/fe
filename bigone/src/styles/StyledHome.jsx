@@ -202,6 +202,14 @@ export const Image = styled.div`
   flex-shrink: 0;
   border-radius: 5px;
   background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+
+  img {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: url(<path-to-image>) lightgray 0px -36.236px / 100% 150% no-repeat;
+  }
 `;
 
 export const Detail = styled.div`

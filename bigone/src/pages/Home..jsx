@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as H from "../styles/StyledHome";
+import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -45,6 +46,56 @@ const Home = () => {
     setSelectedSort(type);
   };
 
+  const [foodbox, setFoodbox] = useState({
+    today: "",
+    summary: "",
+    message: "",
+    dlabel: "",
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    // if (token) {
+    //   console.log("✅ 토큰 있음:", token);
+    // } else {
+    //   console.warn("⚠️ 'user_token' 없음. 로그인 확인 필요.");
+    //   return;
+    // }
+
+    const fetchFoodbox = async () => {
+      try {
+        const res = await axios.get("http://43.203.179.188/home/foodbox", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setFoodbox(res.data);
+      } catch (error) {
+        console.error("❌ API 호출 실패:", error);
+      }
+    };
+
+    fetchFoodbox();
+  }, []);
+
+  const [recipeList, setRecipeList] = useState([]);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const res = await axios.get(
+          "http://43.203.179.188/home/tpo5-popular-boards"
+        ); // ← 헤더 제거!
+        setRecipeList(res.data.boards); // boards 배열 추출
+      } catch (error) {
+        console.error("❌ 레시피 불러오기 실패:", error);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
   return (
     <H.Container>
       <H.Header>
@@ -74,21 +125,18 @@ const Home = () => {
       </H.Header>
 
       <H.Up>
-        <H.Date>2025년 8월 25일</H.Date>
+        <H.Date>{foodbox.today || "날짜 없음"}</H.Date>
         <H.Box>
           <H.BUp>
-            <div id="detail">
-              유통기한이 <br />
-              얼마 남지 않았어요!
-            </div>
-            <li id="product">우유(1L) 외 2개</li>
+            <div id="detail">{foodbox.message || "메시지 없음"}</div>
+            <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>
           </H.BUp>
           <H.BDown>
             <img
               src={`${process.env.PUBLIC_URL}/images/alarm.png`}
               alt="alarm"
             />
-            <div id="date">D-1</div>
+            <div id="date">{foodbox.dlabel || "D-"}</div>
           </H.BDown>
         </H.Box>
       </H.Up>
@@ -96,48 +144,57 @@ const Home = () => {
       <H.Popular>
         <H.PTitle>인기 레시피</H.PTitle>
         <H.List>
-          <H.Component>
-            <H.Top>1</H.Top>
-            <H.PDetail>
-              <H.Image>
-                <img src="" alt="represent" />
-              </H.Image>
-              <H.Detail>
-                <H.CUp>
-                  <H.CTitle>에어프라이어만으로 만드는 스모어 크래커</H.CTitle>
-                  <H.Scrap>
-                    <img
-                      src={`${process.env.PUBLIC_URL}/images/${
-                        isScrapped ? "star_y" : "star_w"
-                      }.svg`}
-                      alt="scrap"
-                      onClick={handleScrapClick}
-                    />
-                  </H.Scrap>
-                </H.CUp>
-                <H.Down>
-                  <H.Icon>
-                    <img
-                      id="heart"
-                      src={`${process.env.PUBLIC_URL}/images/${
-                        isHeart ? "heart_b.png" : "heart_w.svg"
-                      }`}
-                      alt="heart"
-                      onClick={handleHeart}
-                    />
-                    <div id="hnum">105</div>
-                    <img
-                      id="comment"
-                      src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
-                      alt="comment"
-                    />
-                    <div id="cnum">24</div>
-                  </H.Icon>
-                  <H.CDate>8월 24일</H.CDate>
-                </H.Down>
-              </H.Detail>
-            </H.PDetail>
-          </H.Component>
+          {recipeList.map((recipe, index) => (
+            <H.Component key={recipe.postId}>
+              <H.Top>{index + 1}</H.Top>
+              <H.PDetail>
+                <H.Image>
+                  <img
+                    src={`http://43.203.179.188/${recipe.mainImageUrl}`}
+                    alt={recipe.title}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/placeholder.png"; // 대체 이미지
+                    }}
+                  />
+                </H.Image>
+                <H.Detail>
+                  <H.CUp>
+                    <H.CTitle>{recipe.title}</H.CTitle>
+                    <H.Scrap>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/${
+                          isScrapped ? "star_y" : "star_w"
+                        }.svg`}
+                        alt="scrap"
+                        onClick={handleScrapClick}
+                      />
+                    </H.Scrap>
+                  </H.CUp>
+                  <H.Down>
+                    <H.Icon>
+                      <img
+                        id="heart"
+                        src={`${process.env.PUBLIC_URL}/images/${
+                          isHeart ? "heart_b.png" : "heart_w.svg"
+                        }`}
+                        alt="heart"
+                        onClick={handleHeart}
+                      />
+                      <div id="hnum">{recipe.likeCount}</div>
+                      <img
+                        id="comment"
+                        src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
+                        alt="comment"
+                      />
+                      <div id="cnum">{recipe.commentCount}</div>
+                    </H.Icon>
+                    <H.CDate>{recipe.createdAt}</H.CDate>
+                  </H.Down>
+                </H.Detail>
+              </H.PDetail>
+            </H.Component>
+          ))}
         </H.List>
       </H.Popular>
 
