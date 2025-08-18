@@ -182,7 +182,7 @@ export const CTitle = styled.div`
 
   #title {
     display: flex;
-    width: 170px;
+    width: 185px;
     color: #000;
     font-family: Pretendard;
     font-size: 20px;
@@ -236,7 +236,6 @@ export const Detail = styled.div`
 `;
 
 export const D_State = styled.div`
-  width: 50px;
   height: 25px;
   flex-shrink: 0;
   border-radius: 5px;
@@ -249,6 +248,7 @@ export const D_State = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  padding: 0 5px;
 `;
 
 export const D_Date = styled.div`
