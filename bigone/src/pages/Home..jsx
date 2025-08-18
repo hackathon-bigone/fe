@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as H from "../styles/StyledHome";
 import axios from "axios";
+// import placeholderImg from "../assets/placeholder.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -85,8 +86,25 @@ const Home = () => {
     const fetchRecipes = async () => {
       try {
         const res = await axios.get(
-          "http://43.203.179.188/home/tpo5-popular-boards"
-        ); // ← 헤더 제거!
+          "http://43.203.179.188/home/top5-popular-boards"
+        );
+
+        // 전체 응답 로그
+        console.log("✅ 인기 레시피 전체 response:", res);
+
+        // data 객체 로그
+        console.log("📦 res.data:", res.data);
+
+        // boards 배열 로그
+        console.log("📝 res.data.boards:", res.data.boards);
+
+        // 각 보드별 이미지 경로 로그
+        res.data.boards.forEach((recipe, idx) => {
+          console.log(
+            `🔗 [${idx}] postId=${recipe.postId}, title="${recipe.title}", mainImageUrl=${recipe.mainImageUrl}`
+          );
+        });
+
         setRecipeList(res.data.boards); // boards 배열 추출
       } catch (error) {
         console.error("❌ 레시피 불러오기 실패:", error);
@@ -95,6 +113,18 @@ const Home = () => {
 
     fetchRecipes();
   }, []);
+
+  // 백엔드 베이스
+  const API_BASE = "http://43.203.179.188/";
+
+  // 네트워크 요청이 전혀 안 나가는 임베디드 SVG 플레이스홀더
+  const svg = `
+  <svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'>
+    <rect width='100%' height='100%' fill='#eeeeee'/>
+    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+          font-size='24' fill='#888888'>이미지 준비중</text>
+  </svg>
+`;
 
   return (
     <H.Container>
@@ -152,9 +182,11 @@ const Home = () => {
                   <img
                     src={`http://43.203.179.188/${recipe.mainImageUrl}`}
                     alt={recipe.title}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/images/placeholder.png"; // 대체 이미지
+                    style={{
+                      width: "90px",
+                      height: "90px",
+                      borderRadius: "5px",
+                      objectFit: "cover",
                     }}
                   />
                 </H.Image>

@@ -140,70 +140,93 @@ export const Detail = styled.div`
 `;
 
 export const List = styled.div`
+  width: 390px;
   display: flex;
   flex-direction: column;
-  margin-top: 8px;
-  gap: 10px;
-  width: 390px;
   align-items: center;
+  gap: 10px;
+  margin-top: 8px;
 `;
 
+/* ✅ 카드: 가변 높이, 왼쪽 D라벨 + 오른쪽 항목 목록 */
 export const Component = styled.div`
   width: 350px;
-  height: 61px;
-  flex-shrink: 0;
-  border-radius: 5px;
+  border-radius: 10px;
   background: rgba(255, 79, 38, 0.1);
   display: flex;
-  flex-direction: row;
-  padding: 10px 19px 10px 20px;
-  align-items: center;
-  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 16px;
 `;
 
+/* ✅ 왼쪽 D라벨: 고정폭으로 정렬 유지 */
 export const Left = styled.div`
+  width: 64px; /* 고정폭 */
+  flex: 0 0 64px;
   color: #ff4f26;
   font-family: Pretendard;
   font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+  font-weight: 700;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
 `;
 
+/* ✅ 오른쪽 목록 컨테이너 */
+export const Group = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+/* ✅ 그룹 내 한 줄(식품 한 항목) */
+export const Row = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+/* (선택) 얇은 구분선이 필요하면 사용 */
+export const Divider = styled.div`
+  height: 1px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.06);
+`;
+
+/* 항목 왼쪽(이름 + 날짜) */
 export const Name = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 6px;
   text-align: left;
-  gap: 5px;
-  width: 200px;
+  max-width: 220px;
 
   #ingre {
     color: #000;
     font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
+    font-size: 16px;
     font-weight: 600;
-    line-height: normal;
+    line-height: 20px;
   }
 
   #date {
     color: #969696;
     font-family: Pretendard;
-    font-size: 15px;
-    font-style: normal;
+    font-size: 14px;
     font-weight: 500;
-    line-height: normal;
+    line-height: 18px;
   }
 `;
 
+/* 항목 오른쪽(수량) */
 export const Num = styled.div`
   color: #000;
-  text-align: right;
   font-family: Pretendard;
   font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: right;
 `;
 
 export const Nav = styled.div`

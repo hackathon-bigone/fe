@@ -10,7 +10,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  width: 393px;
+  width: 390px;
   flex-shrink: 0;
   padding-bottom: 200px;
 `;
@@ -201,15 +201,12 @@ export const Image = styled.div`
   height: 90px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
-
-  img {
-    width: 90px;
-    height: 90px;
-    flex-shrink: 0;
-    border-radius: 5px;
-    background: url(<path-to-image>) lightgray 0px -36.236px / 100% 150% no-repeat;
-  }
+  background-image: ${(p) => (p.$bg ? `url("${p.$bg}")` : "none")};
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #f3f3f3;
+  overflow: hidden;
 `;
 
 export const Detail = styled.div`
