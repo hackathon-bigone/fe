@@ -69,6 +69,7 @@ export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  width: 353px;
 `;
 
 export const AddLinkBtn = styled.div`
@@ -94,6 +95,13 @@ export const AddLinkBtn = styled.div`
   }
 `;
 
+export const DeleteIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+`;
+
 export const InTitle = styled.div`
   color: #000;
   font-family: Pretendard;
@@ -106,6 +114,7 @@ export const InTitle = styled.div`
 
 export const Input = styled.input`
   width: 350px;
+  display: flex;
   height: 50px;
   flex-shrink: 0;
 

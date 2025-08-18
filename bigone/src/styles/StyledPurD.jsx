@@ -118,7 +118,6 @@ export const D_Inform_black = styled.div`
 `;
 
 export const D_State = styled.div`
-  width: 50px;
   height: 25px;
   flex-shrink: 0;
   border-radius: 5px;
@@ -132,6 +131,7 @@ export const D_State = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  padding: 0 5px;
 `;
 
 export const Profile = styled.div`

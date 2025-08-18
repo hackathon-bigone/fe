@@ -41,7 +41,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/my" element={<My />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/purchase/detail" element={<P_Detail />} />
+        <Route path="/purchase/detail/:user_id" element={<P_Detail />} />
         <Route path="/purchase/write" element={<PurWrite />} />
         <Route path="/purchase" element={<Purchase />} />
         <Route path="/recipe" element={<Recipe />} />

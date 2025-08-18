@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPur";
+import axios from "axios";
 
 const Purchase = () => {
   const navigate = useNavigate();
@@ -9,8 +10,8 @@ const Purchase = () => {
     navigate(`/purchase/write`);
   };
 
-  const goDetail = () => {
-    navigate(`/purchase/detail`);
+  const goDetail = (id) => {
+    navigate(`/purchase/detail/${id}`);
   };
 
   const goMy = () => {
@@ -33,6 +34,39 @@ const Purchase = () => {
   const handleScrapClick = () => {
     setIsScrapped((prev) => !prev);
   };
+  const [component, setComponent] = useState([]);
+  const [total, setTotal] = useState(0);
+  const renderDateOrRelative = (dateString) => {
+    if (!dateString) return "";
+    const isAbsoluteDate = /^\d{4}-\d{2}-\d{2}T/.test(dateString);
+
+    if (isAbsoluteDate) {
+      const date = new Date(dateString);
+      return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+    } else {
+      return dateString;
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://43.203.179.188/groupbuys", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+
+        setComponent(data.groupbuys);
+        setTotal(data.totalCount);
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    };
+    fetchData();
+  }, []); // []: 컴포넌트 마운트 시 1회 실행
 
   return (
     <P.Container>
@@ -52,7 +86,7 @@ const Purchase = () => {
         <P.Bar>
           <P.Post>
             <div id="bold">게시물</div>
-            <div id="num">5</div>
+            <div id="num">{total}</div>
             <div id="gun">건</div>
           </P.Post>
           <P.Recent>
@@ -60,138 +94,41 @@ const Purchase = () => {
             최신순
           </P.Recent>
         </P.Bar>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
-        <P.Component>
-          <P.Img>
-            <img alt="임시"></img>
-          </P.Img>
-          <P.ImformBox>
-            <P.CTitle>
-              <div id="title" onClick={goDetail}>
-                2L 생수 나눠 사실 분 구해요~
-              </div>
-              <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
-            </P.CTitle>
-            <P.Detail>
-              <div style={{ display: "flex", gap: "2px" }}>
-                <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}></img>
-                <div id="comment-num">2</div>
-                <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`}></img>
-                <P.D_State>모집중</P.D_State>
-              </div>
-              <P.D_Date>1시간 전</P.D_Date>
-            </P.Detail>
-          </P.ImformBox>
-        </P.Component>
+
+        {component.map((item) => {
+          // createDate에서 년, 월, 일만 잘라내기
+          const isRecruiting = item.status === "RECRUITING";
+          const status = isRecruiting ? "모집중" : "모집완료";
+          const statusStyle = {
+            color: isRecruiting ? "#FF4F26" : "#FFF",
+            backgroundColor: isRecruiting ? "rgba(255, 79, 38, 0.10)" : "#C4C4C4",
+          };
+
+          return (
+            <P.Component key={item.groupbuyId}>
+              <P.Img>
+                <img src={`http://43.203.179.188/${item.mainImageUrl}`} alt="임시" />
+              </P.Img>
+              <P.ImformBox>
+                <P.CTitle>
+                  <div id="title" onClick={() => goDetail(item.groupbuyId)}>
+                    {item.groupbuyTitle}
+                  </div>
+                  <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y" : "star_w"}.svg`} onClick={handleScrapClick} />
+                </P.CTitle>
+                <P.Detail>
+                  <div style={{ display: "flex", gap: "2px" }}>
+                    <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} />
+                    <div id="comment-num">{item.commentCount}</div>
+                    <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`} />
+                    <P.D_State style={statusStyle}>{status}</P.D_State>
+                  </div>
+                  <P.D_Date>{renderDateOrRelative(item.createDate)}</P.D_Date>
+                </P.Detail>
+              </P.ImformBox>
+            </P.Component>
+          );
+        })}
       </P.Body>
 
       <P.Nav>

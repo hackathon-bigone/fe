@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurW.jsx";
 import Modal from "../pages/components/Modal.jsx";
+import axios from "axios";
 
 const PurWrite = () => {
   const navigate = useNavigate();
@@ -25,6 +26,16 @@ const PurWrite = () => {
   const [member, setMember] = useState("");
   const [detail, setDetail] = useState("");
   const [links, setLinks] = useState([""]);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const payload = {
+    groupbuyTitle: title,
+    mainImageUrl: pic,
+    groupbuyCount: member,
+    groupbuyDescription: detail,
+    buyLinks: links.map((link) => ({ groupbuylinkUrl: link.trim() })),
+  };
 
   const isActive = title.length > 0 && member.length > 0 && detail.length > 0 && links.every((link) => link.trim().length > 0); // 모든 공동구매 링크가 채워져야 동작하도록 구현
 
@@ -42,6 +53,40 @@ const PurWrite = () => {
     const file = e.target.files[0];
     if (file) {
       setPic(file);
+    }
+  };
+
+  const handleRemoveInput = (index) => {
+    if (links.length > 1) {
+      const newLinks = [...links];
+      newLinks.splice(index, 1); // index 위치의 요소를 제거
+      setLinks(newLinks);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("로그인 토큰이 없습니다. 다시 로그인해 주세요.");
+      }
+
+      if (payload.length === 0) {
+        throw new Error("보낼 데이터가 없습니다.");
+      }
+
+      await axios.post("http://43.203.179.188/groupbuys", payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // 서버가 다른 헤더명을 요구하면 여기만 바꾸면 됨
+        },
+      });
+      goPur();
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(err?.response?.data?.message || err?.message || "저장 중 오류가 발생했습니다.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -82,30 +127,30 @@ const PurWrite = () => {
         </P.InputWrapper>
 
         {links.map((linkValue, index) => (
-          <P.LinkWrapper>
+          <P.LinkWrapper key={index}>
             {index === 0 && <P.InTitle>공동구매 링크</P.InTitle>}
-            <P.Input
-              key={index}
-              value={linkValue}
-              onChange={(e) => {
-                const newLinks = [...links];
-                newLinks[index] = e.target.value;
-                setLinks(newLinks);
-              }}
-              // style={{ width: index > 0 ? "300px" : "350px" }}
-            />
-            {/* {index > 0 && (
-              <buttom>
-                <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Trash.svg`} alt="plus" />
-              </buttom>
-            )} */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px" }}>
+              <P.Input
+                value={linkValue}
+                onChange={(e) => {
+                  const newLinks = [...links];
+                  newLinks[index] = e.target.value;
+                  setLinks(newLinks);
+                }}
+                style={{ width: links.length > 1 ? "300px" : "350px" }} // 2개 이상이면 줄임
+              />
+              {links.length > 1 && <P.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveInput(index)} style={{ cursor: "pointer" }} />}
+            </div>
           </P.LinkWrapper>
         ))}
+
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
           <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`} alt="plus" />
           <div>링크 추가</div>
         </P.AddLinkBtn>
-        <P.UploadBtn style={{ background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }}>게시물 업로드</P.UploadBtn>
+        <P.UploadBtn style={{ background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }} onClick={handleSave}>
+          게시물 업로드
+        </P.UploadBtn>
       </P.Content>
       <Modal
         title="게시물 작성을 그만둘까요?"

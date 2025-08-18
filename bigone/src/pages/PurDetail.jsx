@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as P from "../styles/StyledPurD";
 import BottomSheet from "../pages/components/BottomSheet";
+import axios from "axios";
 
 const P_Detail = () => {
   const navigate = useNavigate();
@@ -11,6 +12,51 @@ const P_Detail = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const token = localStorage.getItem("access_token");
+  const { user_id } = useParams();
+  const [component, setComponent] = useState({});
+  const [comment, setComment] = useState([]);
+  const currentStatus = component.status || "";
+
+  const isRecruiting = currentStatus.toUpperCase() === "RECRUITING";
+  const status = isRecruiting ? "모집중" : "모집완료";
+  const statusStyle = {
+    color: isRecruiting ? "#FF4F26" : "#FFF",
+    backgroundColor: isRecruiting ? "rgba(255, 79, 38, 0.10)" : "#C4C4C4",
+  };
+  const renderDateOrRelative = (dateString) => {
+    if (!dateString) return "";
+    const isAbsoluteDate = /^\d{4}-\d{2}-\d{2}T/.test(dateString);
+
+    if (isAbsoluteDate) {
+      const date = new Date(dateString);
+      return `${date.getMonth() + 1}월 ${date.getDate()}일`;
+    } else {
+      return dateString;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://43.203.179.188/groupbuys/${user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+        setComponent(data);
+        setComment(data.comments);
+      } catch (error) {
+        console.log("Error fetching data: ", error);
+      }
+    };
+    fetchData();
+  }, [user_id, token]);
+
+  const myId = localStorage.getItem("user_id");
+  const isMine = myId === String(component.authorName);
+
   return (
     <P.Container>
       <P.Header>
@@ -19,6 +65,7 @@ const P_Detail = () => {
           <P.Title>공동구매 상세</P.Title>
         </P.Icons>
         <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" />
+        {isMine && <button>삭제</button>}
       </P.Header>
 
       <P.Content>
@@ -26,40 +73,46 @@ const P_Detail = () => {
           <img alt="pic"></img>
         </P.Pic>
         <P.Wrapper>
-          <P.D_Title>두루마리 휴지 30개 3개씩 나눠 가져요!!</P.D_Title>
+          <P.D_Title>{component.groupbusTitle}</P.D_Title>
           <img id="star" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
         </P.Wrapper>
         <P.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <P.D_Inform_gray>모집인원</P.D_Inform_gray>
-          <P.D_Inform_black>9명</P.D_Inform_black>
-          <P.D_State>모집중</P.D_State>
+          <P.D_Inform_black>{component.groupbuyCount}명</P.D_Inform_black>
+          <P.D_State style={statusStyle}>{status}</P.D_State>
         </P.Wrapper>
         <P.Wrapper>
           <P.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
             <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
             <div id="profile_inform">
-              <div id="username">월곡동 쩝쩝박사</div>
+              <div id="username">{component.authorName}</div>
               <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
                 <P.D_Inform_gray>게시물</P.D_Inform_gray>
                 <P.D_Inform_black>2개</P.D_Inform_black>
               </div>
             </div>
           </P.Profile>
-          <P.PostDate>8월 12일</P.PostDate>
+          <P.PostDate>{renderDateOrRelative(component.createDate)}</P.PostDate>
         </P.Wrapper>
-        <P.Post>
-          <p>안녕하세요, 월곡동 쩝쩝박사 공구가 돌아왔습니다!</p>
-          <p>쿠팡에서 두루마리 휴지 30개입 짜리를 할인하고 있는데, 제가 혼자 자취 중이라 같이 공동구매 하실 분을 구합니다!!</p>
-          <p>휴지는 저 포함 10명이서 3개씩 나눠가지고 N빵한 가격만큼 입금해주시면 됩니다. 밑에 옵챗 링크 올려두겠습니다~</p>
-        </P.Post>
+        <P.Post>{component.groupbuyDescription}</P.Post>
         <P.PostURL>
           <p>공동구매 링크</p>
-          <a href="https://open.kakao.com/o/szqBpBlh">https://open.kakao.com/o/szqBpBlh</a>
+          {Array.isArray(component.groupbuyLinkUrls) && component.groupbuyLinkUrls.length > 0 ? (
+            component.groupbuyLinkUrls.map((url, idx) => (
+              <p key={idx}>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url}
+                </a>
+              </p>
+            ))
+          ) : (
+            <p></p>
+          )}
         </P.PostURL>
         <P.Comment onClick={() => setIsOpen(true)}>
           <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
-          <div id="comment_cnt">21</div>
+          <div id="comment_cnt">{component.commentCount}</div>
         </P.Comment>
       </P.Content>
       <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}></BottomSheet>
