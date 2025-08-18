@@ -46,7 +46,7 @@ git pull upstream develop
        👉 Safari나 Chrome에서 아래처럼 입력:
 
            ```
-           172.30.1.72:/my
+           172.30.1.72:3000/my
            ```
 
       > ⚠️ **주의사항**
