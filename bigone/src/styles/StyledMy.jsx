@@ -36,6 +36,7 @@ export const Header = styled.div`
 `;
 
 export const Profile = styled.div`
+  width: 390px;
   display: flex;
   flex-direction: row;
   margin-top: 10px;
@@ -103,6 +104,16 @@ export const Image = styled.div`
   flex-shrink: 0;
   background-color: #e5e5e5;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 74px;
+    height: 88px;
+    flex-shrink: 0;
+    aspect-ratio: 37/44;
+  }
 `;
 
 export const Button = styled.div`

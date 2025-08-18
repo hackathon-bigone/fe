@@ -49,7 +49,7 @@ export const Category = styled.div`
   margin-top: 10px;
 
   #recipe {
-    color: #000;
+    color: #969696;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;
@@ -64,7 +64,7 @@ export const Category = styled.div`
   }
 
   #purchase {
-    color: #969696;
+    color: #000;
     text-align: center;
     font-family: Pretendard;
     font-size: 15px;
@@ -88,10 +88,11 @@ export const Body = styled.div`
 `;
 
 export const Component = styled.div`
-  padding: 10px 30px 10px 10px;
+  width: 390px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  // justify-content: space-between;
 `;
 
 export const Image = styled.div`
@@ -99,7 +100,7 @@ export const Image = styled.div`
   height: 90px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  background: lightgray 50% / cover no-repeat;
 `;
 
 export const Detail = styled.div`
@@ -107,6 +108,7 @@ export const Detail = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-left: 20px;
+  justify-content: space-between;
 `;
 
 export const Up = styled.div`
@@ -135,7 +137,8 @@ export const Scrap = styled.div`
 export const Down = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  // justify-content: space-between;
+  align-items: center;
 `;
 
 export const Icons = styled.div`
@@ -188,7 +191,8 @@ export const Icons = styled.div`
 `;
 
 export const Date = styled.div`
-  color: #000;
+  margin-left: 80px;
+  color: #969696;
   text-align: right;
   font-family: Pretendard;
   font-size: 15px;

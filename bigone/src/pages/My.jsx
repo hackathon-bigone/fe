@@ -52,6 +52,22 @@ const My = () => {
           setIsAuthed(false);
           setWelcomeMsg("로그인 하고 순삭의 다양한 서비스를 경험해보세요!");
         }
+
+        const countRes = await axios.get(
+          "http://43.203.179.188/mypage/my-posts/count",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setPostCount(countRes.data.totalPosts);
+
+        const commentRes = await axios.get(
+          "http://43.203.179.188/mypage/my-comments/count",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setCommentCount(commentRes.data.totalCommentCount);
       } catch (err) {
         console.error("❌ /mypage 호출 실패:", err?.response || err);
         setIsAuthed(false);
@@ -92,6 +108,9 @@ const My = () => {
     }
   };
 
+  const [postCount, setPostCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
+
   return (
     <M.Container>
       <M.Header>
@@ -117,7 +136,9 @@ const My = () => {
             <div id="welcome">{welcomeMsg}</div>
           )}
         </M.Welcome>
-        <M.Image></M.Image>
+        <M.Image>
+          <img src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="" />
+        </M.Image>
       </M.Profile>
       {/* 버튼: 로그인 여부에 따라 분기 */}
       <M.Button>
@@ -150,16 +171,16 @@ const My = () => {
               src={`${process.env.PUBLIC_URL}/images/pencil.png`}
               alt="write"
             />
-            <div id="num">1</div>
+            <div id="num">{postCount}</div> {/* ✅ totalPosts 표시 */}
             <div id="title">작성한 게시물</div>
           </M.Write>
           <M.Hr />
           <M.Comment>
             <img
-              src={`${process.env.PUBLIC_URL}/images/comment.png`}
+              src={`${process.env.PUBLIC_URL}/images/declaration.png`}
               alt="comment"
             />
-            <div id="num">2</div>
+            <div id="num">{commentCount}</div> {/* ✅ 수정된 부분 */}
             <div id="title">댓글 단 게시물</div>
           </M.Comment>
           <M.Hr />
@@ -192,7 +213,7 @@ const My = () => {
           <M.Hr />
           <M.Declar>
             <img
-              src={`${process.env.PUBLIC_URL}/images/declaration.png`}
+              src={`${process.env.PUBLIC_URL}/images/comment.png`}
               alt="declaration"
             />
             <div id="title">신고</div>

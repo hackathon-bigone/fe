@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as N from "../styles/StyledNick";
+import axios from "axios";
 
 const Nick = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [nickname, setNickname] = useState(""); // 현재 닉네임 상태
+  const [input, setInput] = useState(""); // 입력값 상태
+  const token = localStorage.getItem("access_token"); // 예: 토큰 localStorage에 저장되어 있다고 가정
+  const [isLoading, setIsLoading] = useState(true);
 
   const goBack = () => {
     navigate(-1);
@@ -16,10 +21,59 @@ const Nick = () => {
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+
+  // 닉네임 가져오기
+  useEffect(() => {
+    axios
+      .get("http://43.203.179.188/mypage", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const nick = res.data.nickname;
+        setNickname(nick);
+        setInput(nick);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("닉네임 조회 실패:", err);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const changeNickname = () => {
+    if (input.length < 2 || input.length > 10) {
+      alert("공백 포함 2~10자의 영문 또는 한글을 입력하세요.");
+      return;
+    }
+
+    axios
+      .patch(
+        "http://43.203.179.188/mypage/nickname",
+        {
+          nickname: input,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        alert("닉네임이 성공적으로 변경되었습니다.");
+        goHome();
+      })
+      .catch((err) => {
+        console.error("닉네임 변경 실패:", err);
+        alert("닉네임 변경 중 오류가 발생했습니다.");
+      });
+  };
+
+  // 모달 확인 클릭 시
   const confirm = () => {
     setOpen(false);
-    // TODO: 실제 저장/검증 로직 후 이동 등
-    goHome();
+    changeNickname();
   };
 
   return (
@@ -35,7 +89,11 @@ const Nick = () => {
       <N.Body>
         <N.Title>닉네임</N.Title>
         <N.Field>
-          <input type="text" />
+          <input
+            type="text"
+            value={input || ""} // undefined 방지!
+            onChange={(e) => setInput(e.target.value)}
+          />
         </N.Field>
         <N.Announce>공백 포함 영문 또는 한글 2~10자</N.Announce>
       </N.Body>
