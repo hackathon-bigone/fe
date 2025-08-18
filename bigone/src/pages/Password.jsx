@@ -30,10 +30,10 @@ const Password = () => {
           src={`${process.env.PUBLIC_URL}/images/back.svg`}
           alt="back"
         />
-        <div>닉네임 변경</div>
+        <div>비밀번호 변경</div>
       </P.Header>
       <P.Body>
-        <P.Title>닉네임</P.Title>
+        <P.Title>현재 비밀번호</P.Title>
         <P.Field>
           <input type="text" />
           <img

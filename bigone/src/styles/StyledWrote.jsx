@@ -85,6 +85,37 @@ export const Body = styled.div`
   align-items: center;
   margin-top: 9px;
   gap: 10px;
+  // min-height: 100vh;
+`;
+
+export const EmptyWrapper = styled.div`
+  justify-content: center;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+
+  img {
+    margin-top: 160px;
+    width: 165px;
+    height: 199px;
+    flex-shrink: 0;
+    aspect-ratio: 165/199;
+    opacity: 0.5; /* 👈 여기 추가! (0.0 ~ 1.0 사이) */
+  }
+
+  div {
+    margin-left: 4px;
+    margin-top: 30px;
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
 `;
 
 export const Component = styled.div`
