@@ -6,56 +6,88 @@ import axios from "axios";
 const My = () => {
   const navigate = useNavigate();
 
-  const goHome = () => {
-    navigate(`/home`);
-  };
+  // ----- 이동 함수 -----
+  const goHome = () => navigate(`/home`);
+  const goPur = () => navigate(`/purchase`);
+  const goRec = () => navigate(`/recipe`);
+  const goRef = () => navigate(`/refrigerator`);
+  const goWro = () => navigate(`/my/wrote/recipe`);
+  const goEdit = () => navigate(`/my/edit`);
+  const goPw = () => navigate(`/my/edit/password`);
+  const goLogin = () => navigate(`/login`);
+  const goSignup = () => navigate(`/signup`); // 라우트명 다르면 맞게 바꿔주세요
 
-  const goPur = () => {
-    navigate(`/purchase`);
-  };
+  // ----- 상태 -----
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [welcomeMsg, setWelcomeMsg] = useState(""); // 비로그인 안내문구
+  const [profile, setProfile] = useState({
+    username: "", // id 로 보여줌
+    nickname: "", // name 으로 보여줌
+  });
 
-  const goRec = () => {
-    navigate(`/recipe`);
-  };
+  // ----- 마이페이지 로드 -----
+  useEffect(() => {
+    const fetchMyPage = async () => {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setIsAuthed(false);
+        setWelcomeMsg("로그인 하고 순삭의 다양한 서비스를 경험해보세요!");
+        setLoading(false);
+        return;
+      }
 
-  const goRef = () => {
-    navigate(`/refrigerator`);
-  };
+      try {
+        const res = await axios.get("http://43.203.179.188/mypage", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-  const goWro = () => {
-    navigate(`/my/wrote/recipe`);
-  };
+        // 성공 케이스(명세: username, nickname)
+        const { username, nickname } = res.data || {};
+        if (username && nickname) {
+          setProfile({ username, nickname });
+          setIsAuthed(true);
+        } else {
+          // 예외적으로 스키마가 다르거나 비어있을 때
+          setIsAuthed(false);
+          setWelcomeMsg("로그인 하고 순삭의 다양한 서비스를 경험해보세요!");
+        }
+      } catch (err) {
+        console.error("❌ /mypage 호출 실패:", err?.response || err);
+        setIsAuthed(false);
+        // 실패 응답 바디에 message 가 있다면 사용
+        const msg =
+          err?.response?.data?.message ||
+          "로그인 하고 순삭의 다양한 서비스를 경험해보세요!";
+        setWelcomeMsg(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const goEdit = () => {
-    navigate(`/my/edit`);
-  };
+    fetchMyPage();
+  }, []);
 
-  const goPw = () => {
-    navigate(`/my/edit/password`);
-  };
-
+  // ----- 로그아웃 -----
   const handleLogout = async () => {
     const token = localStorage.getItem("access_token");
-
     if (!token) {
       alert("이미 로그아웃 상태입니다.");
       navigate("/login");
       return;
     }
-
     try {
       const res = await axios.post("http://43.203.179.188/user/logout", null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
       console.log("✅ 로그아웃 성공:", res.data);
       localStorage.removeItem("access_token");
       alert("로그아웃 되었습니다.");
+      setIsAuthed(false);
+      setWelcomeMsg("로그인 하고 순삭의 다양한 서비스를 경험해보세요!");
       navigate("/login");
     } catch (err) {
-      console.error("❌ 로그아웃 실패:", err.response || err);
+      console.error("❌ 로그아웃 실패:", err?.response || err);
       alert("서버 에러로 로그아웃에 실패했습니다.");
     }
   };
@@ -67,22 +99,47 @@ const My = () => {
       </M.Header>
       <M.Profile>
         <M.Welcome>
-          <M.Name>
-            <div id="name">짜파게티 요리사</div>
-            <div id="sama">님,</div>
-          </M.Name>
-          <div id="welcome">반가워요!</div>
-          <div id="id">yorisa024</div>
+          {loading ? (
+            <div id="welcome">불러오는 중...</div>
+          ) : isAuthed ? (
+            <>
+              <M.Name>
+                {/* name <- nickname */}
+                <div id="name">{profile.nickname}</div>
+                <div id="sama">님,</div>
+              </M.Name>
+              <div id="welcome">반가워요!</div>
+              {/* id <- username */}
+              <div id="id">{profile.username}</div>
+            </>
+          ) : (
+            // 비로그인: 안내 문구만 전체 출력
+            <div id="welcome">{welcomeMsg}</div>
+          )}
         </M.Welcome>
         <M.Image></M.Image>
       </M.Profile>
+      {/* 버튼: 로그인 여부에 따라 분기 */}
       <M.Button>
-        <div id="edit" onClick={goEdit}>
-          프로필 수정
-        </div>
-        <div id="logout" onClick={handleLogout}>
-          로그아웃
-        </div>
+        {isAuthed ? (
+          <>
+            <div id="edit" onClick={goEdit}>
+              프로필 수정
+            </div>
+            <div id="logout" onClick={handleLogout}>
+              로그아웃
+            </div>
+          </>
+        ) : (
+          <>
+            <div id="edit" onClick={goLogin}>
+              로그인
+            </div>
+            <div id="logout" onClick={goSignup}>
+              회원가입
+            </div>
+          </>
+        )}
       </M.Button>
 
       <M.Activity>

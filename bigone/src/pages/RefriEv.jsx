@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as R from "../styles/StyledEvery";
+import axios from "axios";
 
 const RefEv = () => {
   const navigate = useNavigate();
@@ -49,6 +50,63 @@ const RefEv = () => {
   const goToManual = () => {
     navigate(`/refrigerator/ingredients/write`);
   };
+  const [todayLabel, setTodayLabel] = useState("");
+  const [groups, setGroups] = useState([]); // [{key:'25.08.24', items:[...]}]
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // 'YY.MM.DD' -> Date (정렬용)
+  const parseYYMMDD = (s) => {
+    const m = /^(\d{2})\.(\d{2})\.(\d{2})$/.exec(s || "");
+    if (!m) return null;
+    return new Date(2000 + +m[1], +m[2] - 1, +m[3]);
+  };
+
+  useEffect(() => {
+    const fetchFoodbox = async () => {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setErrorMsg("로그인이 필요합니다.");
+        setLoading(false);
+        return;
+      }
+      try {
+        const res = await axios.get("http://43.203.179.188/foodbox", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = res.data || {};
+        setTodayLabel(data.today || "");
+
+        // items 그룹화 (expiryDate 없으면 '상시')
+        const map = {};
+        (data.items || []).forEach((it) => {
+          const key = it.expiryDate ?? "상시";
+          if (!map[key]) map[key] = [];
+          map[key].push(it);
+        });
+
+        // 키 정렬: 날짜 오름차순 + '상시'는 맨 뒤
+        const sortedKeys = Object.keys(map).sort((a, b) => {
+          if (a === "상시") return 1;
+          if (b === "상시") return -1;
+          const da = parseYYMMDD(a);
+          const db = parseYYMMDD(b);
+          if (!da && !db) return 0;
+          if (!da) return 1;
+          if (!db) return -1;
+          return da - db;
+        });
+
+        setGroups(sortedKeys.map((k) => ({ key: k, items: map[k] })));
+      } catch (err) {
+        console.error("❌ /foodbox 실패:", err?.response || err);
+        setErrorMsg("식품 정보를 불러오지 못했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFoodbox();
+  }, []);
 
   return (
     <R.Container>
@@ -91,7 +149,7 @@ const RefEv = () => {
       </R.Category>
 
       <R.Body>
-        <R.Date>2025년 8월 25일</R.Date>
+        <R.Date>{todayLabel || (loading ? "불러오는 중..." : "")}</R.Date>
         <R.Detail>
           <R.L>
             <div id="circle" />
@@ -100,15 +158,27 @@ const RefEv = () => {
           <R.R onClick={goEdit}>수정</R.R>
         </R.Detail>
 
-        <R.List>
-          <R.CDate>25.08.24</R.CDate>
-          <R.Component>
-            <R.Content>
-              <R.Ing>감자</R.Ing>
-              <R.Num>3개</R.Num>
-            </R.Content>
-          </R.Component>
-        </R.List>
+        {loading ? (
+          <div style={{ padding: 16 }}>불러오는 중...</div>
+        ) : errorMsg ? (
+          <div style={{ padding: 16 }}>{errorMsg}</div>
+        ) : groups.length === 0 ? (
+          <div style={{ padding: 16 }}>등록된 식품이 없어요.</div>
+        ) : (
+          groups.map((g) => (
+            <R.List key={g.key}>
+              <R.CDate>{g.key}</R.CDate>
+              {g.items.map((it) => (
+                <R.Component key={`${g.key}-${it.food_id}-${it.name}`}>
+                  <R.Content>
+                    <R.Ing>{it.name}</R.Ing>
+                    <R.Num>{it.quantity}개</R.Num>
+                  </R.Content>
+                </R.Component>
+              ))}
+            </R.List>
+          ))
+        )}
       </R.Body>
 
       <R.Nav>

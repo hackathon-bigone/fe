@@ -39,6 +39,9 @@ export const Profile = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 export const Welcome = styled.div`
@@ -47,6 +50,10 @@ export const Welcome = styled.div`
   text-align: left;
 
   #welcome {
+    white-space: normal; /* 기본 줄바꿈 허용 */
+    word-break: keep-all; /* 단어(음절) 중간에서 끊지 않음(한글/영문 모두 효과적) */
+    overflow-wrap: break-word; /* 너무 긴 단어(긴 URL 등)는 줄 끝에서만 적당히 개행 */
+    // padding-left: 20px;
     color: #000;
     font-family: Pretendard;
     font-size: 25px;
