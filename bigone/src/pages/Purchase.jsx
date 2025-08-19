@@ -77,24 +77,23 @@ const Purchase = () => {
           <img id="write" src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`} alt="pencil" onClick={goWrite} />
         </P.Icons>
       </P.Header>
+      <P.Search>
+        <img src={`${process.env.PUBLIC_URL}/images/search.svg`} alt="search" />
+        <input type="text" placeholder="냉장고 속 재료를 검색해보세요." />
+      </P.Search>
+      <P.Bar>
+        <P.Post>
+          <div id="bold">게시물</div>
+          <div id="num">{total}</div>
+          <div id="gun">건</div>
+        </P.Post>
+        <P.Recent>
+          <div id="dot"></div>
+          최신순
+        </P.Recent>
+      </P.Bar>
 
       <P.Body>
-        <P.Search>
-          <img src={`${process.env.PUBLIC_URL}/images/search.svg`} alt="search" />
-          <input type="text" placeholder="냉장고 속 재료를 검색해보세요." />
-        </P.Search>
-        <P.Bar>
-          <P.Post>
-            <div id="bold">게시물</div>
-            <div id="num">{total}</div>
-            <div id="gun">건</div>
-          </P.Post>
-          <P.Recent>
-            <div id="dot"></div>
-            최신순
-          </P.Recent>
-        </P.Bar>
-
         {component.map((item) => {
           // createDate에서 년, 월, 일만 잘라내기
           const isRecruiting = item.status === "RECRUITING";
@@ -107,7 +106,7 @@ const Purchase = () => {
           return (
             <P.Component key={item.groupbuyId}>
               <P.Img>
-                <img src={`http://43.203.179.188/${item.mainImageUrl}`} alt="임시" />
+                <img src={`http://43.203.179.188/uploads/r?key=${item.mainImageUrl}`} alt="image" />
               </P.Img>
               <P.ImformBox>
                 <P.CTitle>

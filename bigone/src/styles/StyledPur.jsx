@@ -16,11 +16,13 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
+  /* 스크롤 만들기 위해 추가 */
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
+  z-index: 10;
 
   height: 80px;
   width: 393px;
@@ -161,11 +163,13 @@ export const Component = styled.div`
 `;
 
 export const Img = styled.div`
-  width: 90px;
-  height: 90px;
-  flex-shrink: 0;
-  border-radius: 5px;
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  img {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  }
 `;
 
 export const ImformBox = styled.div`

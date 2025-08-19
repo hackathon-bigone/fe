@@ -179,7 +179,7 @@ const Signup = () => {
             placeholder="아이디 입력"
             value={id}
             onChange={onChangeId}
-            style={{ width: "62%", backgroundColor: isIdCheckValid ? "rgba(196, 196, 196, 0.30)" : "rgba(255, 79, 38, 0.10)" }}
+            style={{ width: "62%", backgroundColor: isIdCheckValid ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)" }}
           ></input>
           <div id="IdCheckBtn" onClick={handleIdCheck} style={{ background: isIdCheckActivate ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }}>
             중복확인

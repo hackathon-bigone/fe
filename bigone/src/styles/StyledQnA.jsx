@@ -73,12 +73,12 @@ export const QnATitle = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin: 10px 0;
   display: flex;
 `;
 
 export const QnAContent = styled.div`
+  white-space: pre-wrap;
   color: #000;
   font-family: Pretendard;
   font-size: 15px;
@@ -177,4 +177,11 @@ export const Pic = styled.div`
   border-radius: 5px;
   background: url(<path-to-image>) lightgray 50% / cover no-repeat;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block; /* 불필요한 간격 제거 */
+  }
 `;

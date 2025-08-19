@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as P from "../styles/StyledPurD";
 import BottomSheet from "../pages/components/BottomSheet";
@@ -17,6 +17,8 @@ const P_Detail = () => {
   const [component, setComponent] = useState({});
   const [comment, setComment] = useState([]);
   const currentStatus = component.status || "";
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
 
   const isRecruiting = currentStatus.toUpperCase() === "RECRUITING";
   const status = isRecruiting ? "모집중" : "모집완료";
@@ -24,6 +26,7 @@ const P_Detail = () => {
     color: isRecruiting ? "#FF4F26" : "#FFF",
     backgroundColor: isRecruiting ? "rgba(255, 79, 38, 0.10)" : "#C4C4C4",
   };
+
   const renderDateOrRelative = (dateString) => {
     if (!dateString) return "";
     const isAbsoluteDate = /^\d{4}-\d{2}-\d{2}T/.test(dateString);
@@ -36,6 +39,32 @@ const P_Detail = () => {
     }
   };
 
+  const handleShareClick = () => {
+    const shareUrl = window.location.href; // 현재 페이지 URL 복사 예시
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        alert("링크가 복사되었습니다.");
+      })
+      .catch(() => {
+        alert("복사에 실패했습니다.");
+      });
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      const response = await axios.delete(`http://43.203.179.188/groupbuys/${user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("삭제되었습니다.");
+      goPur();
+    } catch (error) {
+      console.log("Error fetching data: ", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,9 +73,11 @@ const P_Detail = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const data = response.data;
         setComponent(data);
         setComment(data.comments);
+        console.log("status raw:", component.status);
       } catch (error) {
         console.log("Error fetching data: ", error);
       }
@@ -55,7 +86,9 @@ const P_Detail = () => {
   }, [user_id, token]);
 
   const myId = localStorage.getItem("user_id");
-  const isMine = myId === String(component.authorName);
+  const isMine = myId === String(component.authorUsername);
+  console.log("myId from localStorage:", myId);
+  console.log("component.authorId:", component.authorId, typeof component.authorId);
 
   return (
     <P.Container>
@@ -64,16 +97,31 @@ const P_Detail = () => {
           <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goPur} />
           <P.Title>공동구매 상세</P.Title>
         </P.Icons>
-        <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" />
-        {isMine && <button>삭제</button>}
+        <P.Icons>
+          <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" onClick={handleShareClick} />
+          {isMine && <img id="share" src={`${process.env.PUBLIC_URL}/images/Fix.svg`} alt="share" onClick={() => setShowPopup(!showPopup)} />}
+        </P.Icons>
+        {showPopup && (
+          <P.Popup ref={popupRef}>
+            <P.PopupItem>
+              수정
+              <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" />
+            </P.PopupItem>
+            <P.Hr />
+            <P.PopupItem onClick={handleDeleteClick}>
+              삭제
+              <img src={`${process.env.PUBLIC_URL}/images/Trash_c.svg`} alt="edit" />
+            </P.PopupItem>
+          </P.Popup>
+        )}
       </P.Header>
 
       <P.Content>
         <P.Pic>
-          <img alt="pic"></img>
+          <img src={`http://43.203.179.188/uploads/r?key=${component.mainImageUrl}`} alt="임시" />
         </P.Pic>
         <P.Wrapper>
-          <P.D_Title>{component.groupbusTitle}</P.D_Title>
+          <P.D_Title>{component.groupbuyTitle}</P.D_Title>
           <img id="star" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
         </P.Wrapper>
         <P.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
@@ -89,7 +137,7 @@ const P_Detail = () => {
               <div id="username">{component.authorName}</div>
               <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
                 <P.D_Inform_gray>게시물</P.D_Inform_gray>
-                <P.D_Inform_black>2개</P.D_Inform_black>
+                <P.D_Inform_black>{component.authorPostCount}개</P.D_Inform_black>
               </div>
             </div>
           </P.Profile>
@@ -115,7 +163,7 @@ const P_Detail = () => {
           <div id="comment_cnt">{component.commentCount}</div>
         </P.Comment>
       </P.Content>
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
     </P.Container>
   );
 };
