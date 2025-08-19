@@ -57,14 +57,15 @@ export const Content = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 export const InformWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 120px;
-  margin: 10px 20px;
+  align-items: flex-start;
+  height: 110px;
+  margin: 10px 0;
 `;
 
 export const InformTitle = styled.div`
@@ -75,6 +76,16 @@ export const InformTitle = styled.div`
   font-weight: 600;
   line-height: normal;
   margin: 10px 0;
+`;
+
+export const InformContentD = styled.div`
+  white-space: pre-wrap;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 133.333% */
 `;
 
 export const InformContent = styled.div`

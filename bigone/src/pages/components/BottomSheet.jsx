@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as B from "../../styles/StyledBottom";
 import CommentList from "./CommentList";
 
@@ -30,11 +30,16 @@ const sampleComments = [
   },
 ];
 
-const BottomSheet = ({ isOpen, onClose }) => {
+const BottomSheet = ({ isOpen, onClose, comments }) => {
   const [input, setInput] = useState("");
   const isActive = input.length > 0;
   const [isValid, setIsValid] = useState(false);
-  const [feedComments, setFeedComments] = useState(sampleComments);
+  const [feedComments, setFeedComments] = useState(comments || []);
+
+  useEffect(() => {
+    // comment prop이 바뀔 때 feedComments 상태 업데이트
+    setFeedComments(comments || []);
+  }, [comments]);
   const today = new Date();
   const month = today.getMonth() + 1;
   const date = today.getDate();
@@ -52,16 +57,6 @@ const BottomSheet = ({ isOpen, onClose }) => {
     setInput("");
     setIsValid(false);
   };
-
-  //   const textareaRef = useRef(null);
-
-  //   const handleChange = (e) => {
-  //     const textarea = textareaRef.current;
-  //     setInput(e.target.value);
-
-  //     textarea.style.height = "50px";
-  //     textarea.style.height = `${textarea.scrollHeight}px`;
-  //   };
 
   return (
     <B.Overlay isOpen={isOpen} onClick={onClose}>

@@ -55,9 +55,9 @@ function App() {
         <Route path="/my/edit/nickname" element={<Nick />} />
         <Route path="/my/edit/password" element={<Password />} />
         <Route path="/my/inform" element={<Inform />} />
-        <Route path="/my/inform/detail" element={<Inform_Detail />} />
+        <Route path="/my/inform/detail/:id" element={<Inform_Detail />} />
         <Route path="/my/question" element={<QnA />} />
-        <Route path="/my/question/detail" element={<QnADetail />} />
+        <Route path="/my/question/detail/:id" element={<QnADetail />} />
         <Route path="/refrigerator/ingredients" element={<RefEv />} />
         <Route path="/refrigerator/ingredients/edit" element={<RefPlus />} />
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
