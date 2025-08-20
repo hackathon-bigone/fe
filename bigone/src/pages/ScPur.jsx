@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as P from "../styles/StyledPurH";
+import * as P from "../styles/StyledScPur";
 import axios from "axios";
 
-const PurHistory = () => {
+const ScrapPur = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -73,7 +73,7 @@ const PurHistory = () => {
           alt="back"
           onClick={goBack}
         />
-        <P.Title>작성한 게시물</P.Title>
+        <P.Title>스크랩</P.Title>
       </P.Header>
       <P.Category>
         <div id="recipe" onClick={goRec}>
@@ -125,4 +125,4 @@ const PurHistory = () => {
   );
 };
 
-export default PurHistory;
+export default ScrapPur;

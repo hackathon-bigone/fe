@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as R from "../styles/StyledRecipe";
+import axios from "axios";
 
 const Recipe = () => {
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ const Recipe = () => {
 
   const goWrite = () => {
     navigate(`/recipe/write`);
+  };
+
+  const goToDetail = (postId) => {
+    navigate(`/recipe/detail/${postId}`);
   };
 
   const [isScrapped, setIsScrapped] = useState(false);
@@ -48,6 +53,24 @@ const Recipe = () => {
   const handleSelectSort = (type) => {
     setSelectedSort(type);
   };
+
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await axios.get(
+          `http://43.203.179.188/recipe?sort=${selectedSort}`
+        );
+        console.log("응답 데이터:", response.data); // 응답 구조 확인용
+        setRecipes(response.data.boards); // ✅ 배열만 추출해서 세팅!
+      } catch (error) {
+        console.error("레시피 불러오기 실패:", error);
+      }
+    };
+
+    fetchRecipes();
+  }, [selectedSort]);
 
   return (
     <R.Container>
@@ -122,45 +145,53 @@ const Recipe = () => {
           </R.Select>
         </R.Condition>
         <R.List>
-          <R.Component>
-            <R.Image>
-              <img src="" alt="represent" />
-            </R.Image>
-            <R.Detail>
-              <R.Up>
-                <R.CTitle>에어프라이어만으로 만드는 스모어 크래커</R.CTitle>
-                <R.Scrap>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/${
-                      isScrapped ? "star_y" : "star_w"
-                    }.svg`}
-                    alt="scrap"
-                    onClick={handleScrapClick}
-                  />
-                </R.Scrap>
-              </R.Up>
-              <R.Down>
-                <R.Icon>
-                  <img
-                    id="heart"
-                    src={`${process.env.PUBLIC_URL}/images/${
-                      isHeart ? "heart_b.png" : "heart_w.svg"
-                    }`}
-                    alt="heart"
-                    onClick={handleHeart}
-                  />
-                  <div id="hnum">105</div>
-                  <img
-                    id="comment"
-                    src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
-                    alt="comment"
-                  />
-                  <div id="cnum">24</div>
-                </R.Icon>
-                <R.Date>8월 24일</R.Date>
-              </R.Down>
-            </R.Detail>
-          </R.Component>
+          {recipes.map((recipe) => (
+            <R.Component
+              key={recipe.postId}
+              onClick={() => goToDetail(recipe.postId)}
+            >
+              <R.Image>
+                <img
+                  src={`http://43.203.179.188/${recipe.mainImageUrl}`}
+                  alt="represent"
+                />
+              </R.Image>
+              <R.Detail>
+                <R.Up>
+                  <R.CTitle>{recipe.title}</R.CTitle>
+                  <R.Scrap>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/${
+                        isScrapped ? "star_y" : "star_w"
+                      }.svg`}
+                      alt="scrap"
+                      onClick={handleScrapClick}
+                    />
+                  </R.Scrap>
+                </R.Up>
+                <R.Down>
+                  <R.Icon>
+                    <img
+                      id="heart"
+                      src={`${process.env.PUBLIC_URL}/images/${
+                        isHeart ? "heart_b.png" : "heart_w.svg"
+                      }`}
+                      alt="heart"
+                      onClick={handleHeart}
+                    />
+                    <div id="hnum">{recipe.likeCount}</div>
+                    <img
+                      id="comment"
+                      src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
+                      alt="comment"
+                    />
+                    <div id="cnum">{recipe.commentCount}</div>
+                  </R.Icon>
+                  <R.Date>{recipe.createdAt}</R.Date>
+                </R.Down>
+              </R.Detail>
+            </R.Component>
+          ))}
         </R.List>
       </R.Body>
 
