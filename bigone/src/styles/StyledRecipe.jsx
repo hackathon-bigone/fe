@@ -232,7 +232,7 @@ export const Image = styled.div`
   height: 90px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+  background: lightgray 50% / cover no-repeat;
 `;
 
 export const Detail = styled.div`
@@ -240,12 +240,15 @@ export const Detail = styled.div`
   flex-direction: column;
   gap: 24px;
   margin-left: 20px;
+  justify-content: space-between;
 `;
 
 export const Up = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
+  width: 240px;
+  justify-content: space-between;
 `;
 
 export const CTitle = styled.div`
@@ -255,14 +258,18 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 167px;
+  width: 180px;
+
+  /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
+  white-space: normal;
+  overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
+  word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
 `;
 
 export const Scrap = styled.div`
   width: 23px;
   height: 22px;
   flex-shrink: 0;
-  margin-left: 50px;
 `;
 
 export const Down = styled.div`

@@ -30,6 +30,8 @@ import Inform from "./pages/Information";
 import Inform_Detail from "./pages/InformationD";
 import QnA from "./pages/QnA";
 import QnADetail from "./pages/QnADetail";
+import Scrap from "./pages/Scrap";
+import ScrapPur from "./pages/ScPur";
 
 function App() {
   return (
@@ -45,7 +47,7 @@ function App() {
         <Route path="/purchase/write" element={<PurWrite />} />
         <Route path="/purchase" element={<Purchase />} />
         <Route path="/recipe" element={<Recipe />} />
-        <Route path="/recipe/detail" element={<R_Detail />} />
+        <Route path="/recipe/detail/:id" element={<R_Detail />} />
         <Route path="/recipe/write" element={<ReWrite />} />
         <Route path="/refrigerator" element={<Refri />} />
         <Route path="/my/wrote/recipe" element={<Wrote />} />
@@ -63,8 +65,16 @@ function App() {
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
         <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
         <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
-        <Route path="/refrigerator/ingredients/receipt/scan" element={<Scan />} />
-        <Route path="/refrigerator/ingredients/receipt/scan/complete" element={<ScanCom />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan"
+          element={<Scan />}
+        />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/complete"
+          element={<ScanCom />}
+        />
+        <Route path="/my/scrap" element={<Scrap />} />
+        <Route path="/my/scrap/purchase" element={<ScrapPur />} />
       </Routes>
     </BrowserRouter>
   );

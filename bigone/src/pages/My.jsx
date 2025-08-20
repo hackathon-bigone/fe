@@ -14,6 +14,7 @@ const My = () => {
   const goWro = () => navigate(`/my/wrote/recipe`);
   const goEdit = () => navigate(`/my/edit`);
   const goPw = () => navigate(`/my/edit/password`);
+  const goScrap = () => navigate(`/my/scrap`);
   const goLogin = () => navigate(`/login`);
   const goSignup = () => navigate(`/signup`); // 라우트명 다르면 맞게 바꿔주세요
 
@@ -184,7 +185,7 @@ const My = () => {
             <div id="title">댓글 단 게시물</div>
           </M.Comment>
           <M.Hr />
-          <M.Scrap>
+          <M.Scrap onClick={goScrap}>
             <img
               src={`${process.env.PUBLIC_URL}/images/star.png`}
               alt="scrap"
