@@ -19,24 +19,6 @@ const PurWrite = () => {
     setIsOpen(false);
   };
 
-  const getPresignedUrl = async (file) => {
-    const token = localStorage.getItem("access_token");
-    const filename = encodeURIComponent(file.name);
-    // 서버 API가 presigned URL을 반환한다고 가정
-    const response = await axios.get(`http://43.203.179.188/s3/presigned-url?fileName=${filename}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data.putUrl; // server returns { putUrl: 'https://...' }
-  };
-
-  const uploadToS3 = async (file, putUrl) => {
-    await axios.put(putUrl, file, {
-      headers: {
-        "Content-Type": file.type,
-      },
-    });
-  };
-
   const fileInputRef = useRef(null);
   const [pic, setPic] = useState(null);
 
@@ -77,6 +59,7 @@ const PurWrite = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
+
       if (!pic) throw new Error("이미지를 선택해주세요.");
       if (!title || !member || !detail || !links.every((link) => link.trim().length > 0)) {
         throw new Error("모든 필드를 올바르게 입력해주세요.");
@@ -84,29 +67,46 @@ const PurWrite = () => {
 
       const token = localStorage.getItem("access_token");
 
-      // 1. Presigned URL 받기
-      const putUrl = await getPresignedUrl(pic);
+      // 1. Presigned URL 요청 → 파일명과 타입만 배열로 전달
+      const response = await axios.post(
+        "http://43.203.179.188/uploads/groupbuy",
+        [
+          {
+            filename: "groupbuyImage",
+            contentType: "image/png",
+          },
+        ],
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      // 2. S3에 이미지 업로드
-      await uploadToS3(pic, putUrl);
+      const putUrl = response.data[0].putUrl;
+      console.log(putUrl);
 
-      // 3. 실제 이미지 URL (쿼리 제거)
-      const imageUrl = putUrl.split("?")[0];
-
-      // 4. 서버에 게시물 데이터 전송
-      const payload = {
-        groupbuyTitle: title,
-        mainImageUrl: imageUrl,
-        groupbuyCount: member,
-        groupbuyDescription: detail,
-        buyLinks: links.map((link) => ({ groupbuylinkUrl: link.trim() })), // 필드명 반드시 확인
-      };
-
-      await axios.post("http://43.203.179.188/groupbuys", payload, {
-        headers: { "Content-Type": "application/json" },
+      // 2. S3에 파일 업로드(put)
+      await axios.put(putUrl, pic, {
+        headers: { "Content-Type": "image/png" },
       });
 
-      goPur(); // 업로드 성공 후 목록 이동
+      // 3. 게시물 데이터 서버에 전송
+      const payload = {
+        groupbuyTitle: title,
+        mainImageUrl: response.data[0].key,
+        groupbuyCount: Number(member),
+        groupbuyDescription: detail,
+        buyLinks: links.map((link) => ({ groupbuyLinkUrls: link.trim() })),
+      };
+      console.log(typeof member, member);
+      console.log(payload);
+      await axios.post("http://43.203.179.188/groupbuys", payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      goPur();
     } catch (error) {
       setErrorMsg(error.message || "업로드 중 오류가 발생했습니다.");
     } finally {

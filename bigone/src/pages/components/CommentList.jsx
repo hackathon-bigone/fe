@@ -6,7 +6,7 @@ const CommentList = ({ feedComments }) => {
   return (
     <B.CommentList>
       {feedComments.map((item) => (
-        <Comment key={item.commentId} username={item.authorName} date={item.createdAt} comment={item.content} />
+        <Comment key={item.commentId} username={item.authorName} date={item.createdAt} comment={item.content} children={item.children} />
       ))}
     </B.CommentList>
   );
