@@ -53,7 +53,7 @@ const P_Detail = () => {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await axios.delete(`http://43.203.179.188/groupbuys/${user_id}`, {
+      await axios.delete(`http://43.203.179.188/groupbuys/${user_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

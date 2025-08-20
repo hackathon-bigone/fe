@@ -186,6 +186,26 @@ export const Comment = styled.div`
   position: relative;
   align-items: center;
 
+  .comment-children {
+    margin-top: 8px;
+  }
+
+  .line {
+    width: 35px;
+    height: 0.5px;
+    background: #c4c4c4;
+  }
+
+  .button {
+    padding: 10px;
+    color: #969696;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+
   #username-date {
     display: flex;
     gap: 8px;

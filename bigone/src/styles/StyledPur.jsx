@@ -49,6 +49,16 @@ export const Icons = styled.div`
   align-items: center;
 `;
 
+export const Content = styled.div`
+  margin-top: 60px;
+  padding: 20px;
+
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 export const Body = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,7 +101,7 @@ export const Search = styled.div`
 
 export const Bar = styled.div`
   width: 100%;
-  padding: 20px 15px;
+  padding: 20px 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -154,12 +164,12 @@ export const Recent = styled.div`
 `;
 
 export const Component = styled.div`
-  padding: 0 20px;
   position: relative;
   width: 390px;
   height: 100px;
   display: flex;
   flex-direction: row;
+  margin: 5px 0;
 `;
 
 export const Img = styled.div`
