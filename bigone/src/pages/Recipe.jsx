@@ -11,7 +11,7 @@ const Recipe = () => {
   };
 
   const goHome = () => {
-    navigate(`/home`);
+    navigate(`/`);
   };
 
   const goPur = () => {
