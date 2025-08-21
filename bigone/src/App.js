@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React from "react";
 import GlobalStyle from "./pages/GlobalStyles";
-import Main from "./pages/Main";
 import My from "./pages/My";
 import Home from "./pages/Home.";
 import Purchase from "./pages/Purchase";
@@ -38,11 +37,10 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/my" element={<My />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/purchase/detail/:user_id" element={<P_Detail />} />
         <Route path="/purchase/write" element={<PurWrite />} />
         <Route path="/purchase" element={<Purchase />} />
