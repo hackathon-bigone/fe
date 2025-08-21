@@ -208,6 +208,7 @@ export const Comment = styled.div`
 
   #username-date {
     display: flex;
+    position: relative;
     gap: 8px;
   }
 

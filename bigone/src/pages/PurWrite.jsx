@@ -72,7 +72,7 @@ const PurWrite = () => {
         "http://43.203.179.188/uploads/groupbuy",
         [
           {
-            filename: "groupbuyImage",
+            filename: pic.filename,
             contentType: "image/png",
           },
         ],
@@ -95,8 +95,9 @@ const PurWrite = () => {
         mainImageUrl: response.data[0].key,
         groupbuyCount: Number(member),
         groupbuyDescription: detail,
-        buyLinks: links.map((link) => ({ groupbuyLinkUrls: link.trim() })),
+        groupbuyLinkUrls: links.map((link) => link.trim()),
       };
+
       console.log(typeof member, member);
       console.log(payload);
       await axios.post("http://43.203.179.188/groupbuys", payload, {
@@ -105,7 +106,7 @@ const PurWrite = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(payload);
       goPur();
     } catch (error) {
       setErrorMsg(error.message || "업로드 중 오류가 발생했습니다.");

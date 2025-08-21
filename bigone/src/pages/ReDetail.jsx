@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import * as R from "../styles/StyledRecipeD";
 import BottomSheet from "../pages/components/BottomSheet";
+import axios from "axios";
 
 const R_Detail = () => {
   const navigate = useNavigate();
@@ -9,22 +10,123 @@ const R_Detail = () => {
     navigate(`/recipe`);
   };
 
+  const categoryLabels = {
+    BEGINNER: "왕초보",
+    MICROWAVE_AIRFRYER: "전자레인지•에어프라이어",
+    DESSERT: "디저트",
+    VEGAN: "비건",
+  };
+
   const [isOpen, setIsOpen] = useState(false);
+  const [component, setComponent] = useState({});
+  const [comment, setComment] = useState([]);
+  const [step, setStep] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const { id } = useParams();
+  const token = localStorage.getItem("access_token");
+  const lastStepNumber = step.length > 0 ? step[step.length - 1].stepNumber : 0;
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
 
   const [isHeart, setIsHeart] = useState(false);
-  const handleHeart = () => {
-    setIsHeart((prev) => !prev);
+  const handleHeart = async () => {
+    try {
+      const response = await axios.post(
+        `http://43.203.179.188/recipe/${id}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setIsHeart((prev) => !prev);
+    } catch (error) {
+      console.error("좋아요 요청 에러:", error.response ? error.response.data : error.message);
+    }
   };
 
   const [isScrapped, setIsScrapped] = useState(false);
-  const handleScrapClick = () => {
-    setIsScrapped((prev) => !prev);
+  const handleScrapClick = async () => {
+    try {
+      const response = await axios.post(
+        `http://43.203.179.188/recipe/${id}/scrap`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setIsScrapped((prev) => !prev);
+    } catch (error) {
+      console.error("스크랩 요청 에러:", error.response ? error.response.data : error.message);
+    }
   };
 
   const [isSelected, setIsSelected] = useState("ingredients");
   const handleSelectClick = (type) => {
     setIsSelected(type);
   };
+
+  useEffect(() => {
+    console.log("Steps data", step);
+  }, [step]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://43.203.179.188/recipe/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data;
+        console.log(data.ingredients);
+        setComponent(data);
+        setComment(data.comments);
+        setIngredients(data.ingredients);
+        setStep(data.steps);
+      } catch (error) {
+        console.log("Error fetching data: ", error);
+      }
+    };
+    fetchData();
+  }, [id, token]);
+
+  const handleShareClick = () => {
+    const shareUrl = window.location.href; // 현재 페이지 URL 복사 예시
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        alert("링크가 복사되었습니다.");
+      })
+      .catch(() => {
+        alert("복사에 실패했습니다.");
+      });
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await axios.delete(`http://43.203.179.188/recipe/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("삭제되었습니다.");
+      goRec();
+    } catch (error) {
+      console.log("Error fetching data: ", error);
+    }
+  };
+
+  const myId = localStorage.getItem("user_id");
+  const isMine = myId === String(component.authorUsername);
+  // console.log("myId from localStorage:", myId);
+  // console.log("component.authorId:", component.authorId, typeof component.authorId);
 
   return (
     <R.Container>
@@ -33,27 +135,40 @@ const R_Detail = () => {
           <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goRec} />
           <R.Title>레시피 상세</R.Title>
         </R.Icons>
-        <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" />
+        <R.Icons>
+          <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" onClick={handleShareClick} />
+          {isMine && <img id="share" src={`${process.env.PUBLIC_URL}/images/Fix.svg`} alt="share" onClick={() => setShowPopup(!showPopup)} />}
+        </R.Icons>
+        {showPopup && (
+          <R.Popup ref={popupRef}>
+            <R.PopupItem>
+              수정
+              <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" />
+            </R.PopupItem>
+            <R.Hr />
+            <R.PopupItem onClick={handleDeleteClick}>
+              삭제
+              <img src={`${process.env.PUBLIC_URL}/images/Trash_c.svg`} alt="edit" />
+            </R.PopupItem>
+          </R.Popup>
+        )}
       </R.Header>
       <R.Content>
         <R.Pic>
-          <img alt="pic"></img>
+          <img src={`http://43.203.179.188/uploads/r?key=${component.mainImageUrl}`} alt="임시" />
         </R.Pic>
         <R.Wrapper>
-          <R.D_Title>에어프라이어만으로 만드는 스모어 크래커</R.D_Title>
+          <R.D_Title>{component.title}</R.D_Title>
           <img id="star" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y.svg" : "star_w.svg"}`} alt="star" onClick={handleScrapClick} />
         </R.Wrapper>
         <R.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <R.D_Inform_gray>양</R.D_Inform_gray>
-          <R.D_Inform_black>1인분</R.D_Inform_black>
+          <R.D_Inform_black>인분</R.D_Inform_black>
           <R.D_Inform_gray>소요시간</R.D_Inform_gray>
-          <R.D_Inform_black>약 20분</R.D_Inform_black>
+          <R.D_Inform_black>{component.cookingTime}</R.D_Inform_black>
         </R.Wrapper>
         <R.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
-          <R.D_State>왕초보</R.D_State>
-          <R.D_State>전자레인지•에어프라이어</R.D_State>
-          <R.D_State>디저트</R.D_State>
-          <R.D_State>비건</R.D_State>
+          {component.categories && component.categories.map((category) => (categoryLabels[category] ? <R.D_State key={category}>{categoryLabels[category]}</R.D_State> : null))}
         </R.Wrapper>
 
         <R.Wrapper style={{ marginTop: "30px", marginBottom: "20px" }}>
@@ -61,32 +176,39 @@ const R_Detail = () => {
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
             <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
             <div id="profile_inform">
-              <div id="username">짜파게티 요리사</div>
+              <div id="username">{component.authorName}</div>
               <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
                 <R.D_Inform_gray>게시물</R.D_Inform_gray>
                 <R.D_Inform_black>1개</R.D_Inform_black>
               </div>
             </div>
           </R.Profile>
-          <R.PostDate>8월 12일</R.PostDate>
+          <R.PostDate>{component.createdAt}</R.PostDate>
         </R.Wrapper>
-        <R.Post>
-          안녕하세요, 저는 밥 보다 디저트를 더 좋아하는 짜파게티 요리사 입니다^^ 요즘 날씨가 많이 덥다보니 밥은 별로 안 땡기고 디저트 사러 나가기는 귀찮고..ㅎ 그래서 집에 있는 재료와 에어프라이어로
-          스모어를 만들어 봤는데 간단하고 맛있더라고요!? 저만 알기 아까워서 여러분들께 레시피 공유합니다🤗
-        </R.Post>
+        <R.Post>{component.recipeDescription}</R.Post>
         <R.PostURL>
           <p>레시피 링크</p>
-          <a href="https://open.kakao.com/o/szqBpBlh">https://open.kakao.com/o/szqBpBlh</a>
+          {Array.isArray(component.recipeLinks) && component.recipeLinks.length > 0 ? (
+            component.recipeLinks.map((link) => (
+              <p key={link.recipelinkId}>
+                <a href={link.recipelinkUrl} target="_blank" rel="noopener noreferrer">
+                  {link.recipelinkUrl}
+                </a>
+              </p>
+            ))
+          ) : (
+            <p></p>
+          )}
         </R.PostURL>
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <R.Heart>
             <img id="heart" src={`${process.env.PUBLIC_URL}/images/${isHeart ? "heart_b.png" : "heart_w.svg"}`} alt="heart" onClick={handleHeart} />
-            <div id="heart_cnt">84</div>
+            <div id="heart_cnt">{component.likeCount}</div>
           </R.Heart>
           <R.Comment onClick={() => setIsOpen(true)}>
             <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
-            <div id="comment_cnt">21</div>
+            <div id="comment_cnt">{component.commentCount}</div>
           </R.Comment>
         </div>
       </R.Content>
@@ -99,56 +221,33 @@ const R_Detail = () => {
         </R.Tap>
       </R.ContentBar>
 
-      {/* 조건부 렌더링 */}
       {isSelected === "ingredients" && (
         <R.Ingredients>
-          <div id="wrapper">
-            <span id="title">크래커</span>
-            <img id="line" src={`${process.env.PUBLIC_URL}/images/Line_in.png`} alt="line" />
-            <span id="count">6개</span>
-          </div>
-          <div id="wrapper">
-            <span id="title">마쉬멜로우(대)</span>
-            <img id="line" src={`${process.env.PUBLIC_URL}/images/Line_in.png`} alt="line" />
-            <span id="count">3개</span>
-          </div>
+          {ingredients.map((ingredient) => (
+            <div id="wrapper" key={ingredient.ingredientId}>
+              <span id="title">{ingredient.ingredientName}</span>
+              <img id="line" src={`${process.env.PUBLIC_URL}/images/Line_in.png`} alt="line" />
+              <span id="count">{ingredient.ingredientAmount}</span>
+            </div>
+          ))}
         </R.Ingredients>
       )}
 
       {isSelected === "recipe" && (
         <R.Recipe>
-          <div id="count">총 10단계</div>
-          <R.RecipeStep>
-            <R.PicStep>
-              <img alt="pic" />
-            </R.PicStep>
-            <div id="step">STEP 01</div>
-            <div id="explanation">요리에 필요한 재료를 모두 준비해 줍니다.</div>
-          </R.RecipeStep>
-          <R.RecipeStep>
-            <R.PicStep>
-              <img alt="pic" />
-            </R.PicStep>
-            <div id="step">STEP 02</div>
-            <div id="explanation">에어프라이어 온도를 180도로 설정한 후, 3분 동안 예열해 줍니다.</div>
-          </R.RecipeStep>
-          <R.RecipeStep>
-            <R.PicStep>
-              <img alt="pic" />
-            </R.PicStep>
-            <div id="step">STEP 03</div>
-            <div id="explanation">에어프라이어를 예열하는 동안, 크래커를 꺼내 하나씩 올려 둡니다. 올려 둔 각각의 크래커 위에 초콜릿을 조각으로 잘라 하나씩 얹어 줍니다.</div>
-          </R.RecipeStep>
-          <R.RecipeStep>
-            <R.PicStep>
-              <img alt="pic" />
-            </R.PicStep>
-            <div id="step">STEP 04</div>
-            <div id="explanation">크래커에 얹어진 각각의 초콜릿 위에 마시멜로우를 한 개씩 얹어 줍니다.</div>
-          </R.RecipeStep>
+          <div id="count">총 {lastStepNumber}단계</div>
+          {step?.map((step) => (
+            <R.RecipeStep key={step.stepId}>
+              <R.PicStep>
+                <img src={step.stepImageUrl ? `http://43.203.179.188/uploads/r?key=${step.stepImageUrl}` : "/images/scrap.svg"} alt="임시" />
+              </R.PicStep>
+              <div id="step">STEP {step.stepNumber}</div>
+              <div id="explanation">{step.stepDescription}</div>
+            </R.RecipeStep>
+          ))}
         </R.Recipe>
       )}
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
     </R.Container>
   );
 };
