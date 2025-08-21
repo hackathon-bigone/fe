@@ -11,7 +11,7 @@ const Refri = () => {
   };
 
   const goHome = () => {
-    navigate(`/home`);
+    navigate(`/`);
   };
 
   const goPur = () => {
