@@ -196,13 +196,18 @@ export const CTitle = styled.div`
 
   #title {
     display: flex;
-    width: 185px;
+    width: 195px;
     color: #000;
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
+    /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
+    white-space: normal;
+    overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
+    word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
   }
 
   #scrap {

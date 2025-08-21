@@ -233,6 +233,14 @@ export const Image = styled.div`
   flex-shrink: 0;
   border-radius: 5px;
   background: lightgray 50% / cover no-repeat;
+
+  img {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: lightgray 50% / cover no-repeat;
+  }
 `;
 
 export const Detail = styled.div`

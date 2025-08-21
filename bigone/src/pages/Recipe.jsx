@@ -152,7 +152,7 @@ const Recipe = () => {
             >
               <R.Image>
                 <img
-                  src={`http://43.203.179.188/${recipe.mainImageUrl}`}
+                  src={`http://43.203.179.188/uploads/r?key=${recipe.mainImageUrl}`}
                   alt="represent"
                 />
               </R.Image>

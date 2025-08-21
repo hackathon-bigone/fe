@@ -80,13 +80,23 @@ const Scrap = () => {
             <W.Component key={post.postId}>
               <W.Image>
                 <img
-                  src={`http://43.203.179.188/${post.mainImageUrl}`}
+                  src={`http://43.203.179.188/uploads/r?key=${post.mainImageUrl}`}
                   alt="represent"
                 />
               </W.Image>
+
               <W.Detail>
                 <W.Up>
                   <W.CTitle>{post.title}</W.CTitle>
+                  <W.Scrap>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/images/${
+                        isScrapped ? "star_y" : "star_w"
+                      }.svg`}
+                      alt="scrap"
+                      onClick={handleScrapClick}
+                    />
+                  </W.Scrap>
                 </W.Up>
                 <W.Down>
                   <W.Icons>
