@@ -17,6 +17,8 @@ const My = () => {
   const goScrap = () => navigate(`/my/scrap`);
   const goLogin = () => navigate(`/login`);
   const goSignup = () => navigate(`/signup`); // 라우트명 다르면 맞게 바꿔주세요
+  const goInfo = () => navigate(`/my/inform`);
+  const goQna = () => navigate(`/my/question`);
 
   // ----- 상태 -----
   const [isAuthed, setIsAuthed] = useState(false);
@@ -69,6 +71,14 @@ const My = () => {
           }
         );
         setCommentCount(commentRes.data.totalCommentCount);
+
+        const scrapRes = await axios.get(
+          "http://43.203.179.188/mypage/scrap/count",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setScrapCount(scrapRes.data.totalScrapCount);
       } catch (err) {
         console.error("❌ /mypage 호출 실패:", err?.response || err);
         setIsAuthed(false);
@@ -111,6 +121,7 @@ const My = () => {
 
   const [postCount, setPostCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const [scrapCount, setScrapCount] = useState(0);
 
   return (
     <M.Container>
@@ -190,7 +201,7 @@ const My = () => {
               src={`${process.env.PUBLIC_URL}/images/star.png`}
               alt="scrap"
             />
-            <div id="num">4</div>
+            <div id="num">{scrapCount}</div>
             <div id="title">스크랩</div>
           </M.Scrap>
         </M.AList>
@@ -199,7 +210,7 @@ const My = () => {
       <M.Help>
         <M.HTitle>고객지원</M.HTitle>
         <M.HList>
-          <M.Announce>
+          <M.Announce onClick={goInfo}>
             <img
               src={`${process.env.PUBLIC_URL}/images/announcement.png`}
               alt="announcement"
@@ -207,7 +218,7 @@ const My = () => {
             <div id="title">공지사항</div>
           </M.Announce>
           <M.Hr />
-          <M.Qna>
+          <M.Qna onClick={goQna}>
             <img src={`${process.env.PUBLIC_URL}/images/qna.png`} alt="qna" />
             <div id="title">Q&A</div>
           </M.Qna>
