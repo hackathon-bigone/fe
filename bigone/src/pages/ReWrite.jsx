@@ -35,6 +35,7 @@ const ReWrite = () => {
   const handleStepPicClick = (index) => {
     if (stepPicRef.current[index]) stepPicRef.current[index].click();
   };
+
   const handleStepPicChange = (index, e) => {
     const file = e.target.files[0];
     if (file) {
@@ -43,6 +44,18 @@ const ReWrite = () => {
       setStepPic(updated);
     }
   };
+
+  const handleDeleteStep = (index) => {
+    const newStepPics = [...stepPic];
+    const newStepDescriptions = [...stepDescriptions];
+
+    newStepPics.splice(index, 1);
+    newStepDescriptions.splice(index, 1);
+
+    setStepPic(newStepPics);
+    setStepDescriptions(newStepDescriptions);
+  };
+
   const handleStepDescriptionChange = (index, value) => {
     const updated = [...stepDescriptions];
     updated[index] = value;
@@ -152,22 +165,22 @@ const ReWrite = () => {
         cookingTime: time,
         mainImageUrl: mainImageKey,
         steps: stepDescriptions.map((desc, idx) => ({
-          stepId: idx + 1,
           stepNumber: idx + 1,
           stepDescription: desc,
           stepImageUrl: uploadedStepKeys[idx] || "",
         })),
-        recipeLinks: links.map((l) => l.trim()),
+        recipeLinks: links.map((link, idx) => ({
+          recipelinkUrl: link,
+        })),
         ingredients: ingredients.map((ing, idx) => ({
-          ingredientId: idx + 1,
           ingredientName: ing.name,
           ingredientAmount: ing.amount,
         })),
         categories: categoriesPayload,
         recipeDescription: detail,
-        createdAt: "",
       };
-      console.log(payload);
+      const jsonPayload = JSON.stringify(payload, null, 2);
+      console.log(jsonPayload);
 
       const token = localStorage.getItem("access_token");
       await axios.post("http://43.203.179.188/recipe", payload, {
@@ -287,7 +300,7 @@ const ReWrite = () => {
           {stepPic.map((step, index) => (
             <R.StepWrapper key={index}>
               <R.InputStep>
-                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" />
+                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" onClick={() => handleDeleteStep(index)} />
                 <div id="step">STEP {index + 1}</div>
                 <R.InPic
                   onClick={() => handleStepPicClick(index)}

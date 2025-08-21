@@ -124,9 +124,7 @@ const R_Detail = () => {
   };
 
   const myId = localStorage.getItem("user_id");
-  const isMine = myId === String(component.authorUsername);
-  // console.log("myId from localStorage:", myId);
-  // console.log("component.authorId:", component.authorId, typeof component.authorId);
+  const isMine = myId === String(component.authorId);
 
   return (
     <R.Container>
@@ -247,7 +245,7 @@ const R_Detail = () => {
           ))}
         </R.Recipe>
       )}
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment} type="recipe" targetId={id}></BottomSheet>
     </R.Container>
   );
 };

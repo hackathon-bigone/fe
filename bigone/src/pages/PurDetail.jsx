@@ -164,7 +164,7 @@ const P_Detail = () => {
           <div id="comment_cnt">{component.commentCount}</div>
         </P.Comment>
       </P.Content>
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment} type="groupbuy" targetId={user_id}></BottomSheet>
     </P.Container>
   );
 };
