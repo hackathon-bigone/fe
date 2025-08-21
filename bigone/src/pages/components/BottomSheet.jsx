@@ -1,38 +1,51 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import * as B from "../../styles/StyledBottom";
 import CommentList from "./CommentList";
 import axios from "axios";
 
-const BottomSheet = ({ isOpen, onClose, comments }) => {
+const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
+  const apiUrl = type === "recipe" ? `http://43.203.179.188/recipe/${targetId}/comments` : `http://43.203.179.188/groupbuys/${targetId}/comments`;
+
   const [input, setInput] = useState("");
-  const isActive = input.length > 0;
   const [isValid, setIsValid] = useState(false);
   const [feedComments, setFeedComments] = useState(comments || []);
-  const { user_id: groupbuy_id } = useParams();
+  const [replyTo, setReplyTo] = useState(null);
+
+  const isActive = input.length > 0;
+
+  const handleReply = (comment) => {
+    setReplyTo(comment);
+    setInput(`@${comment.authorName} `);
+    setIsValid(true);
+  };
 
   useEffect(() => {
-    // comment prop이 바뀔 때 feedComments 상태 업데이트
     setFeedComments(comments || []);
   }, [comments]);
 
   const post = async () => {
     if (!isValid) return;
     const token = localStorage.getItem("access_token");
-    try {
-      const response = await axios.post(
-        `http://43.203.179.188/groupbuys/${groupbuy_id}/comments`,
-        { content: input },
-        {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        }
-      );
+
+    const mentionPattern = replyTo ? new RegExp(`^@${replyTo.authorName}\\s`) : null;
+    const contentToSend = mentionPattern ? input.replace(mentionPattern, "") : input;
+
+    const payload = { content: contentToSend };
+    if (replyTo) payload.parentId = replyTo.topCommentId;
+
+    const response = await axios.post(apiUrl, payload, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    });
+
+    if (payload.parentId) {
+      setFeedComments((prev) => prev.map((c) => (c.commentId === payload.parentId ? { ...c, children: [...(c.children || []), response.data] } : c)));
+    } else {
       setFeedComments((prev) => [...prev, response.data]);
-      setInput("");
-      setIsValid(false);
-    } catch (error) {
-      console.error("댓글 작성 실패", error);
     }
+
+    setInput("");
+    setIsValid(false);
+    setReplyTo(null);
   };
 
   return (
@@ -42,12 +55,15 @@ const BottomSheet = ({ isOpen, onClose, comments }) => {
           <div id="roundBar" />
           댓글
         </B.CommentInform>
-        <CommentList feedComments={feedComments}></CommentList>
+
+        <CommentList feedComments={feedComments} onReply={handleReply} />
+
         <B.CommentBar>
           <B.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
             <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
           </B.Profile>
+
           <B.CommentInput>
             <input
               type="text"
@@ -57,9 +73,7 @@ const BottomSheet = ({ isOpen, onClose, comments }) => {
                 setIsValid(e.target.value.trim().length > 0);
               }}
             />
-            {/* <textarea type="text" value={input} row={1} onChange={(e) => setInput(e.target.value)} /> */}
-            {/* <textarea type="text" ref={textareaRef} value={input} onChange={handleChange} row={1} /> */}
-            <B.Circle isActive={isActive} onClick={post} disabled={isValid ? false : true}></B.Circle>
+            <B.Circle isActive={isActive} onClick={post} disabled={!isValid}></B.Circle>
             <img id="arrow" src={`${process.env.PUBLIC_URL}/images/${isActive ? "UpArrow_w.svg" : "UpArrow.svg"}`} alt="arrow" />
           </B.CommentInput>
         </B.CommentBar>

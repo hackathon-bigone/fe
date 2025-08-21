@@ -98,6 +98,7 @@ const P_Detail = () => {
           <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goPur} />
           <P.Title>공동구매 상세</P.Title>
         </P.Icons>
+
         <P.Icons>
           <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" onClick={handleShareClick} />
           {isMine && <img id="share" src={`${process.env.PUBLIC_URL}/images/Fix.svg`} alt="share" onClick={() => setShowPopup(!showPopup)} />}
@@ -164,7 +165,7 @@ const P_Detail = () => {
           <div id="comment_cnt">{component.commentCount}</div>
         </P.Comment>
       </P.Content>
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment} type="groupbuy" targetId={user_id}></BottomSheet>
     </P.Container>
   );
 };
