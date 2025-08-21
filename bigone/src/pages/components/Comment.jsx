@@ -18,6 +18,7 @@ const Comment = ({ username, date, comment, children }) => {
         <div id="username-date" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span id="username">{username}</span>
           <span id="date">{date}</span>
+          {children && children.length > 0 && <img src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="대댓글 있음" style={{ marginLeft: "auto" }} />}
         </div>
         <div id="comment">{comment}</div>
 

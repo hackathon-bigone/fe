@@ -31,19 +31,37 @@ const Purchase = () => {
   };
 
   const [scrappedMap, setScrappedMap] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
-  const [typingTimeout, setTypingTimeout] = useState(null);
   const token = localStorage.getItem("access_token");
+  const [component, setComponent] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [userInput, setUserInput] = useState("");
+  const [filteredComponents, setFilteredComponents] = useState([]);
+
+  useEffect(() => {
+    if (userInput.trim() === "") {
+      setFilteredComponents(component);
+    } else {
+      const filtered = component.filter((item) => item.groupbuyTitle.toLowerCase().includes(userInput.toLowerCase()));
+      setFilteredComponents(filtered);
+    }
+  }, [userInput, component]);
+
+  const getSearchData = (e) => {
+    setUserInput(e.target.value);
+  };
 
   const fetchGroupBuys = async () => {
     try {
       const response = await axios.get("http://43.203.179.188/groupbuys", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setComponent(response.data.groupbuys);
-      setTotal(response.data.totalCount);
+      const data = response.data;
+      setComponent(Array.isArray(data.groupbuys) ? data.groupbuys : []);
+      setTotal(typeof data.totalCount === "number" ? data.totalCount : 0);
     } catch (error) {
       console.log(error.response?.data?.message);
+      setComponent([]);
+      setTotal(0);
     }
   };
 
@@ -51,40 +69,13 @@ const Purchase = () => {
     fetchGroupBuys();
   }, []);
 
-  useEffect(() => {
-    if (typingTimeout) clearTimeout(typingTimeout);
-    const timeout = setTimeout(async () => {
-      if (searchQuery.trim() === "") {
-        fetchGroupBuys();
-      } else {
-        try {
-          const response = await axios.get(`http://43.203.179.188/groupbuys/search?keyword=${encodeURIComponent(searchQuery)}`, { headers: { Authorization: `Bearer ${token}` } });
-          setComponent(response.data.groupbuys);
-          setTotal(response.data.totalCount);
-        } catch (error) {
-          console.error("검색 실패:", error);
-        }
-      }
-    }, 500);
-    setTypingTimeout(timeout);
-    return () => clearTimeout(timeout);
-  }, [searchQuery]);
-
-  const handleInputChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
   const handleScrapClick = async (postId) => {
     try {
-      await axios.post(
-        `http://43.203.179.188/recipe/${postId}/scrap`,
-        {}, // POST body가 필요 없다면 빈 객체
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`http://43.203.179.188/groupbuy/${postId}/scrap`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // 성공 시 상태 토글
       setScrappedMap((prev) => ({
@@ -96,17 +87,16 @@ const Purchase = () => {
     }
   };
 
-  const [component, setComponent] = useState([]);
-  const [total, setTotal] = useState(0);
   const renderDateOrRelative = (dateString) => {
     return dateString || "";
   };
+
   return (
     <P.Container>
       <P.Header>
         <P.Title>공동구매</P.Title>
         <P.Icons>
-          <img id="scrap" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} />
+          <img id="scrap" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
           <img id="write" src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`} alt="pencil" onClick={goWrite} />
         </P.Icons>
       </P.Header>
@@ -114,7 +104,7 @@ const Purchase = () => {
       <P.Content>
         <P.Search>
           <img src={`${process.env.PUBLIC_URL}/images/search.svg`} alt="search" />
-          <input type="text" placeholder="냉장고 속 재료를 검색해보세요." value={searchQuery} onChange={handleInputChange} />
+          <input type="text" placeholder="냉장고 속 재료를 검색해보세요." onChange={getSearchData} />
         </P.Search>
         <P.Bar>
           <P.Post>
@@ -129,7 +119,7 @@ const Purchase = () => {
         </P.Bar>
 
         <P.Body>
-          {(component || []).map((item) => {
+          {(filteredComponents || []).map((item) => {
             const scrapped = scrappedMap[item.groupbuyId] || false;
             const isRecruiting = item.status === "RECRUITING";
             const status = isRecruiting ? "모집중" : "모집완료";
@@ -148,13 +138,13 @@ const Purchase = () => {
                     <div id="title" onClick={() => goDetail(item.groupbuyId)}>
                       {item.groupbuyTitle.length > 23 ? item.groupbuyTitle.slice(0, 23) + "..." : item.groupbuyTitle}
                     </div>
-                    <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${scrapped ? "star_y" : "star_w"}.svg`} onClick={() => handleScrapClick(item.groupbuyId)} />
+                    <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${scrapped ? "star_y" : "star_w"}.svg`} alt="scrap" onClick={() => handleScrapClick(item.groupbuyId)} />
                   </P.CTitle>
                   <P.Detail>
                     <div style={{ display: "flex", gap: "2px" }}>
-                      <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} />
+                      <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
                       <div id="comment-num">{item.commentCount}</div>
-                      <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`} />
+                      <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`} alt="line" />
                       <P.D_State style={statusStyle}>{status}</P.D_State>
                     </div>
                     <P.D_Date>{renderDateOrRelative(item.createDate)}</P.D_Date>

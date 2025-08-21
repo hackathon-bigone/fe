@@ -75,6 +75,7 @@ const P_Detail = () => {
         });
 
         const data = response.data;
+        console.log(data.groupbuyLinkUrls);
         setComponent(data);
         setComment(data.comments);
         console.log("status raw:", component.status);
@@ -87,8 +88,8 @@ const P_Detail = () => {
 
   const myId = localStorage.getItem("user_id");
   const isMine = myId === String(component.authorUsername);
-  console.log("myId from localStorage:", myId);
-  console.log("component.authorId:", component.authorId, typeof component.authorId);
+  // console.log("myId from localStorage:", myId);
+  // console.log("component.authorId:", component.authorId, typeof component.authorId);
 
   return (
     <P.Container>
