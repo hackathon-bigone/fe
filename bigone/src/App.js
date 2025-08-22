@@ -6,6 +6,7 @@ import Home from "./pages/Home.";
 import Purchase from "./pages/Purchase";
 import P_Detail from "./pages/PurDetail";
 import PurWrite from "./pages/PurWrite";
+import PurEdit from "./pages/PurEdit";
 import Recipe from "./pages/Recipe";
 import R_Detail from "./pages/ReDetail";
 import ReWrite from "./pages/ReWrite";
@@ -41,6 +42,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/my" element={<My />} />
         <Route path="/" element={<Home />} />
+        <Route path="/purchase/edit/:user_id" element={<PurEdit />} />
         <Route path="/purchase/detail/:user_id" element={<P_Detail />} />
         <Route path="/purchase/write" element={<PurWrite />} />
         <Route path="/purchase" element={<Purchase />} />
@@ -63,14 +65,8 @@ function App() {
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
         <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
         <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
-        <Route
-          path="/refrigerator/ingredients/receipt/scan"
-          element={<Scan />}
-        />
-        <Route
-          path="/refrigerator/ingredients/receipt/scan/complete"
-          element={<ScanCom />}
-        />
+        <Route path="/refrigerator/ingredients/receipt/scan" element={<Scan />} />
+        <Route path="/refrigerator/ingredients/receipt/scan/complete" element={<ScanCom />} />
         <Route path="/my/scrap" element={<Scrap />} />
         <Route path="/my/scrap/purchase" element={<ScrapPur />} />
       </Routes>

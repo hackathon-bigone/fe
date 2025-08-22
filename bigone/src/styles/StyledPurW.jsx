@@ -65,6 +65,12 @@ export const InputWrapper = styled.div`
   margin: 10px 0;
 `;
 
+export const Row = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 100%;
+`;
+
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -133,6 +139,13 @@ export const Input = styled.input`
     outline: none;
     box-shadow: none;
     border-color: #ff4f26;
+  }
+
+  #num,
+  status {
+    width: 170px;
+    height: 50px;
+    flex-shrink: 0;
   }
 `;
 

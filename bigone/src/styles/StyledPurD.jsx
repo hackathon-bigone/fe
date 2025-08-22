@@ -168,7 +168,7 @@ export const Profile = styled.div`
   }
 
   #username {
-    width: 150px;
+    width: 170px;
     margin: 0px 10px;
     color: #000;
     font-family: Pretendard;
