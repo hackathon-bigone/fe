@@ -182,7 +182,7 @@ export const Profile = styled.div`
 
 export const Comment = styled.div`
   width: 360px;
-  height: 60px;
+  min-height: 60px;
   position: relative;
   align-items: center;
 

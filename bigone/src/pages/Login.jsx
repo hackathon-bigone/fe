@@ -39,7 +39,7 @@ const Login = ({ setLoginAuth }) => {
       localStorage.setItem("access_token", response.data.accessToken);
       localStorage.setItem("refresh_token", response.data.refreshToken);
       localStorage.setItem("user_id", id);
-      navigate(`/home`);
+      navigate(`/`);
     } catch (error) {
       console.log(error.response.data.message);
       if (error.response && error.response.status === 401) {

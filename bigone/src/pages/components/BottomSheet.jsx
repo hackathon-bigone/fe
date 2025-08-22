@@ -23,6 +23,10 @@ const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
     setFeedComments(comments || []);
   }, [comments]);
 
+  useEffect(() => {
+    console.log(JSON.stringify(feedComments, null, 2));
+  }, [feedComments]);
+
   const post = async () => {
     if (!isValid) return;
     const token = localStorage.getItem("access_token");
@@ -31,14 +35,28 @@ const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
     const contentToSend = mentionPattern ? input.replace(mentionPattern, "") : input;
 
     const payload = { content: contentToSend };
-    if (replyTo) payload.parentId = replyTo.topCommentId;
+    if (replyTo) payload.parentId = replyTo.commentId;
 
     const response = await axios.post(apiUrl, payload, {
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     });
 
+    const addReplyRecursive = (comments, parentId, newReply) => {
+      return comments.map((c) => {
+        if (c.commentId === parentId) {
+          return {
+            ...c,
+            children: c.children ? [...c.children, newReply] : [newReply],
+          };
+        } else if (c.children) {
+          return { ...c, children: addReplyRecursive(c.children, parentId, newReply) };
+        }
+        return c;
+      });
+    };
+
     if (payload.parentId) {
-      setFeedComments((prev) => prev.map((c) => (c.commentId === payload.parentId ? { ...c, children: [...(c.children || []), response.data] } : c)));
+      setFeedComments((prev) => addReplyRecursive(prev, payload.parentId, response.data));
     } else {
       setFeedComments((prev) => [...prev, response.data]);
     }

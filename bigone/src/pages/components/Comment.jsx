@@ -18,20 +18,22 @@ const Comment = ({ commentId, username, date, comment, children, onReply, parent
   };
 
   return (
-    <B.Comment>
-      <div id="profile-wrapper">
+    <B.Comment style={{ display: "block" }}>
+      <div id="profile-wrapper" style={{ display: "flex", alignItems: "center" }}>
         <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
         <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
       </div>
 
-      <div id="comment-wrapper">
+      <div id="comment-wrapper" style={{ marginTop: "8px" }}>
         <div id="username-date" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span id="username">{username}</span>
           <span id="date">{date}</span>
           {parentId === null && <img src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="답글 달기" style={{ marginLeft: "auto", cursor: "pointer" }} onClick={handleReplyClick} />}
         </div>
 
-        <div id="comment">{comment}</div>
+        <div id="comment" style={{ marginTop: "4px" }}>
+          {comment}
+        </div>
 
         {children && children.length > 0 && (
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -43,7 +45,14 @@ const Comment = ({ commentId, username, date, comment, children, onReply, parent
         )}
 
         {children && children.length > 0 && isOpen && (
-          <div className="comment-children" style={{ marginLeft: 20, marginTop: 8 }}>
+          <div
+            className="comment-children"
+            style={{
+              marginLeft: 28,
+              marginTop: 8,
+              paddingLeft: 12,
+            }}
+          >
             {children.map((child) => (
               <Comment
                 key={child.commentId}
