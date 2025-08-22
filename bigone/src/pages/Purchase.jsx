@@ -136,7 +136,7 @@ const Purchase = () => {
                 <P.ImformBox>
                   <P.CTitle>
                     <div id="title" onClick={() => goDetail(item.groupbuyId)}>
-                      {item.groupbuyTitle.length > 23 ? item.groupbuyTitle.slice(0, 23) + "..." : item.groupbuyTitle}
+                      {item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}
                     </div>
                     <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${scrapped ? "star_y" : "star_w"}.svg`} alt="scrap" onClick={() => handleScrapClick(item.groupbuyId)} />
                   </P.CTitle>
