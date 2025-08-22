@@ -85,16 +85,31 @@ const R_Detail = () => {
         });
 
         const data = response.data;
-        console.log(data.ingredients);
         setComponent(data);
         setComment(data.comments);
         setIngredients(data.ingredients);
         setStep(data.steps);
       } catch (error) {
-        console.log("Error fetching data: ", error);
+        console.log("Error fetching recipe: ", error);
       }
     };
+
+    const fetchScrap = async () => {
+      try {
+        const res = await axios.get("http://43.203.179.188/mypage/recipe-scrap", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const scrapList = res.data;
+        const scrapped = scrapList.some((item) => item.postId === Number(id));
+        setIsScrapped(scrapped);
+      } catch (error) {
+        console.log("스크랩 목록 불러오기 에러:", error);
+      }
+    };
+
     fetchData();
+    fetchScrap();
   }, [id, token]);
 
   const handleShareClick = () => {
@@ -124,7 +139,8 @@ const R_Detail = () => {
   };
 
   const myId = localStorage.getItem("user_id");
-  const isMine = myId === String(component.authorId);
+  const isMine = myId === String(component.authorUsername);
+  console.log(component.authorUsername);
 
   return (
     <R.Container>
@@ -161,7 +177,7 @@ const R_Detail = () => {
         </R.Wrapper>
         <R.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <R.D_Inform_gray>양</R.D_Inform_gray>
-          <R.D_Inform_black>인분</R.D_Inform_black>
+          <R.D_Inform_black>1인분</R.D_Inform_black>
           <R.D_Inform_gray>소요시간</R.D_Inform_gray>
           <R.D_Inform_black>{component.cookingTime}</R.D_Inform_black>
         </R.Wrapper>
@@ -177,7 +193,7 @@ const R_Detail = () => {
               <div id="username">{component.authorName}</div>
               <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
                 <R.D_Inform_gray>게시물</R.D_Inform_gray>
-                <R.D_Inform_black>1개</R.D_Inform_black>
+                <R.D_Inform_black>{component.authorPostCount}개</R.D_Inform_black>
               </div>
             </div>
           </R.Profile>

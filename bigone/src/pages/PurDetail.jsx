@@ -9,9 +9,11 @@ const P_Detail = () => {
   const goPur = () => {
     navigate(`/purchase`);
   };
+  const goEdit = (id) => {
+    navigate(`/purchase/edit/${id}`);
+  };
 
   const [isOpen, setIsOpen] = useState(false);
-
   const token = localStorage.getItem("access_token");
   const { user_id } = useParams();
   const [component, setComponent] = useState({});
@@ -69,27 +71,58 @@ const P_Detail = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://43.203.179.188/groupbuys/${user_id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = response.data;
-        console.log(data.groupbuyLinkUrls);
         setComponent(data);
         setComment(data.comments);
-        console.log("status raw:", component.status);
       } catch (error) {
         console.log("Error fetching data: ", error);
       }
     };
+
+    const fetchScrap = async () => {
+      try {
+        const res = await axios.get("http://43.203.179.188/mypage/groupbuy-scrap", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const scrapList = res.data;
+        const scrapped = scrapList.some((item) => item.groupbuyId === Number(user_id));
+        setIsScrapped(scrapped);
+      } catch (error) {
+        console.log("스크랩 목록 불러오기 에러:", error);
+      }
+    };
+
     fetchData();
+    fetchScrap();
   }, [user_id, token]);
 
   const myId = localStorage.getItem("user_id");
   const isMine = myId === String(component.authorUsername);
   // console.log("myId from localStorage:", myId);
   // console.log("component.authorId:", component.authorId, typeof component.authorId);
+
+  const [isScrapped, setIsScrapped] = useState(false);
+  const handleScrapClick = async () => {
+    try {
+      const response = await axios.post(
+        `http://43.203.179.188/groupbuys/${user_id}/scrap`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setIsScrapped((prev) => !prev);
+    } catch (error) {
+      console.error("스크랩 요청 에러:", error.response ? error.response.data : error.message);
+    }
+  };
 
   return (
     <P.Container>
@@ -107,7 +140,7 @@ const P_Detail = () => {
           <P.Popup ref={popupRef}>
             <P.PopupItem>
               수정
-              <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" />
+              <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" onClick={() => goEdit(user_id)} />
             </P.PopupItem>
             <P.Hr />
             <P.PopupItem onClick={handleDeleteClick}>
@@ -124,7 +157,7 @@ const P_Detail = () => {
         </P.Pic>
         <P.Wrapper>
           <P.D_Title>{component.groupbuyTitle}</P.D_Title>
-          <img id="star" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
+          <img id="star" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y.svg" : "star_w.svg"}`} alt="star" onClick={handleScrapClick} />
         </P.Wrapper>
         <P.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <P.D_Inform_gray>모집인원</P.D_Inform_gray>
@@ -149,10 +182,10 @@ const P_Detail = () => {
         <P.PostURL>
           <p>공동구매 링크</p>
           {Array.isArray(component.groupbuyLinkUrls) && component.groupbuyLinkUrls.length > 0 ? (
-            component.groupbuyLinkUrls.map((url, idx) => (
+            component.groupbuyLinkUrls.map((linkObj, idx) => (
               <p key={idx}>
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  {url}
+                <a href={linkObj.groupbuylinkUrl} target="_blank" rel="noopener noreferrer">
+                  {linkObj.groupbuylinkUrl}
                 </a>
               </p>
             ))

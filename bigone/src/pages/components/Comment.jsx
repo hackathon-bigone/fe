@@ -24,7 +24,7 @@ const Comment = ({ commentId, username, date, comment, children, onReply, parent
         <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
       </div>
 
-      <div id="comment-wrapper" style={{ marginTop: "8px" }}>
+      <div id="comment-wrapper">
         <div id="username-date" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span id="username">{username}</span>
           <span id="date">{date}</span>
