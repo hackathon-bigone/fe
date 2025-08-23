@@ -64,7 +64,11 @@ const Login = ({ setLoginAuth }) => {
         }}
       >
         <img src={`${process.env.PUBLIC_URL}/images/Id.svg`} />
-        <input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)}></input>
+        <input
+          placeholder="아이디"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        ></input>
       </L.Input>
       <L.Input
         style={{
@@ -72,8 +76,18 @@ const Login = ({ setLoginAuth }) => {
         }}
       >
         <img src={`${process.env.PUBLIC_URL}/images/Password.svg`} />
-        <input placeholder="비밀번호(8자 이상)" type={pwType.type} value={pw} onChange={(e) => setPw(e.target.value)}></input>
-        <img src={`${process.env.PUBLIC_URL}/images/${pwType.visible ? "Eye-open.svg" : "Eye-off.svg"}`} onClick={handlePasswordType} />
+        <input
+          placeholder="비밀번호(8자 이상)"
+          type={pwType.type}
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+        ></input>
+        <img
+          src={`${process.env.PUBLIC_URL}/images/${
+            pwType.visible ? "Eye-open.svg" : "Eye-off.svg"
+          }`}
+          onClick={handlePasswordType}
+        />
       </L.Input>
       <L.ErrorMsg visible={!!errorMsg}>{errorMsg}</L.ErrorMsg>
       <L.LoginBtn

@@ -7,7 +7,7 @@ const My = () => {
   const navigate = useNavigate();
 
   // ----- 이동 함수 -----
-  const goHome = () => navigate(`/home`);
+  const goHome = () => navigate(`/`);
   const goPur = () => navigate(`/purchase`);
   const goRec = () => navigate(`/recipe`);
   const goRef = () => navigate(`/refrigerator`);

@@ -11,7 +11,7 @@ const RefEv = () => {
   };
 
   const goHome = () => {
-    navigate(`/home`);
+    navigate(`/`);
   };
 
   const goPur = () => {

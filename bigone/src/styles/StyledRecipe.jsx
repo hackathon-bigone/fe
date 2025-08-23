@@ -221,7 +221,7 @@ export const List = styled.div`
 `;
 
 export const Component = styled.div`
-  padding: 10px 30px 10px 10px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
