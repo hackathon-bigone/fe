@@ -64,6 +64,7 @@ export const QnAWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  width: 100%;
 `;
 
 export const QnATitle = styled.div`
@@ -183,5 +184,149 @@ export const Pic = styled.div`
     height: 100%;
     object-fit: cover;
     display: block; /* 불필요한 간격 제거 */
+  }
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  #back {
+    cursor: pointer;
+    position: absolute;
+    top: 72px;
+    right: 300px;
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+export const InTitle = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 10px 0;
+`;
+
+export const UploadBtn = styled.div`
+  width: 350px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: #c4c4c4;
+  margin-top: 30px;
+
+  color: #fff;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  width: 100%;
+`;
+
+export const Input = styled.input`
+  width: 350px;
+  display: flex;
+  height: 50px;
+  flex-shrink: 0;
+
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  padding: 15px;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #ff4f26;
+  }
+
+  #num,
+  status {
+    width: 170px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+`;
+
+export const Textarea = styled.textarea`
+  width: 350px;
+  height: 150px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  padding: 15px;
+  resize: none;
+
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #ff4f26;
+  }
+`;
+
+export const File = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  background: #fff;
+  gap: 10px;
+
+  img {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .text {
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
   }
 `;

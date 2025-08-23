@@ -15,6 +15,13 @@ const QnADetail = () => {
   const [answer, setAnswer] = useState({});
   const [image, setImage] = useState([]);
   const { id } = useParams();
+  const [modalOpen, setModalOpen] = useState(false); // 모달창 열림 여부
+  const [modalImg, setModalImg] = useState(""); // 모달에 띄울 이미지 URL
+
+  const handleImageClick = (src) => {
+    setModalImg(src);
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +61,7 @@ const QnADetail = () => {
             {image.length > 0
               ? image.map((imgSrc, idx) => (
                   <Q.Pic key={idx}>
-                    <img alt={`image-${idx}`} src={imgSrc} style={{ cursor: "pointer" }} />
+                    <img alt={`image-${idx}`} src={imgSrc} style={{ cursor: "pointer" }} onClick={() => handleImageClick(imgSrc)} />
                   </Q.Pic>
                 ))
               : null}
@@ -77,6 +84,24 @@ const QnADetail = () => {
               <Q.Date>{answer?.displayDate}</Q.Date>
             </Q.Wrapper>
           </Q.QnAWrapper>
+        )}
+
+        {modalOpen && (
+          <Q.Modal onClick={() => setModalOpen(false)}>
+            {/* <img id="back" src={`${process.env.PUBLIC_URL}/images/Delete_p.svg`} alt="back" style={{ cursor: "pointer" }} /> */}
+            <img
+              src={modalImg}
+              alt="modal-img"
+              style={{
+                maxWidth: "350px",
+                maxHeight: "350px",
+                borderRadius: "5px",
+                background: "#fff",
+                objectFit: "contain",
+              }}
+              onClick={(e) => e.stopPropagation()} // 이미지 누르면 모달 안 닫힘
+            />
+          </Q.Modal>
         )}
       </Q.Content>
     </Q.Container>
