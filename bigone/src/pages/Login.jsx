@@ -34,7 +34,7 @@ const Login = ({ setLoginAuth }) => {
     setErrorMsg("");
     try {
       const res = await axios.post(
-        `${API_BASE}/user/login`,
+        `http://43.203.179.188/user/login`,
         {
           username: id, // ✅ 백엔드 스펙이 다르면 아래 '2) 페이로드 점검' 참고
           password: pw,
@@ -69,7 +69,7 @@ const Login = ({ setLoginAuth }) => {
       console.error("Login error detail:", {
         status,
         serverMsg,
-        url: `${API_BASE}/user/login`,
+        url: `http://43.203.179.188/user/login`,
         axiosCode: err?.code,
       });
 
