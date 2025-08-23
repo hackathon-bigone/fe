@@ -36,18 +36,26 @@ const Login = ({ setLoginAuth }) => {
         username: id,
         password: pw,
       });
+
+      // 로그인 성공 시 토큰 저장
       localStorage.setItem("access_token", response.data.accessToken);
       localStorage.setItem("refresh_token", response.data.refreshToken);
       localStorage.setItem("user_id", id);
+
       navigate(`/`);
     } catch (error) {
-      console.log(error.response.data.message);
-      if (error.response && error.response.status === 401) {
-        setErrorMsg(error.response.data.message); // 서버 메시지
+      // ✅ 방어적으로 접근
+      const msg =
+        error?.response?.data?.message || error?.message || "로그인 실패";
+
+      console.error("Login error:", msg);
+
+      if (error.response?.status === 401) {
+        setErrorMsg(msg); // 서버에서 내려준 메시지
         setId("");
         setPw("");
       } else {
-        console.log("로그인 실패");
+        setErrorMsg("서버 연결에 실패했습니다.");
       }
     }
   };
