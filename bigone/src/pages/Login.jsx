@@ -30,32 +30,64 @@ const Login = ({ setLoginAuth }) => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
+    setErrorMsg("");
     try {
-      const response = await axios.post("http://43.203.179.188/user/login", {
-        username: id,
-        password: pw,
-      });
+      const res = await axios.post(
+        `${API_BASE}/user/login`,
+        {
+          username: id, // ✅ 백엔드 스펙이 다르면 아래 '2) 페이로드 점검' 참고
+          password: pw,
+        },
+        {
+          // withCredentials: true,   // 쿠키 세션이라면 활성화 + 백엔드 CORS 세팅 필요
+          headers: { Accept: "application/json" },
+          timeout: 15000,
+        }
+      );
 
-      // 로그인 성공 시 토큰 저장
-      localStorage.setItem("access_token", response.data.accessToken);
-      localStorage.setItem("refresh_token", response.data.refreshToken);
+      const data = res?.data || {};
+      const accessToken = data.accessToken ?? data.access_token;
+      const refreshToken = data.refreshToken ?? data.refresh_token;
+
+      if (!accessToken) {
+        throw new Error("응답에 accessToken이 없습니다.");
+      }
+
+      localStorage.setItem("access_token", accessToken);
+      if (refreshToken) localStorage.setItem("refresh_token", refreshToken);
       localStorage.setItem("user_id", id);
 
       navigate(`/`);
-    } catch (error) {
-      // ✅ 방어적으로 접근
-      const msg =
-        error?.response?.data?.message || error?.message || "로그인 실패";
+    } catch (err) {
+      // Axios 에러 안전 처리
+      const status = err?.response?.status;
+      const serverMsg = err?.response?.data?.message || err?.response?.data;
+      const genericMsg = err?.message || "로그인 실패";
 
-      console.error("Login error:", msg);
+      // 디버깅용 로그 (개발 중에만 참고)
+      console.error("Login error detail:", {
+        status,
+        serverMsg,
+        url: `${API_BASE}/user/login`,
+        axiosCode: err?.code,
+      });
 
-      if (error.response?.status === 401) {
-        setErrorMsg(msg); // 서버에서 내려준 메시지
+      if (status === 401) {
+        setErrorMsg(serverMsg || "아이디 또는 비밀번호가 올바르지 않습니다.");
         setId("");
         setPw("");
+      } else if (status >= 500) {
+        setErrorMsg(
+          "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+        );
+      } else if (!status) {
+        // 네트워크/혼합콘텐츠/CORS/프록시 문제 등으로 response 자체가 없는 경우
+        setErrorMsg(
+          "서버에 연결할 수 없습니다. 네트워크/프록시 설정을 확인하세요."
+        );
       } else {
-        setErrorMsg("서버 연결에 실패했습니다.");
+        setErrorMsg(serverMsg || genericMsg);
       }
     }
   };
