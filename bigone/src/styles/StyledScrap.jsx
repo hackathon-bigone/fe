@@ -119,7 +119,7 @@ export const EmptyWrapper = styled.div`
 `;
 
 export const Component = styled.div`
-  padding: 10px 30px 10px 10px;
+  padding: 10px 20px 10px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -144,7 +144,8 @@ export const Image = styled.div`
 export const Detail = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  // gap: 24px;
+  justify-content: space-between;
   margin-left: 20px;
 `;
 
@@ -152,6 +153,7 @@ export const Up = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
+  justify-content: space-between;
 `;
 
 export const CTitle = styled.div`
@@ -161,7 +163,7 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 167px;
+  width: 177px;
 `;
 
 export const Scrap = styled.div`

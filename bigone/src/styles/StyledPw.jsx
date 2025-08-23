@@ -256,7 +256,7 @@ export const Button = styled.div`
   width: 390px;
   height: 100px;
   flex-shrink: 0;
-  background: #c4c4c4;
+  background: ${(props) => (props.$active ? "#FF4F26" : "#C4C4C4")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -274,5 +274,21 @@ export const Button = styled.div`
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%); /* 가로 가운데 정렬 */
+  transform: translateX(-50%);
+
+  cursor: ${(props) => (props.$active ? "pointer" : "default")};
+  transition: background 0.2s ease, opacity 0.2s ease;
+
+  /* 클릭 막고 싶으면 유지, 필요 없으면 이 줄 제거 */
+  pointer-events: ${(props) => (props.$active ? "auto" : "none")};
+`;
+
+export const Error = styled.div`
+  color: #ff4f26;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  margin-top: 10px;
 `;

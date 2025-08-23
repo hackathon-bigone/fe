@@ -16,7 +16,7 @@ const Nick = () => {
   };
 
   const goHome = () => {
-    navigate(`/home`);
+    navigate(`/`);
   };
 
   const openModal = () => setOpen(true);

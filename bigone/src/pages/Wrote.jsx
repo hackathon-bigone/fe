@@ -7,7 +7,7 @@ const Wrote = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(`/`);
+    navigate(`/my`);
   };
 
   const goPur = () => {

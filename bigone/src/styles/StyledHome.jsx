@@ -96,15 +96,22 @@ export const BUp = styled.div`
   margin-top: 20px;
 
   #detail {
+    width: 170px;
     color: #000;
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
+    white-space: normal;
+    overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
+    word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
   }
 
   #product {
+    list-style-position: inside;
     color: #000;
     text-align: right;
     font-family: Pretendard;
@@ -212,14 +219,15 @@ export const Image = styled.div`
 export const Detail = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  // gap: 24px;
+  justify-content: space-between;
 `;
 
 export const CUp = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
-  gap: 20px;
+  gap: 15px;
 `;
 
 export const CTitle = styled.div`
@@ -229,7 +237,12 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 167px;
+  width: 177px;
+
+  /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
+  white-space: normal;
+  overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
+  word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
 `;
 
 export const Scrap = styled.div`
