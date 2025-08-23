@@ -30,6 +30,7 @@ export const Header = styled.div`
   padding: 17px; /* 아이콘 여백 조절으로 인해 변경 */
   align-items: end;
   justify-content: space-between;
+  z-index: 10;
 `;
 
 export const Title = styled.div`
