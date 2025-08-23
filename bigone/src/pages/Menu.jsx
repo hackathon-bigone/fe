@@ -6,7 +6,7 @@ const Menu = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(`/home`);
+    navigate(`/`);
   };
 
   return (

@@ -82,6 +82,38 @@ const Home = () => {
 
   const [recipeList, setRecipeList] = useState([]);
 
+  // ✅ 백엔드 베이스
+  const API_BASE = "http://43.203.179.188/";
+
+  // ✅ 네트워크 요청이 전혀 안 나가는 임베디드 SVG 플레이스홀더
+  const svg = `
+  <svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'>
+    <rect width='100%' height='100%' fill='#eeeeee'/>
+    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+          font-size='24' fill='#888888'>이미지 준비중</text>
+  </svg>
+  `;
+
+  // ✅ 이미지 URL 정규화 헬퍼 (Purchase의 동작을 그대로 커버)
+  const buildImageUrl = (pathOrKey) => {
+    if (!pathOrKey) {
+      return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+    }
+    // 이미 절대 URL이면 그대로
+    if (/^https?:\/\//i.test(pathOrKey)) return pathOrKey;
+
+    // '/uploads/...' 또는 'uploads/...' 같은 실제 경로면 베이스만 붙임
+    if (pathOrKey.startsWith("/uploads/")) {
+      return `${API_BASE}${pathOrKey.replace(/^\//, "")}`;
+    }
+    if (pathOrKey.startsWith("uploads/")) {
+      return `${API_BASE}${pathOrKey}`;
+    }
+
+    // 그 외에는 '키'로 보고 키 뷰어 엔드포인트 사용 (Purchase에서 쓰는 방식)
+    return `${API_BASE}uploads/r?key=${encodeURIComponent(pathOrKey)}`;
+  };
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -89,42 +121,26 @@ const Home = () => {
           "http://43.203.179.188/home/top5-popular-boards"
         );
 
-        // 전체 응답 로그
         console.log("✅ 인기 레시피 전체 response:", res);
-
-        // data 객체 로그
         console.log("📦 res.data:", res.data);
+        console.log("📝 res.data.boards:", res.data?.boards);
 
-        // boards 배열 로그
-        console.log("📝 res.data.boards:", res.data.boards);
-
-        // 각 보드별 이미지 경로 로그
-        res.data.boards.forEach((recipe, idx) => {
+        (res.data?.boards ?? []).forEach((recipe, idx) => {
           console.log(
             `🔗 [${idx}] postId=${recipe.postId}, title="${recipe.title}", mainImageUrl=${recipe.mainImageUrl}`
           );
         });
 
-        setRecipeList(res.data.boards); // boards 배열 추출
+        // ✅ 방어적 파싱
+        setRecipeList(Array.isArray(res.data?.boards) ? res.data.boards : []);
       } catch (error) {
         console.error("❌ 레시피 불러오기 실패:", error);
+        setRecipeList([]); // 실패 시 빈 배열
       }
     };
 
     fetchRecipes();
   }, []);
-
-  // 백엔드 베이스
-  const API_BASE = "http://43.203.179.188/";
-
-  // 네트워크 요청이 전혀 안 나가는 임베디드 SVG 플레이스홀더
-  const svg = `
-  <svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'>
-    <rect width='100%' height='100%' fill='#eeeeee'/>
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
-          font-size='24' fill='#888888'>이미지 준비중</text>
-  </svg>
-`;
 
   return (
     <H.Container>
@@ -180,13 +196,20 @@ const Home = () => {
               <H.PDetail>
                 <H.Image>
                   <img
-                    src={`http://43.203.179.188/${recipe.mainImageUrl}`}
-                    alt={recipe.title}
+                    src={buildImageUrl(recipe.mainImageUrl)}
+                    alt={recipe.title ?? "recipe"}
+                    loading="lazy"
                     style={{
                       width: "90px",
                       height: "90px",
                       borderRadius: "5px",
                       objectFit: "cover",
+                    }}
+                    onError={(e) => {
+                      // ✅ 실패 시 즉시 플레이스홀더로 대체
+                      e.currentTarget.src = `data:image/svg+xml;utf8,${encodeURIComponent(
+                        svg
+                      )}`;
                     }}
                   />
                 </H.Image>

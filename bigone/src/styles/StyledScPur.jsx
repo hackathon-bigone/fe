@@ -93,6 +93,7 @@ export const Component = styled.div`
   display: flex;
   flex-direction: row;
   // justify-content: space-between;
+  gap: 20px;
 `;
 
 export const Image = styled.div`
@@ -101,13 +102,20 @@ export const Image = styled.div`
   flex-shrink: 0;
   border-radius: 5px;
   background: lightgray 50% / cover no-repeat;
+
+  img {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
 `;
 
 export const Detail = styled.div`
+  width: 260px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-left: 20px;
+  // margin-left: 20px;
   justify-content: space-between;
 `;
 
@@ -115,6 +123,8 @@ export const Up = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
+  width: 240px;
+  justify-content: space-between;
 `;
 
 export const CTitle = styled.div`
@@ -124,20 +134,25 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 167px;
+  width: 187px;
+
+  /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
+  white-space: normal;
+  overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
+  word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
 `;
 
 export const Scrap = styled.div`
   width: 23px;
   height: 22px;
   flex-shrink: 0;
-  margin-left: 50px;
+  // margin-left: 50px;
 `;
 
 export const Down = styled.div`
   display: flex;
   flex-direction: row;
-  // justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -147,7 +162,7 @@ export const Icons = styled.div`
   align-items: center;
 
   #comment {
-    margin-left: 10px;
+    // margin-left: 10px;
     width: 17px;
     height: 16px;
     flex-shrink: 0;
@@ -191,7 +206,8 @@ export const Icons = styled.div`
 `;
 
 export const Date = styled.div`
-  margin-left: 80px;
+  // margin-left: 80px;
+  width: 80px;
   color: #969696;
   text-align: right;
   font-family: Pretendard;
@@ -199,4 +215,34 @@ export const Date = styled.div`
   font-style: normal;
   font-weight: 300;
   line-height: normal;
+`;
+
+export const EmptyWrapper = styled.div`
+  justify-content: center;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+
+  img {
+    margin-top: 160px;
+    width: 165px;
+    height: 199px;
+    flex-shrink: 0;
+    aspect-ratio: 165/199;
+    opacity: 0.5; /* 👈 여기 추가! (0.0 ~ 1.0 사이) */
+  }
+
+  div {
+    margin-left: 4px;
+    margin-top: 30px;
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
 `;
