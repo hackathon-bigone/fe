@@ -163,13 +163,19 @@ const RefEv = () => {
         ) : errorMsg ? (
           <div style={{ padding: 16 }}>{errorMsg}</div>
         ) : groups.length === 0 ? (
-          <div style={{ padding: 16 }}>등록된 식품이 없어요.</div>
+          <R.EmptyWrapper>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/null.png`}
+              alt="no items"
+            />
+            <div>식품 목록을 추가해보세요</div>
+          </R.EmptyWrapper>
         ) : (
           groups.map((g) => (
             <R.List key={g.key}>
               <R.CDate>{g.key}</R.CDate>
-              {g.items.map((it) => (
-                <R.Component key={`${g.key}-${it.food_id}-${it.name}`}>
+              {g.items.map((it, idx) => (
+                <R.Component key={`${g.key}-${it.food_id ?? it.name}-${idx}`}>
                   <R.Content>
                     <R.Ing>{it.name}</R.Ing>
                     <R.Num>{it.quantity}개</R.Num>

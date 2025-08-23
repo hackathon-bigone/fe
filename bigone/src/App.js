@@ -33,6 +33,7 @@ import QnA from "./pages/QnA";
 import QnADetail from "./pages/QnADetail";
 import Scrap from "./pages/Scrap";
 import ScrapPur from "./pages/ScPur";
+import ScanRes from "./pages/ScanRes";
 
 function App() {
   return (
@@ -67,10 +68,20 @@ function App() {
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
         <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
         <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
-        <Route path="/refrigerator/ingredients/receipt/scan" element={<Scan />} />
-        <Route path="/refrigerator/ingredients/receipt/scan/complete" element={<ScanCom />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan"
+          element={<Scan />}
+        />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/complete"
+          element={<ScanCom />}
+        />
         <Route path="/my/scrap" element={<Scrap />} />
         <Route path="/my/scrap/purchase" element={<ScrapPur />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/result"
+          element={<ScanRes />}
+        />
       </Routes>
     </BrowserRouter>
   );
