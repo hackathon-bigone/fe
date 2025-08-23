@@ -80,11 +80,79 @@ export const Menu = styled.div`
   height: 100vh;
   flex-shrink: 0;
   background: rgba(255, 79, 38, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Item = styled.div`
+  width: 140px;
+  height: 50px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 14.96px;
+  margin-left: 20px;
+  position: relative;
+  z-index: 1;
+
+  img {
+    width: 26.037px;
+    height: 26.037px;
+    flex-shrink: 0;
+  }
+
+  div {
+    color: ${({ $active }) => ($active ? "#fff" : "#000")};
+    transition: color 160ms ease;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+`;
+
+export const Items = styled.div`
+  margin-top: 87px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+`;
+
+export const Highlight = styled.div`
+  position: absolute;
+  left: 12px;
+  // margin-left: 20px;
+  transition: top 220ms ease;
+  z-index: 0;
+  // margin-top: 140px;
+  width: 160px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: #ff4f26;
+`;
+
+export const Details = styled.div`
+  margin-top: 91px;
+  gap: 30px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Detail = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 30px;
-  gap: 30px;
+`;
+
+export const DetailRow = styled.div`
+  color: #000;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
