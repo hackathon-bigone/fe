@@ -75,6 +75,7 @@ const P_Detail = () => {
         });
 
         const data = response.data;
+        console.log(JSON.stringify(data, null, 2));
         setComponent(data);
         setComment(data.comments);
       } catch (error) {
@@ -182,10 +183,10 @@ const P_Detail = () => {
         <P.PostURL>
           <p>공동구매 링크</p>
           {Array.isArray(component.groupbuyLinkUrls) && component.groupbuyLinkUrls.length > 0 ? (
-            component.groupbuyLinkUrls.map((linkObj, idx) => (
+            component.groupbuyLinkUrls.map((link, idx) => (
               <p key={idx}>
-                <a href={linkObj.groupbuylinkUrl} target="_blank" rel="noopener noreferrer">
-                  {linkObj.groupbuylinkUrl}
+                <a href={link} target="_blank" rel="noopener noreferrer">
+                  {link}
                 </a>
               </p>
             ))

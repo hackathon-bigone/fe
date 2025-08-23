@@ -9,6 +9,9 @@ const R_Detail = () => {
   const goRec = () => {
     navigate(`/recipe`);
   };
+  const goEdit = (id) => {
+    navigate(`/recipe/edit/${id}`);
+  };
 
   const categoryLabels = {
     BEGINNER: "왕초보",
@@ -155,7 +158,7 @@ const R_Detail = () => {
         </R.Icons>
         {showPopup && (
           <R.Popup ref={popupRef}>
-            <R.PopupItem>
+            <R.PopupItem onClick={() => goEdit(id)}>
               수정
               <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" />
             </R.PopupItem>

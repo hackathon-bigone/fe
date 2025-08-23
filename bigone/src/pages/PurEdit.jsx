@@ -202,7 +202,7 @@ const PurEdit = () => {
         groupbuyCount: Number(member),
         groupbuyDescription: detail,
         status: status,
-        buyLinks: links.map((link) => ({ groupbuylinkUrl: link.trim() })),
+        buyLinks: links.map((link) => link.trim()),
       };
 
       await axios.put(`http://43.203.179.188/groupbuys/${user_id}`, payload, {

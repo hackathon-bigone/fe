@@ -102,7 +102,7 @@ const PurWrite = () => {
         mainImageUrl: response.data[0].key,
         groupbuyCount: Number(member),
         groupbuyDescription: detail,
-        buyLinks: links.map((link) => ({ groupbuylinkUrl: link.trim() })),
+        buyLinks: links.map((link) => link.trim()),
       };
 
       console.log(typeof member, member);
