@@ -31,6 +31,7 @@ import Inform from "./pages/Information";
 import Inform_Detail from "./pages/InformationD";
 import QnA from "./pages/QnA";
 import QnADetail from "./pages/QnADetail";
+import QnAWrite from "./pages/QnAWrite";
 import Scrap from "./pages/Scrap";
 import ScrapPur from "./pages/ScPur";
 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/my/inform/detail/:id" element={<Inform_Detail />} />
         <Route path="/my/question" element={<QnA />} />
         <Route path="/my/question/detail/:id" element={<QnADetail />} />
+        <Route path="/my/question/write" element={<QnAWrite />} />
         <Route path="/refrigerator/ingredients" element={<RefEv />} />
         <Route path="/refrigerator/ingredients/edit" element={<RefPlus />} />
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />

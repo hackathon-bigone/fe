@@ -127,7 +127,7 @@ const Purchase = () => {
         <P.Bar>
           <P.Post>
             <div id="bold">게시물</div>
-            <div id="num">{total}</div>
+            <div id="num">{filteredComponents.length}</div>
             <div id="gun">건</div>
           </P.Post>
           <P.Recent>
