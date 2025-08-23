@@ -8,7 +8,9 @@ const ScanCom = () => {
   const items = state?.items ?? []; // ✅ Scan에서 전달된 결과
 
   const goResult = () => {
-    navigate(`/refrigerator/ingredients/write`);
+    navigate(`/refrigerator/ingredients/receipt/scan/result`, {
+      state: { items },
+    });
   };
 
   return (

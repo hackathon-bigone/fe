@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import * as R from "../styles/StyledRefri";
 import axios from "axios";
@@ -24,6 +24,28 @@ const Refri = () => {
 
   const goEver = () => {
     navigate(`/refrigerator/ingredients`);
+  };
+
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (popupRef.current && !popupRef.current.contains(e.target)) {
+      setShowPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const goToReceipt = () => {
+    navigate(`/refrigerator/ingredients/receipt`);
+  };
+
+  const goToManual = () => {
+    navigate(`/refrigerator/ingredients/write`);
   };
 
   const [today, setToday] = useState("");
@@ -135,9 +157,29 @@ const Refri = () => {
           <img
             id="scrap"
             src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`}
-            alt="scrap"
+            alt="plus"
+            onClick={() => setShowPopup(!showPopup)}
           />
         </R.Icons>
+        {showPopup && (
+          <R.Popup ref={popupRef}>
+            <R.PopupItem onClick={goToReceipt}>
+              영수증 인식
+              <img
+                src={`${process.env.PUBLIC_URL}/images/receipt.svg`}
+                alt="receipt"
+              />
+            </R.PopupItem>
+            <R.Hr />
+            <R.PopupItem onClick={goToManual}>
+              직접 입력
+              <img
+                src={`${process.env.PUBLIC_URL}/images/write.svg`}
+                alt="edit"
+              />
+            </R.PopupItem>
+          </R.Popup>
+        )}
       </R.Header>
 
       <R.Category>
@@ -159,15 +201,18 @@ const Refri = () => {
         ) : errorMsg ? (
           <div style={{ padding: 16 }}>{errorMsg}</div>
         ) : groups.length === 0 ? (
-          <div style={{ padding: 16 }}>{emptyMsg}</div>
+          <R.EmptyWrapper>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/null.png`}
+              alt="no items"
+            />
+            <div>{emptyMsg || "유통기한 임박 항목이 없어요"}</div>
+          </R.EmptyWrapper>
         ) : (
           <R.List>
             {groups.map((g) => (
               <R.Component key={g.dlabel}>
-                {/* 왼쪽 큰 라벨: D+3 / D-1 등 */}
                 <R.Left>{g.dlabel}</R.Left>
-
-                {/* 오른쪽: 같은 dlabel의 아이템들 나열 */}
                 <div style={{ flex: 1 }}>
                   {g.items.map((it, idx) => (
                     <div
