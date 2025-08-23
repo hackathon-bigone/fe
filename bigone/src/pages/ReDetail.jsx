@@ -9,6 +9,9 @@ const R_Detail = () => {
   const goRec = () => {
     navigate(`/recipe`);
   };
+  const goEdit = (id) => {
+    navigate(`/recipe/edit/${id}`);
+  };
 
   const categoryLabels = {
     BEGINNER: "왕초보",
@@ -85,16 +88,31 @@ const R_Detail = () => {
         });
 
         const data = response.data;
-        console.log(data.ingredients);
         setComponent(data);
         setComment(data.comments);
         setIngredients(data.ingredients);
         setStep(data.steps);
       } catch (error) {
-        console.log("Error fetching data: ", error);
+        console.log("Error fetching recipe: ", error);
       }
     };
+
+    const fetchScrap = async () => {
+      try {
+        const res = await axios.get("http://43.203.179.188/mypage/recipe-scrap", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const scrapList = res.data;
+        const scrapped = scrapList.some((item) => item.postId === Number(id));
+        setIsScrapped(scrapped);
+      } catch (error) {
+        console.log("스크랩 목록 불러오기 에러:", error);
+      }
+    };
+
     fetchData();
+    fetchScrap();
   }, [id, token]);
 
   const handleShareClick = () => {
@@ -125,8 +143,7 @@ const R_Detail = () => {
 
   const myId = localStorage.getItem("user_id");
   const isMine = myId === String(component.authorUsername);
-  // console.log("myId from localStorage:", myId);
-  // console.log("component.authorId:", component.authorId, typeof component.authorId);
+  console.log(component.authorUsername);
 
   return (
     <R.Container>
@@ -141,7 +158,7 @@ const R_Detail = () => {
         </R.Icons>
         {showPopup && (
           <R.Popup ref={popupRef}>
-            <R.PopupItem>
+            <R.PopupItem onClick={() => goEdit(id)}>
               수정
               <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" />
             </R.PopupItem>
@@ -163,7 +180,7 @@ const R_Detail = () => {
         </R.Wrapper>
         <R.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <R.D_Inform_gray>양</R.D_Inform_gray>
-          <R.D_Inform_black>인분</R.D_Inform_black>
+          <R.D_Inform_black>1인분</R.D_Inform_black>
           <R.D_Inform_gray>소요시간</R.D_Inform_gray>
           <R.D_Inform_black>{component.cookingTime}</R.D_Inform_black>
         </R.Wrapper>
@@ -179,7 +196,7 @@ const R_Detail = () => {
               <div id="username">{component.authorName}</div>
               <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
                 <R.D_Inform_gray>게시물</R.D_Inform_gray>
-                <R.D_Inform_black>1개</R.D_Inform_black>
+                <R.D_Inform_black>{component.authorPostCount}개</R.D_Inform_black>
               </div>
             </div>
           </R.Profile>
@@ -247,7 +264,7 @@ const R_Detail = () => {
           ))}
         </R.Recipe>
       )}
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment}></BottomSheet>
+      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment} type="recipe" targetId={id}></BottomSheet>
     </R.Container>
   );
 };

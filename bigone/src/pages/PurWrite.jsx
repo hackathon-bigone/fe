@@ -31,6 +31,12 @@ const PurWrite = () => {
 
   const isActive = title.length > 0 && member.length > 0 && detail.length > 0 && links.every((link) => link.trim().length > 0); // 모든 공동구매 링크가 채워져야 동작하도록 구현
 
+  const getUniqueFileName = (file) => {
+    const timestamp = Date.now();
+    const originalName = file.name;
+    return `${timestamp}-${originalName}`;
+  };
+
   const onClickAddLinkBtn = () => {
     setLinks([...links, ""]);
   };
@@ -66,13 +72,14 @@ const PurWrite = () => {
       }
 
       const token = localStorage.getItem("access_token");
+      const uniqueFileName = getUniqueFileName(pic);
 
       // 1. Presigned URL 요청 → 파일명과 타입만 배열로 전달
       const response = await axios.post(
         "http://43.203.179.188/uploads/groupbuy",
         [
           {
-            filename: pic.filename,
+            filename: uniqueFileName,
             contentType: "image/png",
           },
         ],
@@ -95,18 +102,18 @@ const PurWrite = () => {
         mainImageUrl: response.data[0].key,
         groupbuyCount: Number(member),
         groupbuyDescription: detail,
-        groupbuyLinkUrls: links.map((link) => link.trim()),
+        buyLinks: links.map((link) => link.trim()),
       };
 
       console.log(typeof member, member);
-      console.log(payload);
+      console.log("Payload JSON:\n", JSON.stringify(payload, null, 2));
       await axios.post("http://43.203.179.188/groupbuys", payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(payload);
+
       goPur();
     } catch (error) {
       setErrorMsg(error.message || "업로드 중 오류가 발생했습니다.");

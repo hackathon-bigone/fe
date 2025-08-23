@@ -1,19 +1,35 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import * as R from "../styles/StyledRecipeW.jsx";
 import Modal from "../pages/components/Modal.jsx";
 import axios from "axios";
 
-const ReWrite = () => {
+const ReEdit = () => {
   const navigate = useNavigate();
 
   const goRecipe = () => {
     navigate(`/recipe`);
   };
 
+  const categoryLabels = {
+    BEGINNER: "왕초보",
+    MICROWAVE_AIRFRYER: "전자레인지•에어프라이어",
+    DESSERT: "디저트",
+    VEGAN: "비건",
+  };
+  const categoryMapping = {
+    왕초보: "BEGINNER",
+    "전자레인지•에어프라이어": "MICROWAVE_AIRFRYER",
+    디저트: "DESSERT",
+    비건: "VEGAN",
+  };
+  const categories = Object.values(categoryLabels);
+
   const [isOpen, setIsOpen] = useState(false);
   const modalOpen = () => setIsOpen(true);
   const modalClose = () => setIsOpen(false);
+  const { user_id } = useParams();
+  const token = localStorage.getItem("access_token");
 
   // 대표 이미지
   const mainPicRef = useRef(null);
@@ -25,6 +41,18 @@ const ReWrite = () => {
   const handleMainPicChange = (e) => {
     const file = e.target.files[0];
     if (file) setMainPic(file);
+  };
+
+  const getStepPicSrc = (img) => {
+    if (!img) return "";
+    if (typeof img === "string") {
+      // 서버 이미지 URL일 경우, 로컬 도메인 혹은 절대 경로가 필요하면 붙여서 사용
+      return `http://43.203.179.188/uploads/r?key=${img}`;
+    }
+    if (img instanceof File || img instanceof Blob) {
+      return URL.createObjectURL(img);
+    }
+    return "";
   };
 
   // 단계별 이미지 + 설명
@@ -69,9 +97,61 @@ const ReWrite = () => {
   const [detail, setDetail] = useState("");
   const [links, setLinks] = useState([""]);
   const [ingredients, setIngredients] = useState([{ name: "", amount: "" }]);
-
-  const categories = ["왕초보", "전자레인지•에어프라이어", "디저트", "비건"];
   const [isSelected, setIsSelected] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://43.203.179.188/recipe/${user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data;
+        console.log("Fetched Data in JSON format:", JSON.stringify(data, null, 2)); // JSON 출력
+        setMainPic(data.mainImageUrl);
+
+        setTitle(data.title || "");
+        setTime(data.cookingTime || "");
+        setAmount("");
+        setDetail(data.recipeDescription || "");
+        if (data.recipeLinks && data.recipeLinks.length > 0) {
+          setLinks(data.recipeLinks.map((link) => link.recipelinkUrl));
+        } else {
+          setLinks([""]);
+        }
+
+        if (data.ingredients && data.ingredients.length > 0) {
+          setIngredients(
+            data.ingredients.map((ing) => ({
+              name: ing.ingredientName,
+              amount: ing.ingredientAmount,
+            }))
+          );
+        } else {
+          setIngredients([{ name: "", amount: "" }]);
+        }
+
+        if (data.steps && data.steps.length > 0) {
+          setStepPic(data.steps.map((s) => s.stepImageUrl || ""));
+          setStepDescriptions(data.steps.map((s) => s.stepDescription || ""));
+        } else {
+          setStepPic([""]);
+          setStepDescriptions([""]);
+        }
+
+        if (data.categories && data.categories.length > 0) {
+          const mapped = data.categories.map((c) => categoryLabels[c] || c);
+          setIsSelected(mapped);
+        }
+      } catch (error) {
+        console.log("Error fetching recipe: ", error);
+      }
+    };
+
+    fetchData();
+  }, [user_id, token]);
 
   const isActive = title.length > 0 && amount.length > 0 && detail.length > 0 && time.length > 0 && links.every((link) => link.trim().length > 0);
 
@@ -104,22 +184,6 @@ const ReWrite = () => {
     setLinks(newLinks);
   };
 
-  const handleRemoveLink = (index) => {
-    if (links.length > 1) {
-      const newLinks = [...links];
-      newLinks.splice(index, 1);
-      setLinks(newLinks);
-    }
-  };
-
-  const handleRemoveIngredient = (index) => {
-    if (ingredients.length > 1) {
-      const newIngredients = [...ingredients];
-      newIngredients.splice(index, 1);
-      setIngredients(newIngredients);
-    }
-  };
-
   // 이미지 업로드 함수 (공통)
   const uploadImage = async (file) => {
     if (!file) return null;
@@ -148,7 +212,6 @@ const ReWrite = () => {
     return key; // S3 key 반환
   };
 
-  // 저장 버튼
   const handleSave = async () => {
     try {
       if (!mainPic) throw new Error("대표사진을 선택해주세요.");
@@ -157,49 +220,45 @@ const ReWrite = () => {
       }
 
       // 대표 이미지 업로드
-      const mainImageKey = await uploadImage(mainPic);
+      const mainImageKey = typeof mainPic === "string" ? mainPic : await uploadImage(mainPic);
 
       // 단계별 이미지 업로드
       const uploadedStepKeys = [];
       for (let i = 0; i < stepPic.length; i++) {
-        const key = await uploadImage(stepPic[i]);
-        uploadedStepKeys.push(key || "");
+        if (typeof stepPic[i] === "string") {
+          uploadedStepKeys.push(stepPic[i]); // 기존 URL 그대로 사용
+        } else {
+          const key = await uploadImage(stepPic[i]);
+          uploadedStepKeys.push(key || "");
+        }
       }
 
-      // 카테고리 매핑
-      const categoryMapping = {
-        왕초보: "BEGINNER",
-        "전자레인지•에어프라이어": "MICROWAVE_AIRFRYER",
-        디저트: "DESSERT",
-        비건: "VEGAN",
-      };
+      // 카테고리 변환
       const categoriesPayload = isSelected.map((cat) => categoryMapping[cat] || cat);
+      const timeNumber = parseInt(time, 10);
 
       // payload 구성
       const payload = {
         title,
-        cookingTime: time,
+        cookingTime: timeNumber,
         mainImageUrl: mainImageKey,
         steps: stepDescriptions.map((desc, idx) => ({
           stepNumber: idx + 1,
           stepDescription: desc,
           stepImageUrl: uploadedStepKeys[idx] || "",
         })),
-        recipeLinks: links.map((link, idx) => ({
-          recipelinkUrl: link,
-        })),
-        ingredients: ingredients.map((ing, idx) => ({
+        recipeLinks: links.map((link) => ({ recipelinkUrl: link })),
+        ingredients: ingredients.map((ing) => ({
           ingredientName: ing.name,
           ingredientAmount: ing.amount,
         })),
         categories: categoriesPayload,
         recipeDescription: detail,
       };
-      const jsonPayload = JSON.stringify(payload, null, 2);
-      console.log(jsonPayload);
 
-      const token = localStorage.getItem("access_token");
-      await axios.post("http://43.203.179.188/recipe", payload, {
+      console.log("PATCH payload:", payload);
+
+      await axios.patch(`http://43.203.179.188/recipe/${user_id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -217,7 +276,7 @@ const ReWrite = () => {
       <R.Header>
         <R.Icons>
           <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
-          <R.Title>레시피 글쓰기</R.Title>
+          <R.Title>게시물 수정</R.Title>
         </R.Icons>
       </R.Header>
 
@@ -228,14 +287,13 @@ const ReWrite = () => {
           <R.InPic onClick={handleMainPicClick} style={{ cursor: "pointer" }}>
             {mainPic ? (
               <img
-                src={URL.createObjectURL(mainPic)}
+                src={
+                  mainPic instanceof File
+                    ? URL.createObjectURL(mainPic) // 사용자가 업로드한 파일 미리보기
+                    : `http://43.203.179.188/uploads/r?key=${mainPic}` // 서버에서 가져온 기존 이미지
+                }
                 alt="Selected"
-                style={{
-                  width: 350,
-                  height: 350,
-                  objectFit: "cover",
-                  borderRadius: 5,
-                }}
+                style={{ width: 350, height: 350, objectFit: "cover", borderRadius: 5 }}
               />
             ) : (
               <>
@@ -287,13 +345,9 @@ const ReWrite = () => {
         {links.map((linkValue, index) => (
           <R.LinkWrapper key={index}>
             {index === 0 && <R.InTitle>레시피 링크</R.InTitle>}
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <R.Input value={linkValue} onChange={(e) => handleLinkChange(index, e.target.value)} style={{ width: links.length === 1 ? "350px" : "330px" }} />
-              {links.length > 1 && <R.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveLink(index)} style={{ cursor: "pointer" }} />}
-            </div>
+            <R.Input value={linkValue} onChange={(e) => handleLinkChange(index, e.target.value)} />
           </R.LinkWrapper>
         ))}
-
         <R.AddLinkBtn onClick={onClickAddLinkBtn}>
           <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`} alt="plus" />
           <div>링크 추가</div>
@@ -304,16 +358,8 @@ const ReWrite = () => {
           <R.InTitle>재료 정보</R.InTitle>
           {ingredients.map((ing, index) => (
             <R.TwinInputWrapper key={index}>
-              <R.Input value={ing.name} onChange={(e) => handleIngredientChange(index, "name", e.target.value)} style={{ width: ingredients.length === 1 ? "170px" : "150px" }} placeholder="재료명" />
-              <R.Input
-                value={ing.amount}
-                onChange={(e) => handleIngredientChange(index, "amount", e.target.value)}
-                style={{ width: ingredients.length === 1 ? "170px" : "150px" }}
-                placeholder="수량(0개)"
-              />
-              {ingredients.length > 1 && (
-                <R.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveIngredient(index)} style={{ cursor: "pointer", marginLeft: "10px" }} />
-              )}
+              <R.Input value={ing.name} onChange={(e) => handleIngredientChange(index, "name", e.target.value)} style={{ width: "170px" }} placeholder="재료명"></R.Input>
+              <R.Input value={ing.amount} onChange={(e) => handleIngredientChange(index, "amount", e.target.value)} style={{ width: "170px" }} placeholder="수량(0개)"></R.Input>
             </R.TwinInputWrapper>
           ))}
         </R.InputWrapper>
@@ -327,8 +373,8 @@ const ReWrite = () => {
           <R.InTitle>레시피 설명</R.InTitle>
           {stepPic.map((step, index) => (
             <R.StepWrapper key={index}>
-              <R.InputStep>
-                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" onClick={() => handleDeleteStep(index)} />
+              <R.InputStep onClick={() => handleDeleteStep(index)}>
+                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" />
                 <div id="step">STEP {index + 1}</div>
                 <R.InPic
                   onClick={() => handleStepPicClick(index)}
@@ -339,16 +385,7 @@ const ReWrite = () => {
                   }}
                 >
                   {step ? (
-                    <img
-                      src={URL.createObjectURL(step)}
-                      alt={`step-${index}`}
-                      style={{
-                        width: 310,
-                        height: 310,
-                        objectFit: "cover",
-                        borderRadius: 5,
-                      }}
-                    />
+                    <img key={index} src={getStepPicSrc(step)} alt={`step-${index}`} style={{ width: 310, height: 310, objectFit: "cover", borderRadius: 5 }} />
                   ) : (
                     <>
                       <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
@@ -380,8 +417,8 @@ const ReWrite = () => {
       </R.Content>
 
       <Modal
-        title="게시물 작성을 그만둘까요?"
-        content="게시물 작성 페이지를 벗어나면 작성된 내용은 저장되지 않고 사라집니다."
+        title="게시물 수정을 그만둘까요?"
+        content="게시물 수정 페이지를 벗어나면 수정된 내용은 저장되지 않고 사라집니다."
         isOpen={isOpen}
         onClose={modalClose}
         onConfirm={() => {
@@ -393,4 +430,4 @@ const ReWrite = () => {
   );
 };
 
-export default ReWrite;
+export default ReEdit;

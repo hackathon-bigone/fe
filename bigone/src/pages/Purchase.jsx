@@ -159,9 +159,7 @@ const Purchase = () => {
                 <P.ImformBox>
                   <P.CTitle>
                     <div id="title" onClick={() => goDetail(item.groupbuyId)}>
-                      {item.groupbuyTitle.length > 23
-                        ? item.groupbuyTitle.slice(0, 23) + "..."
-                        : item.groupbuyTitle}
+                      {item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}
                     </div>
                     <img
                       id="scrap"

@@ -30,6 +30,7 @@ export const Header = styled.div`
   padding: 17px; /* 아이콘 여백 조절으로 인해 변경 */
   align-items: end;
   justify-content: space-between;
+  z-index: 10;
 `;
 
 export const Title = styled.div`
@@ -63,6 +64,12 @@ export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px 0;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  gap: 10px;
+  width: 100%;
 `;
 
 export const LinkWrapper = styled.div`
@@ -133,6 +140,13 @@ export const Input = styled.input`
     outline: none;
     box-shadow: none;
     border-color: #ff4f26;
+  }
+
+  #num,
+  status {
+    width: 170px;
+    height: 50px;
+    flex-shrink: 0;
   }
 `;
 

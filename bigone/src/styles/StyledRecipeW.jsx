@@ -80,6 +80,7 @@ export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  width: 350px;
 `;
 
 export const CategoryWrapper = styled.div`
@@ -305,4 +306,11 @@ export const UploadBtn = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+`;
+
+export const DeleteIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
 `;

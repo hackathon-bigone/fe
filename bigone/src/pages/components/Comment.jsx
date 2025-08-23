@@ -1,28 +1,40 @@
 import React, { useState } from "react";
 import * as B from "../../styles/StyledBottom";
 
-const Comment = ({ username, date, comment, children }) => {
-  const [isOpen, setIsOpen] = useState(true); // 기본은 펼쳐진 상태
+const Comment = ({ commentId, username, date, comment, children, onReply, parentId, topCommentId }) => {
+  const [isOpen, setIsOpen] = useState(true);
 
-  const toggleOpen = () => {
-    setIsOpen((prev) => !prev);
+  const toggleOpen = () => setIsOpen((prev) => !prev);
+
+  const handleReplyClick = () => {
+    if (onReply) {
+      onReply({
+        commentId,
+        authorName: username,
+        parentId: parentId === null ? commentId : parentId,
+        topCommentId,
+      });
+    }
   };
 
   return (
-    <B.Comment>
-      <div id="profile-wrapper">
+    <B.Comment style={{ display: "block" }}>
+      <div id="profile-wrapper" style={{ display: "flex", alignItems: "center" }}>
         <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
         <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
       </div>
+
       <div id="comment-wrapper">
         <div id="username-date" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span id="username">{username}</span>
           <span id="date">{date}</span>
-          {children && children.length > 0 && <img src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="대댓글 있음" style={{ marginLeft: "auto" }} />}
+          {parentId === null && <img src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="답글 달기" style={{ marginLeft: "auto", cursor: "pointer" }} onClick={handleReplyClick} />}
         </div>
-        <div id="comment">{comment}</div>
 
-        {/* children이 있으면 토글 버튼 표시 */}
+        <div id="comment" style={{ marginTop: "4px" }}>
+          {comment}
+        </div>
+
         {children && children.length > 0 && (
           <div style={{ display: "flex", alignItems: "center" }}>
             <div className="line" />
@@ -33,9 +45,26 @@ const Comment = ({ username, date, comment, children }) => {
         )}
 
         {children && children.length > 0 && isOpen && (
-          <div className="comment-children" style={{ marginLeft: 20, marginTop: 8 }}>
+          <div
+            className="comment-children"
+            style={{
+              marginLeft: 28,
+              marginTop: 8,
+              paddingLeft: 12,
+            }}
+          >
             {children.map((child) => (
-              <Comment key={child.commentId} username={child.authorName} date={child.createdAt} comment={child.content} children={child.children} />
+              <Comment
+                key={child.commentId}
+                commentId={child.commentId}
+                username={child.authorName}
+                date={child.createdAt}
+                comment={child.content}
+                children={child.children}
+                onReply={onReply}
+                parentId={child.parentId}
+                topCommentId={topCommentId}
+              />
             ))}
           </div>
         )}
