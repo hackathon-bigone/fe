@@ -35,6 +35,8 @@ import QnAWrite from "./pages/QnAWrite";
 import Scrap from "./pages/Scrap";
 import ScrapPur from "./pages/ScPur";
 import ScanRes from "./pages/ScanRes";
+import ComW from "./pages/ComW";
+import ComP from "./pages/ComP";
 
 function App() {
   return (
@@ -84,6 +86,8 @@ function App() {
           path="/refrigerator/ingredients/receipt/scan/result"
           element={<ScanRes />}
         />
+        <Route path="/my/comment" element={<ComW />} />
+        <Route path="/my/comment/purchase" element={<ComP />} />
       </Routes>
     </BrowserRouter>
   );

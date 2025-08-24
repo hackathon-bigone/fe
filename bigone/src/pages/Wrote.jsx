@@ -32,11 +32,14 @@ const Wrote = () => {
     const fetchPosts = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const res = await axios.get("http://43.203.179.188/mypage/my-boards", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://43-203-179-188.sslip.io/mypage/my-boards",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setPosts(res.data); // 응답이 배열 형태
         console.log("✅ 게시글 목록:", res.data);
       } catch (err) {
@@ -77,7 +80,7 @@ const Wrote = () => {
             <W.Component key={post.postId}>
               <W.Image>
                 <img
-                  src={`http://43.203.179.188/${post.mainImageUrl}`}
+                  src={`https://43-203-179-188.sslip.io/${post.mainImageUrl}`}
                   alt="represent"
                 />
               </W.Image>

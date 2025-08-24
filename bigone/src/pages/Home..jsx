@@ -23,22 +23,148 @@ const Home = () => {
     navigate(`/refrigerator`);
   };
 
-  const goMenu = () => navigate(`/menu`);
+  const goMenu = () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      navigate("/login"); // 로그인 안 된 경우 → 로그인 페이지로
+    } else {
+      navigate("/menu"); // 로그인 된 경우 → 메뉴 페이지로
+    }
+  };
+
+  const goScrap = () => navigate(`/my/scrap`);
 
   const onKey = (e) => {
-    if (e.key === "Enter" || e.key === " ") goMenu();
+    if (e.key === "Enter" || e.key === " ") {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        navigate("/login");
+      } else {
+        navigate("/menu");
+      }
+    }
+  };
+  const token = localStorage.getItem("access_token");
+
+  // 게시글별 스크랩 상태
+  const [scrappedMap, setScrappedMap] = useState({});
+  const [pending, setPending] = useState({}); // 중복 클릭 방지
+
+  // ✅ Home 진입 시, 내가 스크랩한 레시피 목록 불러오기
+  useEffect(() => {
+    const fetchScraps = async () => {
+      if (!token) return; // 로그인 안 된 경우 스킵
+      try {
+        const res = await axios.get(`${API_BASE}mypage/recipe-scrap`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // 스크랩된 postId를 true로 설정
+        const init = {};
+        (res.data || []).forEach((r) => {
+          init[r.postId] = true;
+        });
+        setScrappedMap(init);
+
+        console.log("✅ 내 스크랩 목록:", init);
+      } catch (err) {
+        console.error("❌ 스크랩 목록 불러오기 실패:", err);
+      }
+    };
+
+    fetchScraps();
+  }, [token]);
+
+  // ✅ 스크랩 토글 함수
+  const handleScrapToggle = async (e, postId) => {
+    e.stopPropagation();
+    if (!token) return navigate("/login");
+    if (pending[postId]) return;
+
+    // 낙관적 업데이트
+    setPending((p) => ({ ...p, [postId]: true }));
+    setScrappedMap((m) => ({ ...m, [postId]: !m[postId] }));
+
+    try {
+      await axios.post(`${API_BASE}recipe/${postId}/scrap`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+        timeout: 15000,
+      });
+      // 서버 성공 응답은 상태 그대로 유지
+    } catch (err) {
+      console.error("❌ 스크랩 토글 실패:", err);
+      // 실패 시 롤백
+      setScrappedMap((m) => ({ ...m, [postId]: !m[postId] }));
+    } finally {
+      setPending((p) => ({ ...p, [postId]: false }));
+    }
   };
 
-  const [isScrapped, setIsScrapped] = useState(false);
+  // ✅ 좋아요 상태 (postId: true/false)
+  const [likedMap, setLikedMap] = useState(() => {
+    try {
+      const saved = localStorage.getItem("recipe_likes");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [likePending, setLikePending] = useState({});
 
-  const handleScrapClick = () => {
-    setIsScrapped((prev) => !prev);
-  };
+  // ✅ localStorage 동기화 (좋아요 상태 저장)
+  useEffect(() => {
+    try {
+      localStorage.setItem("recipe_likes", JSON.stringify(likedMap));
+    } catch {}
+  }, [likedMap]);
 
-  const [isHeart, setIsHeart] = useState(false);
+  // ✅ 좋아요 토글
+  const handleLikeToggle = async (e, postId) => {
+    e.stopPropagation();
+    if (!token) return navigate("/login");
+    if (likePending[postId]) return;
 
-  const handleHeart = () => {
-    setIsHeart((prev) => !prev);
+    const willLike = !likedMap[postId];
+
+    // 낙관적 업데이트
+    setLikePending((p) => ({ ...p, [postId]: true }));
+    setLikedMap((m) => ({ ...m, [postId]: willLike }));
+    setRecipeList((prev) =>
+      prev.map((r) =>
+        r.postId === postId
+          ? {
+              ...r,
+              likeCount: Math.max(0, (r.likeCount ?? 0) + (willLike ? 1 : -1)),
+            }
+          : r
+      )
+    );
+
+    try {
+      await axios.post(`${API_BASE}recipe/${postId}/like`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+        timeout: 15000,
+      });
+    } catch (err) {
+      console.error("❌ 좋아요 토글 실패:", err);
+      // 롤백
+      setLikedMap((m) => ({ ...m, [postId]: !willLike }));
+      setRecipeList((prev) =>
+        prev.map((r) =>
+          r.postId === postId
+            ? {
+                ...r,
+                likeCount: Math.max(
+                  0,
+                  (r.likeCount ?? 0) + (willLike ? -1 : 1)
+                ),
+              }
+            : r
+        )
+      );
+    } finally {
+      setLikePending((p) => ({ ...p, [postId]: false }));
+    }
   };
 
   const [selectedSort, setSelectedSort] = useState("popular");
@@ -66,11 +192,14 @@ const Home = () => {
 
     const fetchFoodbox = async () => {
       try {
-        const res = await axios.get("http://43.203.179.188/home/foodbox", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://43-203-179-188.sslip.io/home/foodbox",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setFoodbox(res.data);
       } catch (error) {
         console.error("❌ API 호출 실패:", error);
@@ -83,7 +212,7 @@ const Home = () => {
   const [recipeList, setRecipeList] = useState([]);
 
   // ✅ 백엔드 베이스
-  const API_BASE = "http://43.203.179.188/";
+  const API_BASE = "https://43-203-179-188.sslip.io/";
 
   // ✅ 네트워크 요청이 전혀 안 나가는 임베디드 SVG 플레이스홀더
   const svg = `
@@ -118,7 +247,7 @@ const Home = () => {
     const fetchRecipes = async () => {
       try {
         const res = await axios.get(
-          "http://43.203.179.188/home/top5-popular-boards"
+          "https://43-203-179-188.sslip.io/home/top5-popular-boards"
         );
 
         console.log("✅ 인기 레시피 전체 response:", res);
@@ -154,6 +283,7 @@ const Home = () => {
         </H.Title>
         <H.Icons>
           <img
+            onClick={goScrap}
             id="scrap"
             src={`${process.env.PUBLIC_URL}/images/scrap.svg`}
             alt="scrap"
@@ -172,18 +302,43 @@ const Home = () => {
 
       <H.Up>
         <H.Date>{foodbox.today || "날짜 없음"}</H.Date>
-        <H.Box>
+        <H.Box style={{ position: "relative" }}>
           <H.BUp>
+            {/* ✅ 로그인 여부 관계없이 message는 그대로 표시 */}
             <div id="detail">{foodbox.message || "메시지 없음"}</div>
-            <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>
+
+            {/* ✅ 로그인 된 경우만 product 표시 */}
+            {localStorage.getItem("access_token") && (
+              <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>
+            )}
           </H.BUp>
-          <H.BDown>
+
+          {/* ✅ 로그인 된 경우만 BDown 표시 */}
+          {localStorage.getItem("access_token") ? (
+            <H.BDown>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/alarm.png`}
+                alt="alarm"
+              />
+              <div id="date">{foodbox.dlabel || "D-"}</div>
+            </H.BDown>
+          ) : (
+            // 로그인 안 된 경우 null.png를 absolute로 크게 띄움
             <img
-              src={`${process.env.PUBLIC_URL}/images/alarm.png`}
-              alt="alarm"
+              src={`${process.env.PUBLIC_URL}/images/null.png`}
+              alt="login required"
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "70%",
+                transform: "translate(-50%, -50%)",
+                width: "134px", // 원하는 크기로 조정
+                height: "161px",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/login")}
             />
-            <div id="date">{foodbox.dlabel || "D-"}</div>
-          </H.BDown>
+          )}
         </H.Box>
       </H.Up>
 
@@ -219,10 +374,14 @@ const Home = () => {
                     <H.Scrap>
                       <img
                         src={`${process.env.PUBLIC_URL}/images/${
-                          isScrapped ? "star_y" : "star_w"
+                          scrappedMap[recipe.postId] ? "star_y" : "star_w"
                         }.svg`}
                         alt="scrap"
-                        onClick={handleScrapClick}
+                        onClick={(e) => handleScrapToggle(e, recipe.postId)}
+                        style={{
+                          cursor: "pointer",
+                          opacity: pending[recipe.postId] ? 0.6 : 1,
+                        }}
                       />
                     </H.Scrap>
                   </H.CUp>
@@ -231,10 +390,16 @@ const Home = () => {
                       <img
                         id="heart"
                         src={`${process.env.PUBLIC_URL}/images/${
-                          isHeart ? "heart_b.png" : "heart_w.svg"
+                          likedMap[recipe.postId]
+                            ? "heart_b.png"
+                            : "heart_w.svg"
                         }`}
-                        alt="heart"
-                        onClick={handleHeart}
+                        alt={likedMap[recipe.postId] ? "좋아요 취소" : "좋아요"}
+                        onClick={(e) => handleLikeToggle(e, recipe.postId)}
+                        style={{
+                          cursor: "pointer",
+                          opacity: likePending[recipe.postId] ? 0.6 : 1,
+                        }}
                       />
                       <div id="hnum">{recipe.likeCount}</div>
                       <img

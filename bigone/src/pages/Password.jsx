@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPw";
 import axios from "axios";
 
-const API_BASE = "http://43.203.179.188/";
+const API_BASE = "https://43-203-179-188.sslip.io/";
 
 const Password = () => {
   const curPwRef = useRef(null);

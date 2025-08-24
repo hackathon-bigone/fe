@@ -26,11 +26,14 @@ const QnADetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://43.203.179.188/mypage/qna/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://43-203-179-188.sslip.io/mypage/qna/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setQna(response.data);
         setAnswer(response.data.answer);
         setImage(response.data.imageUrls);
@@ -45,7 +48,13 @@ const QnADetail = () => {
     <Q.Container>
       <Q.Header>
         <Q.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" style={{ cursor: "pointer" }} onClick={goBack} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            style={{ cursor: "pointer" }}
+            onClick={goBack}
+          />
           <Q.Title>Q&A 상세</Q.Title>
         </Q.Icons>
       </Q.Header>
@@ -61,7 +70,12 @@ const QnADetail = () => {
             {image.length > 0
               ? image.map((imgSrc, idx) => (
                   <Q.Pic key={idx}>
-                    <img alt={`image-${idx}`} src={imgSrc} style={{ cursor: "pointer" }} onClick={() => handleImageClick(imgSrc)} />
+                    <img
+                      alt={`image-${idx}`}
+                      src={imgSrc}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleImageClick(imgSrc)}
+                    />
                   </Q.Pic>
                 ))
               : null}

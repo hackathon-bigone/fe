@@ -18,11 +18,14 @@ const Inform_Detail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://43.203.179.188/mypage/notice/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://43-203-179-188.sslip.io/mypage/notice/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setNotice(response.data);
       } catch (error) {
         console.log("Error fetching data: ", error);
@@ -35,7 +38,13 @@ const Inform_Detail = () => {
     <I.Container>
       <I.Header>
         <I.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" style={{ cursor: "pointer" }} onClick={goBack} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            style={{ cursor: "pointer" }}
+            onClick={goBack}
+          />
           <I.Title>공지사항 상세</I.Title>
         </I.Icons>
       </I.Header>

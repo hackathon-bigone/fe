@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as E from "../styles/StyledRefW";
 import axios from "axios";
-const API_URL = "http://43.203.179.188/foodbox";
+const API_URL = "https://43-203-179-188.sslip.io/foodbox";
 
 const RefWrite = () => {
   const navigate = useNavigate();
