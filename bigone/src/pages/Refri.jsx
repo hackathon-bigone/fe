@@ -79,7 +79,7 @@ const Refri = () => {
       }
       try {
         const res = await axios.get(
-          "http://43.203.179.188/foodbox?filter=imminent",
+          "https://43-203-179-188.sslip.io/foodbox?filter=imminent",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = res.data || {};

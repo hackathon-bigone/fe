@@ -27,7 +27,7 @@ const Scan = () => {
         form.append("file", file); // 명세: key는 file
 
         const { data } = await axios.post(
-          "http://43.203.179.188/foodbox/receipt/upload",
+          "https://43-203-179-188.sslip.io/foodbox/receipt/upload",
           form,
           {
             headers: {

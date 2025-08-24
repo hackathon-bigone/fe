@@ -219,7 +219,7 @@ export const Date = styled.div`
 
 export const EmptyWrapper = styled.div`
   justify-content: center;
-  width: 220px;
+  width: 240px;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -232,10 +232,12 @@ export const EmptyWrapper = styled.div`
     flex-shrink: 0;
     aspect-ratio: 165/199;
     opacity: 0.5; /* 👈 여기 추가! (0.0 ~ 1.0 사이) */
+    margin-left: -4px;
   }
 
   div {
-    margin-left: 4px;
+    width: 240px;
+    // margin-left: 4px;
     margin-top: 30px;
     color: #000;
     text-align: center;

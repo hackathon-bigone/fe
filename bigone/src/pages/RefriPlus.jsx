@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import * as E from "../styles/StyledRPlus";
 import axios from "axios";
 
-const API_GET_URL = "http://43.203.179.188/foodbox"; // 목록 조회
-const API_PATCH_URL = "http://43.203.179.188/foodbox";
+const API_GET_URL = "https://43-203-179-188.sslip.io/foodbox"; // 목록 조회
+const API_PATCH_URL = "https://43-203-179-188.sslip.io/foodbox";
 
 // 숫자만 추출(앞자리), 없으면 0
 const extractNumber = (str) => {

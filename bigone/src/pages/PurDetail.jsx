@@ -55,11 +55,14 @@ const P_Detail = () => {
 
   const handleDeleteClick = async () => {
     try {
-      await axios.delete(`http://43.203.179.188/groupbuys/${user_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://43-203-179-188.sslip.io/groupbuys/${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("삭제되었습니다.");
       goPur();
     } catch (error) {
@@ -70,9 +73,12 @@ const P_Detail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://43.203.179.188/groupbuys/${user_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `https://43-203-179-188.sslip.io/groupbuys/${user_id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const data = response.data;
         console.log(JSON.stringify(data, null, 2));
@@ -85,12 +91,17 @@ const P_Detail = () => {
 
     const fetchScrap = async () => {
       try {
-        const res = await axios.get("http://43.203.179.188/mypage/groupbuy-scrap", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://43-203-179-188.sslip.io/mypage/groupbuy-scrap",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const scrapList = res.data;
-        const scrapped = scrapList.some((item) => item.groupbuyId === Number(user_id));
+        const scrapped = scrapList.some(
+          (item) => item.groupbuyId === Number(user_id)
+        );
         setIsScrapped(scrapped);
       } catch (error) {
         console.log("스크랩 목록 불러오기 에러:", error);
@@ -110,7 +121,7 @@ const P_Detail = () => {
   const handleScrapClick = async () => {
     try {
       const response = await axios.post(
-        `http://43.203.179.188/groupbuys/${user_id}/scrap`,
+        `https://43-203-179-188.sslip.io/groupbuys/${user_id}/scrap`,
         {},
         {
           headers: {
@@ -121,7 +132,10 @@ const P_Detail = () => {
       console.log(response.data);
       setIsScrapped((prev) => !prev);
     } catch (error) {
-      console.error("스크랩 요청 에러:", error.response ? error.response.data : error.message);
+      console.error(
+        "스크랩 요청 에러:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -129,24 +143,48 @@ const P_Detail = () => {
     <P.Container>
       <P.Header>
         <P.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goPur} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            onClick={goPur}
+          />
           <P.Title>공동구매 상세</P.Title>
         </P.Icons>
 
         <P.Icons>
-          <img id="share" src={`${process.env.PUBLIC_URL}/images/Share.svg`} alt="share" onClick={handleShareClick} />
-          {isMine && <img id="share" src={`${process.env.PUBLIC_URL}/images/Fix.svg`} alt="share" onClick={() => setShowPopup(!showPopup)} />}
+          <img
+            id="share"
+            src={`${process.env.PUBLIC_URL}/images/Share.svg`}
+            alt="share"
+            onClick={handleShareClick}
+          />
+          {isMine && (
+            <img
+              id="share"
+              src={`${process.env.PUBLIC_URL}/images/Fix.svg`}
+              alt="share"
+              onClick={() => setShowPopup(!showPopup)}
+            />
+          )}
         </P.Icons>
         {showPopup && (
           <P.Popup ref={popupRef}>
             <P.PopupItem>
               수정
-              <img src={`${process.env.PUBLIC_URL}/images/write.svg`} alt="edit" onClick={() => goEdit(user_id)} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/write.svg`}
+                alt="edit"
+                onClick={() => goEdit(user_id)}
+              />
             </P.PopupItem>
             <P.Hr />
             <P.PopupItem onClick={handleDeleteClick}>
               삭제
-              <img src={`${process.env.PUBLIC_URL}/images/Trash_c.svg`} alt="edit" />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/Trash_c.svg`}
+                alt="edit"
+              />
             </P.PopupItem>
           </P.Popup>
         )}
@@ -154,11 +192,21 @@ const P_Detail = () => {
 
       <P.Content>
         <P.Pic>
-          <img src={`http://43.203.179.188/uploads/r?key=${component.mainImageUrl}`} alt="임시" />
+          <img
+            src={`https://43-203-179-188.sslip.io/uploads/r?key=${component.mainImageUrl}`}
+            alt="임시"
+          />
         </P.Pic>
         <P.Wrapper>
           <P.D_Title>{component.groupbuyTitle}</P.D_Title>
-          <img id="star" src={`${process.env.PUBLIC_URL}/images/${isScrapped ? "star_y.svg" : "star_w.svg"}`} alt="star" onClick={handleScrapClick} />
+          <img
+            id="star"
+            src={`${process.env.PUBLIC_URL}/images/${
+              isScrapped ? "star_y.svg" : "star_w.svg"
+            }`}
+            alt="star"
+            onClick={handleScrapClick}
+          />
         </P.Wrapper>
         <P.Wrapper style={{ justifyContent: "start", gap: "7px" }}>
           <P.D_Inform_gray>모집인원</P.D_Inform_gray>
@@ -167,13 +215,30 @@ const P_Detail = () => {
         </P.Wrapper>
         <P.Wrapper>
           <P.Profile>
-            <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-            <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
+            <img
+              id="circle"
+              src={`${process.env.PUBLIC_URL}/images/Circle.svg`}
+              alt="circle"
+            />
+            <img
+              id="cat"
+              src={`${process.env.PUBLIC_URL}/images/Profile.png`}
+              alt="cat"
+            />
             <div id="profile_inform">
               <div id="username">{component.authorName}</div>
-              <div style={{ display: "flex", flexDirection: "row", gap: "7px", marginLeft: "10px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "7px",
+                  marginLeft: "10px",
+                }}
+              >
                 <P.D_Inform_gray>게시물</P.D_Inform_gray>
-                <P.D_Inform_black>{component.authorPostCount}개</P.D_Inform_black>
+                <P.D_Inform_black>
+                  {component.authorPostCount}개
+                </P.D_Inform_black>
               </div>
             </div>
           </P.Profile>
@@ -182,7 +247,8 @@ const P_Detail = () => {
         <P.Post>{component.groupbuyDescription}</P.Post>
         <P.PostURL>
           <p>공동구매 링크</p>
-          {Array.isArray(component.groupbuyLinkUrls) && component.groupbuyLinkUrls.length > 0 ? (
+          {Array.isArray(component.groupbuyLinkUrls) &&
+          component.groupbuyLinkUrls.length > 0 ? (
             component.groupbuyLinkUrls.map((link, idx) => (
               <p key={idx}>
                 <a href={link} target="_blank" rel="noopener noreferrer">
@@ -195,11 +261,21 @@ const P_Detail = () => {
           )}
         </P.PostURL>
         <P.Comment onClick={() => setIsOpen(true)}>
-          <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
+          <img
+            id="comment"
+            src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
+            alt="comment"
+          />
           <div id="comment_cnt">{component.commentCount}</div>
         </P.Comment>
       </P.Content>
-      <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)} comments={comment} type="groupbuy" targetId={user_id}></BottomSheet>
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        comments={comment}
+        type="groupbuy"
+        targetId={user_id}
+      ></BottomSheet>
     </P.Container>
   );
 };

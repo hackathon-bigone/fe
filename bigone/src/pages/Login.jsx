@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import * as L from "../styles/StyledLogin";
 import axios from "axios";
 
+const API_BASE = "https://43-203-179-188.sslip.io";
+
 const Login = ({ setLoginAuth }) => {
   const navigate = useNavigate();
 
@@ -34,9 +36,9 @@ const Login = ({ setLoginAuth }) => {
     setErrorMsg("");
     try {
       const res = await axios.post(
-        `http://43.203.179.188/user/login`,
+        `${API_BASE}/user/login`,
         {
-          username: id, // ✅ 백엔드 스펙이 다르면 아래 '2) 페이로드 점검' 참고
+          username: id,
           password: pw,
         },
         {
@@ -69,7 +71,7 @@ const Login = ({ setLoginAuth }) => {
       console.error("Login error detail:", {
         status,
         serverMsg,
-        url: `http://43.203.179.188/user/login`,
+        url: `https://43-203-179-188.sslip.io/user/login`,
         axiosCode: err?.code,
       });
 

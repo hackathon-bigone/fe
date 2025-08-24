@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as R from "../styles/StyledRecipe";
 import axios from "axios";
 
-const API_BASE = "http://43.203.179.188/";
+const API_BASE = "https://43-203-179-188.sslip.io/";
 
 const buildImageUrl = (val) => {
   if (!val) return `${API_BASE}uploads/r?key=__none__`;
@@ -78,6 +78,8 @@ const Recipe = () => {
     navigate(`/recipe/detail/${postId}`);
   };
 
+  const goScrap = () => navigate(`/my/scrap`);
+
   const [isScrapped, setIsScrapped] = useState(false);
 
   const handleScrapClick = () => {
@@ -122,7 +124,7 @@ const Recipe = () => {
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(
-          `http://43.203.179.188/recipe?sort=${selectedSort}`
+          `https://43-203-179-188.sslip.io/recipe?sort=${selectedSort}`
         );
         console.log("응답 데이터:", response.data); // 응답 구조 확인용
         setRecipes(response.data.boards); // ✅ 배열만 추출해서 세팅!
@@ -420,6 +422,7 @@ const Recipe = () => {
         <R.Title>레시피</R.Title>
         <R.Icons>
           <img
+            onClick={goScrap}
             id="scrap"
             src={`${process.env.PUBLIC_URL}/images/scrap.svg`}
             alt="scrap"

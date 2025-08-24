@@ -54,9 +54,12 @@ const Purchase = () => {
 
   const fetchGroupBuys = async () => {
     try {
-      const response = await axios.get("http://43.203.179.188/groupbuys", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://43-203-179-188.sslip.io/groupbuys",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const data = response.data;
       setComponent(Array.isArray(data.groupbuys) ? data.groupbuys : []);
       setTotal(typeof data.totalCount === "number" ? data.totalCount : 0);
@@ -69,15 +72,40 @@ const Purchase = () => {
 
   useEffect(() => {
     fetchGroupBuys();
+
+    const fetchScrapList = async () => {
+      try {
+        const res = await axios.get(
+          "https://43-203-179-188.sslip.io/mypage/groupbuy-scrap",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const scrapList = Array.isArray(res.data) ? res.data : [];
+        // { groupbuyId: true, ... } 형태로 상태화
+        const initialScrappedMap = {};
+        scrapList.forEach((item) => {
+          initialScrappedMap[item.postId || item.groupbuyId] = true;
+        });
+        setScrappedMap(initialScrappedMap);
+      } catch (error) {
+        console.log("스크랩 목록 불러오기 에러:", error);
+      }
+    };
+
+    fetchScrapList();
   }, []);
 
   const handleScrapClick = async (postId) => {
     try {
-      await axios.post(`http://43.203.179.188/groupbuy/${postId}/scrap`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        `https://43-203-179-188.sslip.io/groupbuy/${postId}/scrap`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       // 성공 시 상태 토글
       setScrappedMap((prev) => ({
@@ -159,7 +187,9 @@ const Purchase = () => {
                 <P.ImformBox>
                   <P.CTitle>
                     <div id="title" onClick={() => goDetail(item.groupbuyId)}>
-                      {item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}
+                      {item.groupbuyTitle.length > 22
+                        ? item.groupbuyTitle.slice(0, 22) + "..."
+                        : item.groupbuyTitle}
                     </div>
                     <img
                       id="scrap"
