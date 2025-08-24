@@ -25,11 +25,14 @@ const QnA = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://43.203.179.188/mypage/qna`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://43-203-179-188.sslip.io/mypage/qna`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setCount(response.data.count);
         setQna(response.data.items);
       } catch (error) {
@@ -43,11 +46,23 @@ const QnA = () => {
     <Q.Container>
       <Q.Header>
         <Q.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" style={{ cursor: "pointer" }} onClick={goBack} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            style={{ cursor: "pointer" }}
+            onClick={goBack}
+          />
           <Q.Title>Q&A</Q.Title>
         </Q.Icons>
         <Q.Icons>
-          <img id="pencil" src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`} alt="pencil" style={{ cursor: "pointer" }} onClick={goWrite} />
+          <img
+            id="pencil"
+            src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`}
+            alt="pencil"
+            style={{ cursor: "pointer" }}
+            onClick={goWrite}
+          />
         </Q.Icons>
       </Q.Header>
 
@@ -62,7 +77,11 @@ const QnA = () => {
               <Q.QMark>Q</Q.QMark>
               {item.title}
             </Q.QnATitle>
-            <Q.QnAContent>{item.body.length > 50 ? item.body.slice(0, 50) + "..." : item.body}</Q.QnAContent>
+            <Q.QnAContent>
+              {item.body.length > 50
+                ? item.body.slice(0, 50) + "..."
+                : item.body}
+            </Q.QnAContent>
             <Q.Wrapper style={{ gap: "10px" }}>
               <Q.Date>{item.displayDate}</Q.Date>
               <Q.Divider />

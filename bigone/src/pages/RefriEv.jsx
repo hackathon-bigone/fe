@@ -71,7 +71,7 @@ const RefEv = () => {
         return;
       }
       try {
-        const res = await axios.get("http://43.203.179.188/foodbox", {
+        const res = await axios.get("https://43-203-179-188.sslip.io/foodbox", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = res.data || {};

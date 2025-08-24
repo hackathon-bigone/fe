@@ -25,7 +25,7 @@ const Nick = () => {
   // 닉네임 가져오기
   useEffect(() => {
     axios
-      .get("http://43.203.179.188/mypage", {
+      .get("https://43-203-179-188.sslip.io/mypage", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,7 +50,7 @@ const Nick = () => {
 
     axios
       .patch(
-        "http://43.203.179.188/mypage/nickname",
+        "https://43-203-179-188.sslip.io/mypage/nickname",
         {
           nickname: input,
         },

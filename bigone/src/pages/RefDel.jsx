@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as E from "../styles/StyledDelete";
 import axios from "axios";
 
-const API_BASE = "http://43.203.179.188/foodbox";
+const API_BASE = "https://43-203-179-188.sslip.io/foodbox";
 
 const withUnit = (n) => `${Number(n ?? 0)}개`;
 

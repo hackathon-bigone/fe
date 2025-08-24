@@ -19,6 +19,7 @@ const My = () => {
   const goSignup = () => navigate(`/signup`); // 라우트명 다르면 맞게 바꿔주세요
   const goInfo = () => navigate(`/my/inform`);
   const goQna = () => navigate(`/my/question`);
+  const goCom = () => navigate(`/my/comment`);
 
   // ----- 상태 -----
   const [isAuthed, setIsAuthed] = useState(false);
@@ -41,7 +42,7 @@ const My = () => {
       }
 
       try {
-        const res = await axios.get("http://43.203.179.188/mypage", {
+        const res = await axios.get("https://43-203-179-188.sslip.io/mypage", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -57,7 +58,7 @@ const My = () => {
         }
 
         const countRes = await axios.get(
-          "http://43.203.179.188/mypage/my-posts/count",
+          "https://43-203-179-188.sslip.io/mypage/my-posts/count",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -65,7 +66,7 @@ const My = () => {
         setPostCount(countRes.data.totalPosts);
 
         const commentRes = await axios.get(
-          "http://43.203.179.188/mypage/my-comments/count",
+          "https://43-203-179-188.sslip.io/mypage/my-comments/count",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -73,7 +74,7 @@ const My = () => {
         setCommentCount(commentRes.data.totalCommentCount);
 
         const scrapRes = await axios.get(
-          "http://43.203.179.188/mypage/scrap/count",
+          "https://43-203-179-188.sslip.io/mypage/scrap/count",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -104,9 +105,13 @@ const My = () => {
       return;
     }
     try {
-      const res = await axios.post("http://43.203.179.188/user/logout", null, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        "https://43-203-179-188.sslip.io/user/logout",
+        null,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       console.log("✅ 로그아웃 성공:", res.data);
       localStorage.removeItem("access_token");
       alert("로그아웃 되었습니다.");
@@ -187,7 +192,7 @@ const My = () => {
             <div id="title">작성한 게시물</div>
           </M.Write>
           <M.Hr />
-          <M.Comment>
+          <M.Comment onClick={goCom}>
             <img
               src={`${process.env.PUBLIC_URL}/images/declaration.png`}
               alt="comment"

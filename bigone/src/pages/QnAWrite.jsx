@@ -55,7 +55,7 @@ const QnAWrite = () => {
 
         // presigned url 획득
         const response = await axios.post(
-          "http://43.203.179.188/uploads/qna",
+          "https://43-203-179-188.sslip.io/uploads/qna",
           [
             {
               filename: uniqueFileName,
@@ -84,7 +84,7 @@ const QnAWrite = () => {
         imageKeys,
       };
 
-      await axios.post("http://43.203.179.188/mypage/qna", payload, {
+      await axios.post("https://43-203-179-188.sslip.io/mypage/qna", payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -103,7 +103,13 @@ const QnAWrite = () => {
     <Q.Container>
       <Q.Header>
         <Q.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goBack} style={{ cursor: "pointer" }} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            onClick={goBack}
+            style={{ cursor: "pointer" }}
+          />
           <Q.Title>문의 글쓰기</Q.Title>
         </Q.Icons>
       </Q.Header>
@@ -116,7 +122,10 @@ const QnAWrite = () => {
 
         <Q.InputWrapper>
           <Q.InTitle>문의 내용</Q.InTitle>
-          <Q.Textarea value={detail} onChange={(e) => setDetail(e.target.value)} />
+          <Q.Textarea
+            value={detail}
+            onChange={(e) => setDetail(e.target.value)}
+          />
         </Q.InputWrapper>
 
         <Q.InputWrapper>
@@ -138,7 +147,11 @@ const QnAWrite = () => {
                   justifyContent: "center",
                 }}
               >
-                <img src={URL.createObjectURL(file)} alt={`preview-${idx}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`preview-${idx}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
                 <img
                   src={`${process.env.PUBLIC_URL}/images/Delete.svg`}
                   alt="delete"
@@ -158,16 +171,34 @@ const QnAWrite = () => {
             ))}
             {pics.length < 4 && (
               <Q.File onClick={handleInPicClick} style={{ cursor: "pointer" }}>
-                <img src={`${process.env.PUBLIC_URL}/images/File_add.svg`} alt="add" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/images/File_add.svg`}
+                  alt="add"
+                />
                 <div id="text">파일 추가</div>
               </Q.File>
             )}
           </div>
-          <div style={{ fontSize: 13, color: "#969696", marginTop: 4 }}>{pics.length}/4</div>
-          <input type="file" accept="image/*" multiple ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
+          <div style={{ fontSize: 13, color: "#969696", marginTop: 4 }}>
+            {pics.length}/4
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
         </Q.InputWrapper>
 
-        <Q.UploadBtn style={{ background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }} onClick={handleSave}>
+        <Q.UploadBtn
+          style={{
+            background: isActive ? "#FF4F26" : "#C4C4C4",
+            cursor: isActive ? "pointer" : "default",
+          }}
+          onClick={handleSave}
+        >
           작성 완료
         </Q.UploadBtn>
       </Q.Content>

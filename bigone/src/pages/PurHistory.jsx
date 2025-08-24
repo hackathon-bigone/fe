@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as P from "../styles/StyledPurH";
 import axios from "axios"; // 파일 맨 위(컴포넌트 바깥 또는 안 가장 위) 추가
 
-const API_BASE = "http://43.203.179.188/";
+const API_BASE = "https://43-203-179-188.sslip.io/";
 
 // 네트워크 요청 없는 SVG 플레이스홀더
 const svg = `
@@ -69,7 +69,7 @@ const PurHistory = () => {
       try {
         const token = localStorage.getItem("access_token");
         const res = await axios.get(
-          "http://43.203.179.188/mypage/my-groupbuys",
+          "https://43-203-179-188.sslip.io/mypage/my-groupbuys",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

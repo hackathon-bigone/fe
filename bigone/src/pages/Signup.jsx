@@ -45,7 +45,7 @@ const Signup = () => {
     }
 
     try {
-      await axios.post("http://43.203.179.188/user/signup", {
+      await axios.post("https://43-203-179-188.sslip.io/user/signup", {
         nickname,
         username: id,
         password: pw,
@@ -74,7 +74,11 @@ const Signup = () => {
 
   const handleIdCheck = async () => {
     try {
-      const response = await axios.get(`http://43.203.179.188/user/check-username?username=${encodeURIComponent(id)}`);
+      const response = await axios.get(
+        `https://43-203-179-188.sslip.io/user/check-username?username=${encodeURIComponent(
+          id
+        )}`
+      );
       setIdErrorMsg(response.data.message);
       if (response.data.message.includes("사용 가능")) {
         setIsIdCheckValid(true);
@@ -106,7 +110,8 @@ const Signup = () => {
     const value = e.target.value;
     setPw(value);
     // 비밀번호 조건: 영문, 숫자, 특수문자 포함 8~16자
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
     if (!passwordRegex.test(value)) {
       setPwErrorMsg("영문, 숫자, 특수문자를 포함하여 8~16자를 입력하세요.");
@@ -149,7 +154,12 @@ const Signup = () => {
     <S.Container>
       <S.Header>
         <S.Icons>
-          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goLogin} />
+          <img
+            id="back"
+            src={`${process.env.PUBLIC_URL}/images/back.svg`}
+            alt="back"
+            onClick={goLogin}
+          />
         </S.Icons>
         <S.Title>회원가입</S.Title>
       </S.Header>
@@ -163,9 +173,15 @@ const Signup = () => {
           placeholder="닉네임 입력"
           value={nickname}
           onChange={onChangeName}
-          style={{ backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)" }}
+          style={{
+            backgroundColor: nameErrorMsg
+              ? "rgba(255, 79, 38, 0.10)"
+              : "rgba(196, 196, 196, 0.30)",
+          }}
         ></input>
-        {!nameErrorMsg && !isNameValid && <div id="inputDetail">공백 포함 영문 또는 한글 2~10자</div>}
+        {!nameErrorMsg && !isNameValid && (
+          <div id="inputDetail">공백 포함 영문 또는 한글 2~10자</div>
+        )}
         {nameErrorMsg && <div id="inputError">{nameErrorMsg}</div>}
       </S.InputCon>
 
@@ -173,19 +189,41 @@ const Signup = () => {
         <div id="title">
           아이디 <span style={{ color: "#FF385C" }}>*</span>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+          }}
+        >
           <input
             type="text"
             placeholder="아이디 입력"
             value={id}
             onChange={onChangeId}
-            style={{ width: "62%", backgroundColor: isIdCheckValid ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)" }}
+            style={{
+              width: "62%",
+              backgroundColor: isIdCheckValid
+                ? "rgba(255, 79, 38, 0.10)"
+                : "rgba(196, 196, 196, 0.30)",
+            }}
           ></input>
-          <div id="IdCheckBtn" onClick={handleIdCheck} style={{ background: isIdCheckActivate ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }}>
+          <div
+            id="IdCheckBtn"
+            onClick={handleIdCheck}
+            style={{
+              background: isIdCheckActivate ? "#FF4F26" : "#C4C4C4",
+              cursor: isActive ? "pointer" : "default",
+            }}
+          >
             중복확인
           </div>
         </div>
-        {!idErrorMsg && !isIdValid && <div id="inputDetail">영문, 숫자 포함 5자~12자</div>}
+        {!idErrorMsg && !isIdValid && (
+          <div id="inputDetail">영문, 숫자 포함 5자~12자</div>
+        )}
         {idErrorMsg && (
           <div
             id="inputError"
@@ -210,22 +248,44 @@ const Signup = () => {
           placeholder="비밀번호 입력"
           value={pw}
           onChange={onChangePassword}
-          style={{ backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)" }}
+          style={{
+            backgroundColor: nameErrorMsg
+              ? "rgba(255, 79, 38, 0.10)"
+              : "rgba(196, 196, 196, 0.30)",
+          }}
         ></input>
-        <img src={`${process.env.PUBLIC_URL}/images/${pwType.visible ? "Eye-open.svg" : "Eye-off.svg"}`} onClick={handlePasswordType} />
-        {!pwErrorMsg && isPwValid && <div id="inputDetail">영문, 숫자, 특수문자 포함 8~16자</div>}
+        <img
+          src={`${process.env.PUBLIC_URL}/images/${
+            pwType.visible ? "Eye-open.svg" : "Eye-off.svg"
+          }`}
+          onClick={handlePasswordType}
+        />
+        {!pwErrorMsg && isPwValid && (
+          <div id="inputDetail">영문, 숫자, 특수문자 포함 8~16자</div>
+        )}
         {pwErrorMsg && <div id="inputError">{pwErrorMsg}</div>}
         <input
           type={pwType.type}
           placeholder="비밀번호 확인"
           value={pwCheck}
           onChange={onChangePwCheck}
-          style={{ backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)" }}
+          style={{
+            backgroundColor: nameErrorMsg
+              ? "rgba(255, 79, 38, 0.10)"
+              : "rgba(196, 196, 196, 0.30)",
+          }}
         ></input>
         {pwCheckErrorMsg && <div id="inputError">{pwCheckErrorMsg}</div>}
       </S.InputCon>
 
-      <S.SignUpBtn style={{ marginTop: "60px", background: isActive ? "#FF4F26" : "#C4C4C4", cursor: isActive ? "pointer" : "default" }} onClick={handleSubmit}>
+      <S.SignUpBtn
+        style={{
+          marginTop: "60px",
+          background: isActive ? "#FF4F26" : "#C4C4C4",
+          cursor: isActive ? "pointer" : "default",
+        }}
+        onClick={handleSubmit}
+      >
         가입하기
       </S.SignUpBtn>
     </S.Container>

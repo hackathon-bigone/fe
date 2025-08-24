@@ -4,7 +4,7 @@ import * as E from "../styles/StyledScanRes";
 import axios from "axios";
 
 // 개발환경에서 CRA 프록시(setupProxy.js) 사용을 권장: 절대URL 대신 상대경로
-const API_BASE = "/foodbox";
+const API_BASE = "https://43-203-179-188.sslip.io/foodbox";
 
 const ScanRes = () => {
   const navigate = useNavigate();
