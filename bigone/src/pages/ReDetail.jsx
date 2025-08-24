@@ -32,6 +32,7 @@ const R_Detail = () => {
   const popupRef = useRef(null);
 
   const [isHeart, setIsHeart] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const handleHeart = async () => {
     try {
       const response = await axios.post(
@@ -45,6 +46,7 @@ const R_Detail = () => {
       );
       console.log(response.data);
       setIsHeart((prev) => !prev);
+      setLikeCount((prev) => (isHeart ? prev - 1 : prev + 1));
     } catch (error) {
       console.error("좋아요 요청 에러:", error.response ? error.response.data : error.message);
     }
@@ -92,6 +94,8 @@ const R_Detail = () => {
         setComment(data.comments);
         setIngredients(data.ingredients);
         setStep(data.steps);
+        setIsHeart(data.likedByCurrentUser);
+        setLikeCount(data.likeCount);
       } catch (error) {
         console.log("Error fetching recipe: ", error);
       }
@@ -221,7 +225,7 @@ const R_Detail = () => {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <R.Heart>
             <img id="heart" src={`${process.env.PUBLIC_URL}/images/${isHeart ? "heart_b.png" : "heart_w.svg"}`} alt="heart" onClick={handleHeart} />
-            <div id="heart_cnt">{component.likeCount}</div>
+            <div id="heart_cnt">{likeCount}</div>
           </R.Heart>
           <R.Comment onClick={() => setIsOpen(true)}>
             <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
