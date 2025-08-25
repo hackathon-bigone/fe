@@ -266,7 +266,7 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 180px;
+  width: 187px;
 
   /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
   white-space: normal;
