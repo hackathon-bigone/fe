@@ -248,7 +248,7 @@ const Scrap = () => {
                     <img
                       id="heart"
                       src={`${process.env.PUBLIC_URL}/images/${
-                        likedMap[post.postId] ? "heart_b.png" : "heart_w.svg"
+                        likedMap[post.postId] ? "heart_w.svg" : "heart_b.png"
                       }`}
                       alt={likedMap[post.postId] ? "좋아요 취소" : "좋아요"}
                       onClick={(e) => handleLikeToggle(e, post.postId)}
