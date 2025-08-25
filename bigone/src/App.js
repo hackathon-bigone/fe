@@ -74,11 +74,20 @@ function App() {
         <Route path="/refrigerator/ingredients/delete" element={<RefDel />} />
         <Route path="/refrigerator/ingredients/write" element={<RefWrite />} />
         <Route path="/refrigerator/ingredients/receipt" element={<Receipt />} />
-        <Route path="/refrigerator/ingredients/receipt/scan" element={<Scan />} />
-        <Route path="/refrigerator/ingredients/receipt/scan/complete" element={<ScanCom />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan"
+          element={<Scan />}
+        />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/complete"
+          element={<ScanCom />}
+        />
         <Route path="/my/scrap" element={<Scrap />} />
         <Route path="/my/scrap/purchase" element={<ScrapPur />} />
-        <Route path="/refrigerator/ingredients/receipt/scan/result" element={<ScanRes />} />
+        <Route
+          path="/refrigerator/ingredients/receipt/scan/result"
+          element={<ScanRes />}
+        />
         <Route path="/my/comment" element={<ComW />} />
         <Route path="/my/comment/purchase" element={<ComP />} />
       </Routes>
