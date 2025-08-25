@@ -27,7 +27,7 @@ export const BottomSheet = styled.div`
   transform: ${({ isOpen }) => (isOpen ? "translateY(0)" : "translateY(100%)")};
   transition: transform 0.3s ease;
   overflow-y: auto;
-  height: 700px;
+  height: 600px;
   width: 393px;
 
   -ms-overflow-style: none; /* IE & Edge */
