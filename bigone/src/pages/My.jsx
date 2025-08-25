@@ -14,6 +14,7 @@ const My = () => {
   const goWro = () => navigate(`/my/wrote/recipe`);
   const goEdit = () => navigate(`/my/edit`);
   const goPw = () => navigate(`/my/edit/password`);
+  const goReport = () => navigate(`/my/report`);
   const goScrap = () => navigate(`/my/scrap`);
   const goLogin = () => navigate(`/login`);
   const goSignup = () => navigate(`/signup`); // 라우트명 다르면 맞게 바꿔주세요
@@ -57,36 +58,25 @@ const My = () => {
           setWelcomeMsg("로그인 하고 순삭의 다양한 서비스를 경험해보세요!");
         }
 
-        const countRes = await axios.get(
-          "https://43-203-179-188.sslip.io/mypage/my-posts/count",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const countRes = await axios.get("https://43-203-179-188.sslip.io/mypage/my-posts/count", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setPostCount(countRes.data.totalPosts);
 
-        const commentRes = await axios.get(
-          "https://43-203-179-188.sslip.io/mypage/my-comments/count",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const commentRes = await axios.get("https://43-203-179-188.sslip.io/mypage/my-comments/count", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setCommentCount(commentRes.data.totalCommentCount);
 
-        const scrapRes = await axios.get(
-          "https://43-203-179-188.sslip.io/mypage/scrap/count",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const scrapRes = await axios.get("https://43-203-179-188.sslip.io/mypage/scrap/count", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setScrapCount(scrapRes.data.totalScrapCount);
       } catch (err) {
         console.error("❌ /mypage 호출 실패:", err?.response || err);
         setIsAuthed(false);
         // 실패 응답 바디에 message 가 있다면 사용
-        const msg =
-          err?.response?.data?.message ||
-          "로그인 하고 순삭의 다양한 서비스를 경험해보세요!";
+        const msg = err?.response?.data?.message || "로그인 하고 순삭의 다양한 서비스를 경험해보세요!";
         setWelcomeMsg(msg);
       } finally {
         setLoading(false);
@@ -105,13 +95,9 @@ const My = () => {
       return;
     }
     try {
-      const res = await axios.post(
-        "https://43-203-179-188.sslip.io/user/logout",
-        null,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.post("https://43-203-179-188.sslip.io/user/logout", null, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       console.log("✅ 로그아웃 성공:", res.data);
       localStorage.removeItem("access_token");
       alert("로그아웃 되었습니다.");
@@ -184,28 +170,19 @@ const My = () => {
         <M.ATitle>나의 활동 내역</M.ATitle>
         <M.AList>
           <M.Write onClick={goWro}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/pencil.png`}
-              alt="write"
-            />
+            <img src={`${process.env.PUBLIC_URL}/images/pencil.png`} alt="write" />
             <div id="num">{postCount}</div> {/* ✅ totalPosts 표시 */}
             <div id="title">작성한 게시물</div>
           </M.Write>
           <M.Hr />
           <M.Comment onClick={goCom}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/declaration.png`}
-              alt="comment"
-            />
+            <img src={`${process.env.PUBLIC_URL}/images/declaration.png`} alt="comment" />
             <div id="num">{commentCount}</div> {/* ✅ 수정된 부분 */}
             <div id="title">댓글 단 게시물</div>
           </M.Comment>
           <M.Hr />
           <M.Scrap onClick={goScrap}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/star.png`}
-              alt="scrap"
-            />
+            <img src={`${process.env.PUBLIC_URL}/images/star.png`} alt="scrap" />
             <div id="num">{scrapCount}</div>
             <div id="title">스크랩</div>
           </M.Scrap>
@@ -216,10 +193,7 @@ const My = () => {
         <M.HTitle>고객지원</M.HTitle>
         <M.HList>
           <M.Announce onClick={goInfo}>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/announcement.png`}
-              alt="announcement"
-            />
+            <img src={`${process.env.PUBLIC_URL}/images/announcement.png`} alt="announcement" />
             <div id="title">공지사항</div>
           </M.Announce>
           <M.Hr />
@@ -228,11 +202,8 @@ const My = () => {
             <div id="title">Q&A</div>
           </M.Qna>
           <M.Hr />
-          <M.Declar>
-            <img
-              src={`${process.env.PUBLIC_URL}/images/comment.png`}
-              alt="declaration"
-            />
+          <M.Declar onClick={goReport}>
+            <img src={`${process.env.PUBLIC_URL}/images/comment.png`} alt="declaration" />
             <div id="title">신고</div>
           </M.Declar>
         </M.HList>
@@ -244,24 +215,15 @@ const My = () => {
           <div>홈</div>
         </M.NHome>
         <M.NRefri onClick={goRef}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
-            alt="refrigerator"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`} alt="refrigerator" />
           <div>냉장고</div>
         </M.NRefri>
         <M.NRecipe onClick={goRec}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
-            alt="recipe"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`} alt="recipe" />
           <div>레시피</div>
         </M.NRecipe>
         <M.NPur onClick={goPur}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`}
-            alt="purchase"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`} alt="purchase" />
           <div>공동구매</div>
         </M.NPur>
         <M.NMy>
