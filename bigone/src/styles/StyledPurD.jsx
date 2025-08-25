@@ -137,6 +137,10 @@ export const D_State = styled.div`
   font-weight: 400;
   line-height: normal;
   padding: 0 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Profile = styled.div`
