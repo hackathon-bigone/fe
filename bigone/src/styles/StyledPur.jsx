@@ -10,7 +10,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  width: 393px;
+  width: 390px;
   flex-shrink: 0;
   padding-bottom: 200px;
 `;
@@ -25,7 +25,7 @@ export const Header = styled.div`
   z-index: 10;
 
   height: 80px;
-  width: 393px;
+  width: 390px;
   display: flex;
   flex-direction: row;
   padding: 20px;
@@ -178,7 +178,7 @@ export const Img = styled.div`
     height: 90px;
     flex-shrink: 0;
     border-radius: 5px;
-    background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+    background: lightgray 50% / cover no-repeat;
   }
 `;
 
@@ -195,7 +195,6 @@ export const CTitle = styled.div`
   justify-content: space-between;
 
   #title {
-    display: flex;
     width: 195px;
     color: #000;
     font-family: Pretendard;
@@ -204,10 +203,12 @@ export const CTitle = styled.div`
     font-weight: 500;
     line-height: normal;
 
-    /* ✅ 단어 기준 줄바꿈을 위한 추가 속성 */
-    white-space: normal;
-    overflow-wrap: break-word; /* 또는 word-wrap: break-word; */
-    word-break: keep-all; /* ✅ 영어 줄바꿈 시 단어 단위 유지 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 표시할 최대 줄 수 (예: 2줄) */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all; /* 단어 기준 자동 줄바꿈 */
   }
 
   #scrap {
