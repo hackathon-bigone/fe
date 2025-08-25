@@ -174,6 +174,171 @@ const Recipe = () => {
     fetchRecipes();
   }, [selectedSort, token]);
 
+  /* 디바운스 훅 (검색용) */
+  function useDebounce(value, delay = 300) {
+    const [v, setV] = useState(value);
+    useEffect(() => {
+      const t = setTimeout(() => setV(value), delay);
+      return () => clearTimeout(t);
+    }, [value, delay]);
+    return v;
+  }
+
+  // ✅ 검색어 상태
+  // const [recipes, setRecipes] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
+
+  /* 숫자 안전 파싱 (totalCount 없거나 문자열일 때 대비) */
+  const pickCount = (data, list) => {
+    const raw = data?.totalCount;
+    const n = raw === undefined || raw === null ? NaN : Number(raw);
+    return Number.isFinite(n) ? n : list.length;
+  };
+
+  /* in-flight 취소 */
+  // const cancelRef = useRef(null);
+  const cancelInFlight = () => {
+    if (cancelRef.current) {
+      cancelRef.current.cancel("cancel previous");
+      cancelRef.current = null;
+    }
+  };
+
+  // 키워드 정규화: " 초콜릿,  순두부  " -> "초콜릿,순두부"
+  const buildKeywords = (raw) =>
+    raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join(",");
+
+  // 기본 리스트(정렬) 가져오기
+  const fetchSorted = async () => {
+    cancelInFlight();
+    const src = axios.CancelToken.source();
+    cancelRef.current = src;
+
+    try {
+      const res = await axios.get(`${API_BASE}recipe`, {
+        params: { sort: selectedSort },
+        cancelToken: src.token,
+      });
+      setRecipes(Array.isArray(res.data?.boards) ? res.data.boards : []);
+      setTotalCount(
+        typeof res.data?.totalCount === "number"
+          ? res.data.totalCount
+          : res.data?.boards?.length ?? 0
+      );
+    } catch (e) {
+      if (!axios.isCancel(e)) console.error("정렬 리스트 불러오기 실패:", e);
+      setRecipes([]);
+      setTotalCount(0);
+    } finally {
+      cancelRef.current = null;
+    }
+  };
+
+  // 검색 호출
+  const fetchSearch = async (keywords) => {
+    cancelInFlight();
+    const src = axios.CancelToken.source();
+    cancelRef.current = src;
+
+    try {
+      const res = await axios.get(`${API_BASE}recipe/search`, {
+        params: { keywords },
+        // axios가 알아서 인코딩합니다
+        cancelToken: src.token,
+      });
+      setRecipes(Array.isArray(res.data?.boards) ? res.data.boards : []);
+      setTotalCount(
+        typeof res.data?.totalCount === "number"
+          ? res.data.totalCount
+          : res.data?.boards?.length ?? 0
+      );
+    } catch (e) {
+      if (!axios.isCancel(e)) console.error("검색 실패:", e);
+      setRecipes([]);
+      setTotalCount(0);
+    } finally {
+      cancelRef.current = null;
+    }
+  };
+
+  /* 카테고리 호출 (검색어 없고, 카테고리!=전체) */
+  const fetchCategory = async (categoryLabel) => {
+    const categoryParam = CATEGORY_PARAM_MAP[categoryLabel] ?? null;
+    if (!categoryParam) {
+      // 전체면 정렬 리스트로 대체
+      return fetchSorted();
+    }
+    cancelInFlight();
+    const src = axios.CancelToken.source();
+    cancelRef.current = src;
+    try {
+      const res = await axios.get(`${API_BASE}recipe`, {
+        params: { category: categoryParam },
+        cancelToken: src.token,
+      });
+      const list = Array.isArray(res.data?.boards) ? res.data.boards : [];
+      setRecipes(list);
+      setTotalCount(pickCount(res.data, list));
+    } catch (e) {
+      if (!axios.isCancel(e)) console.error("카테고리 조회 실패:", e);
+      setRecipes([]);
+      setTotalCount(0);
+    } finally {
+      cancelRef.current = null;
+    }
+  };
+
+  /* 최초 로드 / 정렬 변경 시: 검색어 없고 카테고리=전체일 때만 */
+  useEffect(() => {
+    if (debouncedQuery.trim()) return;
+    if (selectedCategory !== "전체") return;
+    fetchSorted();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSort]);
+
+  // 디바운스된 검색어 변화 감지
+  useEffect(() => {
+    const q = debouncedQuery.trim();
+    if (!q) {
+      // 검색어가 비면 기본 리스트로 복귀
+      fetchSorted();
+    } else {
+      fetchSearch(buildKeywords(q));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery]);
+
+  /* 카테고리 변경 시 (검색어 없을 때만) */
+  useEffect(() => {
+    if (debouncedQuery.trim()) return;
+    fetchCategory(selectedCategory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
+
+  /* 모달에서 카테고리 클릭 */
+  const onClickCategory = (label) => {
+    setSelectedCategory(label);
+    setIsOpen(false);
+  };
+
+  /* Enter 즉시 검색 */
+  const onSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const q = query.trim();
+      if (q) fetchSearch(buildKeywords(q));
+      else {
+        if (selectedCategory === "전체") fetchSorted();
+        else fetchCategory(selectedCategory);
+      }
+    }
+  };
+
   return (
     <R.Container>
       <R.Header>
@@ -224,6 +389,19 @@ const Recipe = () => {
       </R.Sheet>
 
       <R.Body>
+        <R.Search>
+          <img
+            src={`${process.env.PUBLIC_URL}/images/search.svg`}
+            alt="search"
+          />
+          <input
+            type="text"
+            placeholder="냉장고 속 재료를 검색해보세요."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={onSearchKeyDown}
+          />
+        </R.Search>
         <R.Condition>
           <R.Post>
             <div id="title">게시물</div>

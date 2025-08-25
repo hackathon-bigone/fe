@@ -100,69 +100,33 @@ const Home = () => {
     }
   };
 
-  // ✅ 좋아요 상태 (postId: true/false)
-  const [likedMap, setLikedMap] = useState(() => {
-    try {
-      const saved = localStorage.getItem("recipe_likes");
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-  const [likePending, setLikePending] = useState({});
+  // ✅ 좋아요 상태 (조회 전용)
+  const [likedMap, setLikedMap] = useState({});
 
-  // ✅ localStorage 동기화 (좋아요 상태 저장)
+  // ✅ Home 진입 시, 내가 좋아요한 레시피 목록 불러오기
   useEffect(() => {
-    try {
-      localStorage.setItem("recipe_likes", JSON.stringify(likedMap));
-    } catch {}
-  }, [likedMap]);
+    const fetchLikes = async () => {
+      if (!token) return; // 로그인 안 된 경우 스킵
+      try {
+        const res = await axios.get(`${API_BASE}mypage/recipe-like`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-  // ✅ 좋아요 토글
-  const handleLikeToggle = async (e, postId) => {
-    e.stopPropagation();
-    if (!token) return navigate("/login");
-    if (likePending[postId]) return;
+        // 좋아요된 postId를 true로 설정
+        const init = {};
+        (res.data || []).forEach((r) => {
+          init[r.postId] = true;
+        });
+        setLikedMap(init);
 
-    const willLike = !likedMap[postId];
+        console.log("✅ 내 좋아요 목록:", init);
+      } catch (err) {
+        console.error("❌ 좋아요 목록 불러오기 실패:", err);
+      }
+    };
 
-    // 낙관적 업데이트
-    setLikePending((p) => ({ ...p, [postId]: true }));
-    setLikedMap((m) => ({ ...m, [postId]: willLike }));
-    setRecipeList((prev) =>
-      prev.map((r) =>
-        r.postId === postId
-          ? {
-              ...r,
-              likeCount: Math.max(0, (r.likeCount ?? 0) + (willLike ? 1 : -1)),
-            }
-          : r
-      )
-    );
-
-    try {
-      await axios.post(`${API_BASE}recipe/${postId}/like`, null, {
-        headers: { Authorization: `Bearer ${token}` },
-        timeout: 15000,
-      });
-    } catch (err) {
-      console.error("❌ 좋아요 토글 실패:", err);
-      // 롤백
-      setLikedMap((m) => ({ ...m, [postId]: !willLike }));
-      setRecipeList((prev) =>
-        prev.map((r) =>
-          r.postId === postId
-            ? {
-                ...r,
-                likeCount: Math.max(0, (r.likeCount ?? 0) + (willLike ? -1 : 1)),
-              }
-            : r
-        )
-      );
-    } finally {
-      setLikePending((p) => ({ ...p, [postId]: false }));
-    }
-  };
+    fetchLikes();
+  }, [token]);
 
   const [selectedSort, setSelectedSort] = useState("popular");
 
@@ -189,11 +153,14 @@ const Home = () => {
 
     const fetchFoodbox = async () => {
       try {
-        const res = await axios.get("https://43-203-179-188.sslip.io/home/foodbox", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          "https://43-203-179-188.sslip.io/home/foodbox",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setFoodbox(res.data);
       } catch (error) {
         console.error("❌ API 호출 실패:", error);
@@ -237,24 +204,29 @@ const Home = () => {
     return `${API_BASE}uploads/r?key=${encodeURIComponent(pathOrKey)}`;
   };
 
+  // ---- ★ 새 명세서 연동: 인기순 5개 ----
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const res = await axios.get("https://43-203-179-188.sslip.io/home/top5-popular-boards");
-
-        console.log("✅ 인기 레시피 전체 response:", res);
-        console.log("📦 res.data:", res.data);
-        console.log("📝 res.data.boards:", res.data?.boards);
-
-        (res.data?.boards ?? []).forEach((recipe, idx) => {
-          console.log(`🔗 [${idx}] postId=${recipe.postId}, title="${recipe.title}", mainImageUrl=${recipe.mainImageUrl}`);
+        // /recipe?sort=popular 에서 boards 배열 반환 (명세서)
+        const res = await axios.get(`${API_BASE}recipe`, {
+          params: { sort: "popular" },
         });
 
-        // ✅ 방어적 파싱
-        setRecipeList(Array.isArray(res.data?.boards) ? res.data.boards : []);
+        const boards = Array.isArray(res.data?.boards) ? res.data.boards : [];
+        const top5 = boards.slice(0, 5).map((b) => ({
+          postId: b.postId,
+          title: b.title,
+          mainImageUrl: b.mainImageUrl, // e.g., "recipe/4/....jpg"
+          likeCount: b.likeCount ?? 0, // 명세서에 없을 수 있으니 기본값
+          commentCount: b.commentCount ?? 0,
+          createdAt: b.createdAt ?? "", // 없으면 빈 문자열
+        }));
+
+        setRecipeList(top5);
       } catch (error) {
-        console.error("❌ 레시피 불러오기 실패:", error);
-        setRecipeList([]); // 실패 시 빈 배열
+        console.error("❌ 인기 레시피 불러오기 실패:", error);
+        setRecipeList([]);
       }
     };
 
@@ -265,11 +237,28 @@ const Home = () => {
     <H.Container>
       <H.Header>
         <H.Title>
-          <img id="logo" src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="logo" />
+          <img
+            id="logo"
+            src={`${process.env.PUBLIC_URL}/images/logo.png`}
+            alt="logo"
+          />
         </H.Title>
         <H.Icons>
-          <img onClick={goScrap} id="scrap" src={`${process.env.PUBLIC_URL}/images/scrap.svg`} alt="scrap" />
-          <img id="bar" src={`${process.env.PUBLIC_URL}/images/bar.svg`} alt="bar" role="button" tabIndex={0} onClick={goMenu} onKeyDown={onKey} />
+          <img
+            onClick={goScrap}
+            id="scrap"
+            src={`${process.env.PUBLIC_URL}/images/scrap.svg`}
+            alt="scrap"
+          />
+          <img
+            id="bar"
+            src={`${process.env.PUBLIC_URL}/images/bar.svg`}
+            alt="bar"
+            role="button"
+            tabIndex={0}
+            onClick={goMenu}
+            onKeyDown={onKey}
+          />
         </H.Icons>
       </H.Header>
 
@@ -281,7 +270,9 @@ const Home = () => {
             <div id="detail">{foodbox.message || "메시지 없음"}</div>
 
             {/* ✅ 로그인 된 경우만 product 표시 */}
-            {localStorage.getItem("access_token") && <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>}
+            {localStorage.getItem("access_token") && (
+              <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>
+            )}
           </H.BUp>
 
           {/* ✅ 로그인 된 경우만 BDown 표시 */}
@@ -354,7 +345,9 @@ const Home = () => {
                     <H.CTitle>{recipe.title}</H.CTitle>
                     <H.Scrap>
                       <img
-                        src={`${process.env.PUBLIC_URL}/images/${scrappedMap[recipe.postId] ? "star_y" : "star_w"}.svg`}
+                        src={`${process.env.PUBLIC_URL}/images/${
+                          scrappedMap[recipe.postId] ? "star_y" : "star_w"
+                        }.svg`}
                         alt="scrap"
                         onClick={(e) => {
                           e.stopPropagation(); // ✅ 부모 onClick(상세 페이지 이동) 막기
@@ -371,19 +364,21 @@ const Home = () => {
                     <H.Icon>
                       <img
                         id="heart"
-                        src={`${process.env.PUBLIC_URL}/images/${likedMap[recipe.postId] ? "heart_b.png" : "heart_w.svg"}`}
-                        alt={likedMap[recipe.postId] ? "좋아요 취소" : "좋아요"}
-                        onClick={(e) => {
-                          e.stopPropagation(); // ✅ 상세 이동 막기
-                          handleLikeToggle(e, recipe.postId);
-                        }}
-                        style={{
-                          cursor: "pointer",
-                          opacity: likePending[recipe.postId] ? 0.6 : 1,
-                        }}
+                        src={`${process.env.PUBLIC_URL}/images/${
+                          likedMap[recipe.postId]
+                            ? "heart_b.png"
+                            : "heart_w.svg"
+                        }`}
+                        alt="좋아요"
+                        style={{ cursor: "default" }} // 커서도 일반 화살표
                       />
+
                       <div id="hnum">{recipe.likeCount}</div>
-                      <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
+                      <img
+                        id="comment"
+                        src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
+                        alt="comment"
+                      />
                       <div id="cnum">{recipe.commentCount}</div>
                     </H.Icon>
                     <H.CDate>{recipe.createdAt}</H.CDate>
@@ -401,15 +396,24 @@ const Home = () => {
           <div>홈</div>
         </H.NHome>
         <H.NRefri onClick={goRef}>
-          <img src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`} alt="refrigerator" />
+          <img
+            src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
+            alt="refrigerator"
+          />
           <div>냉장고</div>
         </H.NRefri>
         <H.NRecipe onClick={goRec}>
-          <img src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`} alt="recipe" />
+          <img
+            src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
+            alt="recipe"
+          />
           <div>레시피</div>
         </H.NRecipe>
         <H.NPur onClick={goPur}>
-          <img src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`} alt="purchase" />
+          <img
+            src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`}
+            alt="purchase"
+          />
           <div>공동구매</div>
         </H.NPur>
         <H.NMy onClick={goMy}>
