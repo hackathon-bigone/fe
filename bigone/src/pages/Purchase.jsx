@@ -41,9 +41,7 @@ const Purchase = () => {
     if (userInput.trim() === "") {
       setFilteredComponents(component);
     } else {
-      const filtered = component.filter((item) =>
-        item.groupbuyTitle.toLowerCase().includes(userInput.toLowerCase())
-      );
+      const filtered = component.filter((item) => item.groupbuyTitle.toLowerCase().includes(userInput.toLowerCase()));
       setFilteredComponents(filtered);
     }
   }, [userInput, component]);
@@ -54,12 +52,9 @@ const Purchase = () => {
 
   const fetchGroupBuys = async () => {
     try {
-      const response = await axios.get(
-        "https://43-203-179-188.sslip.io/groupbuys",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get("https://43-203-179-188.sslip.io/groupbuys", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = response.data;
       setComponent(Array.isArray(data.groupbuys) ? data.groupbuys : []);
       setTotal(typeof data.totalCount === "number" ? data.totalCount : 0);
@@ -75,12 +70,9 @@ const Purchase = () => {
 
     const fetchScrapList = async () => {
       try {
-        const res = await axios.get(
-          "https://43-203-179-188.sslip.io/mypage/groupbuy-scrap",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get("https://43-203-179-188.sslip.io/mypage/groupbuy-scrap", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const scrapList = Array.isArray(res.data) ? res.data : [];
         // { groupbuyId: true, ... } 형태로 상태화
         const initialScrappedMap = {};
@@ -98,14 +90,11 @@ const Purchase = () => {
 
   const handleScrapClick = async (postId) => {
     try {
-      await axios.post(
-        `https://43-203-179-188.sslip.io/groupbuy/${postId}/scrap`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`https://43-203-179-188.sslip.io/groupbuy/${postId}/scrap`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // 성공 시 상태 토글
       setScrappedMap((prev) => ({
@@ -126,31 +115,15 @@ const Purchase = () => {
       <P.Header>
         <P.Title>공동구매</P.Title>
         <P.Icons>
-          <img
-            id="scrap"
-            src={`${process.env.PUBLIC_URL}/images/star_w.svg`}
-            alt="star"
-          />
-          <img
-            id="write"
-            src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`}
-            alt="pencil"
-            onClick={goWrite}
-          />
+          <img id="scrap" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
+          <img id="write" src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`} alt="pencil" onClick={goWrite} />
         </P.Icons>
       </P.Header>
 
       <P.Content>
         <P.Search>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/search.svg`}
-            alt="search"
-          />
-          <input
-            type="text"
-            placeholder="냉장고 속 재료를 검색해보세요."
-            onChange={getSearchData}
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/search.svg`} alt="search" />
+          <input type="text" placeholder="냉장고 속 재료를 검색해보세요." onChange={getSearchData} />
         </P.Search>
         <P.Bar>
           <P.Post>
@@ -171,48 +144,26 @@ const Purchase = () => {
             const status = isRecruiting ? "모집중" : "모집완료";
             const statusStyle = {
               color: isRecruiting ? "#FF4F26" : "#FFF",
-              backgroundColor: isRecruiting
-                ? "rgba(255, 79, 38, 0.10)"
-                : "#C4C4C4",
+              backgroundColor: isRecruiting ? "rgba(255, 79, 38, 0.10)" : "#C4C4C4",
             };
 
             return (
               <P.Component key={item.groupbuyId}>
                 <P.Img>
-                  <img
-                    src={`http://43.203.179.188/uploads/r?key=${item.mainImageUrl}`}
-                    alt="image"
-                  />
+                  <img src={`https://43-203-179-188.sslip.io/uploads/r?key=${item.mainImageUrl}`} alt="image" />
                 </P.Img>
                 <P.ImformBox>
                   <P.CTitle>
                     <div id="title" onClick={() => goDetail(item.groupbuyId)}>
-                      {item.groupbuyTitle.length > 22
-                        ? item.groupbuyTitle.slice(0, 22) + "..."
-                        : item.groupbuyTitle}
+                      {item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}
                     </div>
-                    <img
-                      id="scrap"
-                      src={`${process.env.PUBLIC_URL}/images/${
-                        scrapped ? "star_y" : "star_w"
-                      }.svg`}
-                      alt="scrap"
-                      onClick={() => handleScrapClick(item.groupbuyId)}
-                    />
+                    <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${scrapped ? "star_y" : "star_w"}.svg`} alt="scrap" onClick={() => handleScrapClick(item.groupbuyId)} />
                   </P.CTitle>
                   <P.Detail>
                     <div style={{ display: "flex", gap: "2px" }}>
-                      <img
-                        id="comment"
-                        src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
-                        alt="comment"
-                      />
+                      <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
                       <div id="comment-num">{item.commentCount}</div>
-                      <img
-                        id="line"
-                        src={`${process.env.PUBLIC_URL}/images/Line.png`}
-                        alt="line"
-                      />
+                      <img id="line" src={`${process.env.PUBLIC_URL}/images/Line.png`} alt="line" />
                       <P.D_State style={statusStyle}>{status}</P.D_State>
                     </div>
                     <P.D_Date>{renderDateOrRelative(item.createDate)}</P.D_Date>
@@ -230,24 +181,15 @@ const Purchase = () => {
           <div>홈</div>
         </P.NHome>
         <P.NRefri onClick={goRef}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
-            alt="refrigerator"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`} alt="refrigerator" />
           <div>냉장고</div>
         </P.NRefri>
         <P.NRecipe onClick={goRec}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
-            alt="recipe"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`} alt="recipe" />
           <div>레시피</div>
         </P.NRecipe>
         <P.NPur>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/purchase_b.svg`}
-            alt="purchase"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/purchase_b.svg`} alt="purchase" />
           <div>공동구매</div>
         </P.NPur>
         <P.NMy onClick={goMy}>

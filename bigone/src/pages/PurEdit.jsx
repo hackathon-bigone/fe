@@ -136,14 +136,11 @@ const PurEdit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://43-203-179-188.sslip.io/groupbuys/${user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`https://43-203-179-188.sslip.io/groupbuys/${user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = response.data;
         console.log("Loaded data:\n", JSON.stringify(data, null, 2));
@@ -152,16 +149,8 @@ const PurEdit = () => {
         setTitle(data.groupbuyTitle || "");
         setDetail(data.groupbuyDescription || "");
         setStatus(data.status);
-        setMember(
-          data.groupbuyCount !== undefined && data.groupbuyCount !== null
-            ? String(data.groupbuyCount)
-            : ""
-        );
-        setLinks(
-          data.groupbuyLinkUrls && Array.isArray(data.groupbuyLinkUrls)
-            ? data.groupbuyLinkUrls
-            : [""]
-        );
+        setMember(data.groupbuyCount !== undefined && data.groupbuyCount !== null ? String(data.groupbuyCount) : "");
+        setLinks(data.groupbuyLinkUrls && Array.isArray(data.groupbuyLinkUrls) ? data.groupbuyLinkUrls : [""]);
       } catch (error) {
         console.log("Error fetching data: ", error);
       }
@@ -173,12 +162,7 @@ const PurEdit = () => {
     try {
       setSaving(true);
 
-      if (
-        !title ||
-        !member ||
-        !detail ||
-        !links.every((link) => link.trim().length > 0)
-      ) {
+      if (!title || !member || !detail || !links.every((link) => link.trim().length > 0)) {
         throw new Error("모든 필드를 올바르게 입력해주세요.");
       }
 
@@ -221,16 +205,12 @@ const PurEdit = () => {
         buyLinks: links.map((link) => link.trim()),
       };
 
-      await axios.put(
-        `https://43-203-179-188.sslip.io/groupbuys/${user_id}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`https://43-203-179-188.sslip.io/groupbuys/${user_id}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       goPur();
     } catch (error) {
@@ -244,13 +224,7 @@ const PurEdit = () => {
     <P.Container>
       <P.Header>
         <P.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            onClick={modalOpen}
-            style={{ cursor: "pointer" }}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
           <P.Title>게시물 수정</P.Title>
         </P.Icons>
       </P.Header>
@@ -275,60 +249,33 @@ const PurEdit = () => {
               />
             ) : (
               <>
-                <img
-                  id="plus"
-                  src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                  alt="plus"
-                />
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                 <p>게시물의 대표 사진을 업로드해 주세요.</p>
               </>
             )}
           </P.InPic>
 
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          />
+          <input type="file" accept="image/*" style={{ display: "none" }} ref={fileInputRef} onChange={handleFileChange} />
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>제목</P.InTitle>
-          <P.Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></P.Input>
+          <P.Input value={title} onChange={(e) => setTitle(e.target.value)}></P.Input>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.Row>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <P.InTitle>모집 인원</P.InTitle>
-              <P.Input
-                placeholder="0명"
-                value={member}
-                onChange={(e) => setMember(e.target.value)}
-                style={{ width: "170px", height: "50px" }}
-              />
+              <P.Input placeholder="0명" value={member} onChange={(e) => setMember(e.target.value)} style={{ width: "170px", height: "50px" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <P.InTitle>모집 상태</P.InTitle>
-              <Select
-                options={statusOptions}
-                value={statusOptions.find((opt) => opt.value === status)}
-                onChange={(e) => setStatus(e.value)}
-                styles={customStyles}
-                placeholder="상태 선택"
-              />
+              <Select options={statusOptions} value={statusOptions.find((opt) => opt.value === status)} onChange={(e) => setStatus(e.value)} styles={customStyles} placeholder="상태 선택" />
             </div>
           </P.Row>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>상세 설명</P.InTitle>
-          <P.Textarea
-            value={detail}
-            onChange={(e) => setDetail(e.target.value)}
-          ></P.Textarea>
+          <P.Textarea value={detail} onChange={(e) => setDetail(e.target.value)}></P.Textarea>
         </P.InputWrapper>
 
         {links.map((linkValue, index) => (
@@ -351,24 +298,13 @@ const PurEdit = () => {
                 }}
                 style={{ width: links.length > 1 ? "300px" : "350px" }} // 2개 이상이면 줄임
               />
-              {links.length > 1 && (
-                <P.DeleteIcon
-                  src={`${process.env.PUBLIC_URL}/images/delete_o.svg`}
-                  alt="delete"
-                  onClick={() => handleRemoveInput(index)}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
+              {links.length > 1 && <P.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveInput(index)} style={{ cursor: "pointer" }} />}
             </div>
           </P.LinkWrapper>
         ))}
 
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`/images/Plus_b.svg`} alt="plus" />
           <div>링크 추가</div>
         </P.AddLinkBtn>
         <P.UploadBtn

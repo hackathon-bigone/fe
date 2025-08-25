@@ -10,7 +10,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  width: 393px;
+  width: 390px;
   flex-shrink: 0;
   padding-bottom: 200px;
 `;
@@ -25,7 +25,7 @@ export const Header = styled.div`
   z-index: 10;
 
   height: 80px;
-  width: 393px;
+  width: 390px;
   display: flex;
   flex-direction: row;
   padding: 20px;
