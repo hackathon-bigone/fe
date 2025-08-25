@@ -74,11 +74,7 @@ const Signup = () => {
 
   const handleIdCheck = async () => {
     try {
-      const response = await axios.get(
-        `https://43-203-179-188.sslip.io/user/check-username?username=${encodeURIComponent(
-          id
-        )}`
-      );
+      const response = await axios.get(`https://43-203-179-188.sslip.io/user/check-username?username=${encodeURIComponent(id)}`);
       setIdErrorMsg(response.data.message);
       if (response.data.message.includes("사용 가능")) {
         setIsIdCheckValid(true);
@@ -110,8 +106,7 @@ const Signup = () => {
     const value = e.target.value;
     setPw(value);
     // 비밀번호 조건: 영문, 숫자, 특수문자 포함 8~16자
-    const passwordRegex =
-      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
     if (!passwordRegex.test(value)) {
       setPwErrorMsg("영문, 숫자, 특수문자를 포함하여 8~16자를 입력하세요.");
@@ -154,12 +149,7 @@ const Signup = () => {
     <S.Container>
       <S.Header>
         <S.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            onClick={goLogin}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goLogin} />
         </S.Icons>
         <S.Title>회원가입</S.Title>
       </S.Header>
@@ -174,14 +164,10 @@ const Signup = () => {
           value={nickname}
           onChange={onChangeName}
           style={{
-            backgroundColor: nameErrorMsg
-              ? "rgba(255, 79, 38, 0.10)"
-              : "rgba(196, 196, 196, 0.30)",
+            backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)",
           }}
         ></input>
-        {!nameErrorMsg && !isNameValid && (
-          <div id="inputDetail">공백 포함 영문 또는 한글 2~10자</div>
-        )}
+        {!nameErrorMsg && !isNameValid && <div id="inputDetail">공백 포함 영문 또는 한글 2~10자</div>}
         {nameErrorMsg && <div id="inputError">{nameErrorMsg}</div>}
       </S.InputCon>
 
@@ -205,9 +191,7 @@ const Signup = () => {
             onChange={onChangeId}
             style={{
               width: "62%",
-              backgroundColor: isIdCheckValid
-                ? "rgba(255, 79, 38, 0.10)"
-                : "rgba(196, 196, 196, 0.30)",
+              backgroundColor: isIdCheckValid ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)",
             }}
           ></input>
           <div
@@ -221,9 +205,7 @@ const Signup = () => {
             중복확인
           </div>
         </div>
-        {!idErrorMsg && !isIdValid && (
-          <div id="inputDetail">영문, 숫자 포함 5자~12자</div>
-        )}
+        {!idErrorMsg && !isIdValid && <div id="inputDetail">영문, 숫자 포함 5자~12자</div>}
         {idErrorMsg && (
           <div
             id="inputError"
@@ -249,20 +231,11 @@ const Signup = () => {
           value={pw}
           onChange={onChangePassword}
           style={{
-            backgroundColor: nameErrorMsg
-              ? "rgba(255, 79, 38, 0.10)"
-              : "rgba(196, 196, 196, 0.30)",
+            backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)",
           }}
         ></input>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/${
-            pwType.visible ? "Eye-open.svg" : "Eye-off.svg"
-          }`}
-          onClick={handlePasswordType}
-        />
-        {!pwErrorMsg && isPwValid && (
-          <div id="inputDetail">영문, 숫자, 특수문자 포함 8~16자</div>
-        )}
+        <img src={`${process.env.PUBLIC_URL}/images/${pwType.visible ? "Eye-open.svg" : "Eye-off.svg"}`} onClick={handlePasswordType} />
+        {!pwErrorMsg && isPwValid && <div id="inputDetail">영문, 숫자, 특수문자 포함 8~16자</div>}
         {pwErrorMsg && <div id="inputError">{pwErrorMsg}</div>}
         <input
           type={pwType.type}
@@ -270,9 +243,7 @@ const Signup = () => {
           value={pwCheck}
           onChange={onChangePwCheck}
           style={{
-            backgroundColor: nameErrorMsg
-              ? "rgba(255, 79, 38, 0.10)"
-              : "rgba(196, 196, 196, 0.30)",
+            backgroundColor: nameErrorMsg ? "rgba(255, 79, 38, 0.10)" : "rgba(196, 196, 196, 0.30)",
           }}
         ></input>
         {pwCheckErrorMsg && <div id="inputError">{pwCheckErrorMsg}</div>}

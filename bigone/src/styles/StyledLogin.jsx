@@ -12,7 +12,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   background: #fff;
-  width: 393px;
+  width: 390px;
   flex-shrink: 0;
   padding-bottom: 200px;
 `;

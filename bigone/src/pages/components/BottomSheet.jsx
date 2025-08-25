@@ -4,7 +4,7 @@ import CommentList from "./CommentList";
 import axios from "axios";
 
 const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
-  const apiUrl = type === "recipe" ? `http://43.203.179.188/recipe/${targetId}/comments` : `http://43.203.179.188/groupbuys/${targetId}/comments`;
+  const apiUrl = type === "recipe" ? `https://43-203-179-188.sslip.io/recipe/${targetId}/comments` : `https://43-203-179-188.sslip.io/groupbuys/${targetId}/comments`;
 
   const [input, setInput] = useState("");
   const [isValid, setIsValid] = useState(false);
