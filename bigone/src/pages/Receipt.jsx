@@ -11,12 +11,7 @@ async function pollReceiptJob({ token, jobId, signal }) {
   let attempt = 0;
 
   const headers = { Authorization: `Bearer ${token}` };
-  const candidates = [
-    `/foodbox/receipt/${jobId}`,
-    `/foodbox/receipt/result/${jobId}`,
-    `/foodbox/receipt/status/${jobId}`,
-    `/foodbox/receipt?jobId=${encodeURIComponent(jobId)}`,
-  ];
+  const candidates = [`/foodbox/receipt/result/${jobId}`];
 
   const getAny = async (url) =>
     axios.get(`${API_BASE}${url}`, {
@@ -35,6 +30,12 @@ async function pollReceiptJob({ token, jobId, signal }) {
 
       if (status >= 200 && status < 300) {
         const s = String(data?.status || "").toUpperCase();
+        // if (data?.status === "FAILED") {
+        //   throw new Error(
+        //     "영수증 인식에 실패했습니다. 이미지 상태를 확인해 주세요."
+        //   );
+        // }
+
         if (s === "DONE" || s === "SUCCESS") {
           if (Array.isArray(data?.items)) return data.items;
           if (Array.isArray(data?.result)) return data.result;
@@ -68,15 +69,17 @@ async function startReceiptScanWorkflow({
   const form = new FormData();
   form.append("file", file);
 
-  const uploadOnce = () =>
+  const uploadOnce = (usePrefer) =>
     axios.post(`${API_BASE}/foodbox/receipt/upload`, form, {
       headers: {
         Authorization: `Bearer ${token}`,
-        // Prefer: "respond-async",
+        ...(usePrefer && { Prefer: "respond-async" }),
       },
       timeout: 60000,
-      signal,
     });
+
+  console.log(file);
+  console.log(form.get("file"));
 
   let res;
   try {
@@ -90,9 +93,13 @@ async function startReceiptScanWorkflow({
     }
   }
 
+  console.log("jobId 응답 확인:", res?.data?.jobId); // ✅ 여기로 이동
+
   const data = res?.data;
 
   if (data?.jobId) {
+    console.log("jobId 응답:", data.jobId);
+    await new Promise((r) => setTimeout(r, 2000));
     const items = await pollReceiptJob({ token, jobId: data.jobId, signal });
     navigate("/refrigerator/ingredients/receipt/scan/complete", {
       state: { items, previewUrl },
