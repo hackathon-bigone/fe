@@ -79,7 +79,7 @@ const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
         <B.CommentBar>
           <B.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-            <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
+            <img id="cat" src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="cat" />
           </B.Profile>
 
           <B.CommentInput>

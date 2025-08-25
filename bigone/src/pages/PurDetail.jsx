@@ -168,7 +168,7 @@ const P_Detail = () => {
         <P.Wrapper>
           <P.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-            <img id="cat" src={`/images/Profile.png`} alt="cat" />
+            <img id="cat" src={`/images/profile.png`} alt="cat" />
             <div id="profile_inform">
               <div id="username">{component.authorName}</div>
               <div
