@@ -154,10 +154,7 @@ const Home = () => {
           r.postId === postId
             ? {
                 ...r,
-                likeCount: Math.max(
-                  0,
-                  (r.likeCount ?? 0) + (willLike ? -1 : 1)
-                ),
+                likeCount: Math.max(0, (r.likeCount ?? 0) + (willLike ? -1 : 1)),
               }
             : r
         )
@@ -192,14 +189,11 @@ const Home = () => {
 
     const fetchFoodbox = async () => {
       try {
-        const res = await axios.get(
-          "https://43-203-179-188.sslip.io/home/foodbox",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get("https://43-203-179-188.sslip.io/home/foodbox", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setFoodbox(res.data);
       } catch (error) {
         console.error("❌ API 호출 실패:", error);
@@ -246,18 +240,14 @@ const Home = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const res = await axios.get(
-          "https://43-203-179-188.sslip.io/home/top5-popular-boards"
-        );
+        const res = await axios.get("https://43-203-179-188.sslip.io/home/top5-popular-boards");
 
         console.log("✅ 인기 레시피 전체 response:", res);
         console.log("📦 res.data:", res.data);
         console.log("📝 res.data.boards:", res.data?.boards);
 
         (res.data?.boards ?? []).forEach((recipe, idx) => {
-          console.log(
-            `🔗 [${idx}] postId=${recipe.postId}, title="${recipe.title}", mainImageUrl=${recipe.mainImageUrl}`
-          );
+          console.log(`🔗 [${idx}] postId=${recipe.postId}, title="${recipe.title}", mainImageUrl=${recipe.mainImageUrl}`);
         });
 
         // ✅ 방어적 파싱
@@ -275,28 +265,11 @@ const Home = () => {
     <H.Container>
       <H.Header>
         <H.Title>
-          <img
-            id="logo"
-            src={`${process.env.PUBLIC_URL}/images/logo.png`}
-            alt="logo"
-          />
+          <img id="logo" src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="logo" />
         </H.Title>
         <H.Icons>
-          <img
-            onClick={goScrap}
-            id="scrap"
-            src={`${process.env.PUBLIC_URL}/images/scrap.svg`}
-            alt="scrap"
-          />
-          <img
-            id="bar"
-            src={`${process.env.PUBLIC_URL}/images/bar.svg`}
-            alt="bar"
-            role="button"
-            tabIndex={0}
-            onClick={goMenu}
-            onKeyDown={onKey}
-          />
+          <img onClick={goScrap} id="scrap" src={`${process.env.PUBLIC_URL}/images/scrap.svg`} alt="scrap" />
+          <img id="bar" src={`${process.env.PUBLIC_URL}/images/bar.svg`} alt="bar" role="button" tabIndex={0} onClick={goMenu} onKeyDown={onKey} />
         </H.Icons>
       </H.Header>
 
@@ -308,18 +281,13 @@ const Home = () => {
             <div id="detail">{foodbox.message || "메시지 없음"}</div>
 
             {/* ✅ 로그인 된 경우만 product 표시 */}
-            {localStorage.getItem("access_token") && (
-              <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>
-            )}
+            {localStorage.getItem("access_token") && <li id="product">{foodbox.summary || "표시할 식품 없음"}</li>}
           </H.BUp>
 
           {/* ✅ 로그인 된 경우만 BDown 표시 */}
           {localStorage.getItem("access_token") ? (
             <H.BDown>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/alarm.png`}
-                alt="alarm"
-              />
+              <img src={`${process.env.PUBLIC_URL}/images/alarm.png`} alt="alarm" />
               <div id="date">{foodbox.dlabel || "D-"}</div>
             </H.BDown>
           ) : (
@@ -362,9 +330,7 @@ const Home = () => {
                     }}
                     onError={(e) => {
                       // ✅ 실패 시 즉시 플레이스홀더로 대체
-                      e.currentTarget.src = `data:image/svg+xml;utf8,${encodeURIComponent(
-                        svg
-                      )}`;
+                      e.currentTarget.src = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
                     }}
                   />
                 </H.Image>
@@ -373,9 +339,7 @@ const Home = () => {
                     <H.CTitle>{recipe.title}</H.CTitle>
                     <H.Scrap>
                       <img
-                        src={`${process.env.PUBLIC_URL}/images/${
-                          scrappedMap[recipe.postId] ? "star_y" : "star_w"
-                        }.svg`}
+                        src={`${process.env.PUBLIC_URL}/images/${scrappedMap[recipe.postId] ? "star_y" : "star_w"}.svg`}
                         alt="scrap"
                         onClick={(e) => handleScrapToggle(e, recipe.postId)}
                         style={{
@@ -389,11 +353,7 @@ const Home = () => {
                     <H.Icon>
                       <img
                         id="heart"
-                        src={`${process.env.PUBLIC_URL}/images/${
-                          likedMap[recipe.postId]
-                            ? "heart_b.png"
-                            : "heart_w.svg"
-                        }`}
+                        src={`${process.env.PUBLIC_URL}/images/${likedMap[recipe.postId] ? "heart_b.png" : "heart_w.svg"}`}
                         alt={likedMap[recipe.postId] ? "좋아요 취소" : "좋아요"}
                         onClick={(e) => handleLikeToggle(e, recipe.postId)}
                         style={{
@@ -402,11 +362,7 @@ const Home = () => {
                         }}
                       />
                       <div id="hnum">{recipe.likeCount}</div>
-                      <img
-                        id="comment"
-                        src={`${process.env.PUBLIC_URL}/images/comment_w.svg`}
-                        alt="comment"
-                      />
+                      <img id="comment" src={`${process.env.PUBLIC_URL}/images/comment_w.svg`} alt="comment" />
                       <div id="cnum">{recipe.commentCount}</div>
                     </H.Icon>
                     <H.CDate>{recipe.createdAt}</H.CDate>
@@ -424,24 +380,15 @@ const Home = () => {
           <div>홈</div>
         </H.NHome>
         <H.NRefri onClick={goRef}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`}
-            alt="refrigerator"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/refrigerator_w.svg`} alt="refrigerator" />
           <div>냉장고</div>
         </H.NRefri>
         <H.NRecipe onClick={goRec}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`}
-            alt="recipe"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/recipe_w.svg`} alt="recipe" />
           <div>레시피</div>
         </H.NRecipe>
         <H.NPur onClick={goPur}>
-          <img
-            src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`}
-            alt="purchase"
-          />
+          <img src={`${process.env.PUBLIC_URL}/images/purchase_w.svg`} alt="purchase" />
           <div>공동구매</div>
         </H.NPur>
         <H.NMy onClick={goMy}>

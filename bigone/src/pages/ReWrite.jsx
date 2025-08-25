@@ -73,19 +73,10 @@ const ReWrite = () => {
   const categories = ["왕초보", "전자레인지•에어프라이어", "디저트", "비건"];
   const [isSelected, setIsSelected] = useState([]);
 
-  const isActive =
-    title.length > 0 &&
-    amount.length > 0 &&
-    detail.length > 0 &&
-    time.length > 0 &&
-    links.every((link) => link.trim().length > 0);
+  const isActive = title.length > 0 && amount.length > 0 && detail.length > 0 && time.length > 0 && links.every((link) => link.trim().length > 0);
 
   const handlCategoryClick = (category) => {
-    setIsSelected((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+    setIsSelected((prev) => (prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]));
   };
 
   const onClickAddLinkBtn = () => {
@@ -161,13 +152,7 @@ const ReWrite = () => {
   const handleSave = async () => {
     try {
       if (!mainPic) throw new Error("대표사진을 선택해주세요.");
-      if (
-        !title ||
-        !amount ||
-        !time ||
-        !detail ||
-        !links.every((link) => link.trim().length > 0)
-      ) {
+      if (!title || !amount || !time || !detail || !links.every((link) => link.trim().length > 0)) {
         throw new Error("모든 필드를 올바르게 입력해주세요.");
       }
 
@@ -188,9 +173,7 @@ const ReWrite = () => {
         디저트: "DESSERT",
         비건: "VEGAN",
       };
-      const categoriesPayload = isSelected.map(
-        (cat) => categoryMapping[cat] || cat
-      );
+      const categoriesPayload = isSelected.map((cat) => categoryMapping[cat] || cat);
 
       // payload 구성
       const payload = {
@@ -233,13 +216,7 @@ const ReWrite = () => {
     <R.Container>
       <R.Header>
         <R.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            onClick={modalOpen}
-            style={{ cursor: "pointer" }}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
           <R.Title>레시피 글쓰기</R.Title>
         </R.Icons>
       </R.Header>
@@ -262,51 +239,29 @@ const ReWrite = () => {
               />
             ) : (
               <>
-                <img
-                  id="plus"
-                  src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                  alt="plus"
-                />
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                 <p>게시물의 대표 사진을 업로드해 주세요.</p>
               </>
             )}
           </R.InPic>
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            ref={mainPicRef}
-            onChange={handleMainPicChange}
-          />
+          <input type="file" accept="image/*" style={{ display: "none" }} ref={mainPicRef} onChange={handleMainPicChange} />
         </R.InputWrapper>
 
         {/* 제목 */}
         <R.InputWrapper>
           <R.InTitle>제목</R.InTitle>
-          <R.Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></R.Input>
+          <R.Input value={title} onChange={(e) => setTitle(e.target.value)}></R.Input>
         </R.InputWrapper>
 
         {/* 양 & 시간 */}
         <R.TwinInputWrapper>
           <R.InputWrapper>
             <R.InTitle>양</R.InTitle>
-            <R.Input
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              style={{ width: "170px" }}
-              placeholder="0인분"
-            ></R.Input>
+            <R.Input value={amount} onChange={(e) => setAmount(e.target.value)} style={{ width: "170px" }} placeholder="0인분"></R.Input>
           </R.InputWrapper>
           <R.InputWrapper>
             <R.InTitle>소요시간</R.InTitle>
-            <R.Input
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              style={{ width: "170px" }}
-            ></R.Input>
+            <R.Input value={time} onChange={(e) => setTime(e.target.value)} style={{ width: "170px" }}></R.Input>
           </R.InputWrapper>
         </R.TwinInputWrapper>
 
@@ -315,11 +270,7 @@ const ReWrite = () => {
           <R.InTitle>카테고리 (선택)</R.InTitle>
           <R.CategoryWrapper>
             {categories.map((cat) => (
-              <R.Category
-                key={cat}
-                $selected={isSelected.includes(cat)}
-                onClick={() => handlCategoryClick(cat)}
-              >
+              <R.Category key={cat} $selected={isSelected.includes(cat)} onClick={() => handlCategoryClick(cat)}>
                 {cat}
               </R.Category>
             ))}
@@ -329,10 +280,7 @@ const ReWrite = () => {
         {/* 상세 설명 */}
         <R.InputWrapper>
           <R.InTitle>상세 설명</R.InTitle>
-          <R.Textarea
-            value={detail}
-            onChange={(e) => setDetail(e.target.value)}
-          ></R.Textarea>
+          <R.Textarea value={detail} onChange={(e) => setDetail(e.target.value)}></R.Textarea>
         </R.InputWrapper>
 
         {/* 링크 */}
@@ -340,29 +288,14 @@ const ReWrite = () => {
           <R.LinkWrapper key={index}>
             {index === 0 && <R.InTitle>레시피 링크</R.InTitle>}
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <R.Input
-                value={linkValue}
-                onChange={(e) => handleLinkChange(index, e.target.value)}
-                style={{ width: links.length === 1 ? "350px" : "330px" }}
-              />
-              {links.length > 1 && (
-                <R.DeleteIcon
-                  src={`${process.env.PUBLIC_URL}/images/delete_o.svg`}
-                  alt="delete"
-                  onClick={() => handleRemoveLink(index)}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
+              <R.Input value={linkValue} onChange={(e) => handleLinkChange(index, e.target.value)} style={{ width: links.length === 1 ? "350px" : "330px" }} />
+              {links.length > 1 && <R.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveLink(index)} style={{ cursor: "pointer" }} />}
             </div>
           </R.LinkWrapper>
         ))}
 
         <R.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`/images/Plus_b.svg`} alt="plus" />
           <div>링크 추가</div>
         </R.AddLinkBtn>
 
@@ -371,39 +304,21 @@ const ReWrite = () => {
           <R.InTitle>재료 정보</R.InTitle>
           {ingredients.map((ing, index) => (
             <R.TwinInputWrapper key={index}>
-              <R.Input
-                value={ing.name}
-                onChange={(e) =>
-                  handleIngredientChange(index, "name", e.target.value)
-                }
-                style={{ width: ingredients.length === 1 ? "170px" : "150px" }}
-                placeholder="재료명"
-              />
+              <R.Input value={ing.name} onChange={(e) => handleIngredientChange(index, "name", e.target.value)} style={{ width: ingredients.length === 1 ? "170px" : "150px" }} placeholder="재료명" />
               <R.Input
                 value={ing.amount}
-                onChange={(e) =>
-                  handleIngredientChange(index, "amount", e.target.value)
-                }
+                onChange={(e) => handleIngredientChange(index, "amount", e.target.value)}
                 style={{ width: ingredients.length === 1 ? "170px" : "150px" }}
                 placeholder="수량(0개)"
               />
               {ingredients.length > 1 && (
-                <R.DeleteIcon
-                  src={`${process.env.PUBLIC_URL}/images/delete_o.svg`}
-                  alt="delete"
-                  onClick={() => handleRemoveIngredient(index)}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
-                />
+                <R.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveIngredient(index)} style={{ cursor: "pointer", marginLeft: "10px" }} />
               )}
             </R.TwinInputWrapper>
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddingredientsBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`/images/Plus_b.svg`} alt="plus" />
           <div>재료 추가</div>
         </R.AddLinkBtn>
 
@@ -413,12 +328,7 @@ const ReWrite = () => {
           {stepPic.map((step, index) => (
             <R.StepWrapper key={index}>
               <R.InputStep>
-                <img
-                  id="delete"
-                  src={`${process.env.PUBLIC_URL}/images/Delete.svg`}
-                  alt="delete"
-                  onClick={() => handleDeleteStep(index)}
-                />
+                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" onClick={() => handleDeleteStep(index)} />
                 <div id="step">STEP {index + 1}</div>
                 <R.InPic
                   onClick={() => handleStepPicClick(index)}
@@ -441,38 +351,19 @@ const ReWrite = () => {
                     />
                   ) : (
                     <>
-                      <img
-                        id="plus"
-                        src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                        alt="plus"
-                      />
+                      <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                       <p>해당 단계의 레시피 사진을 업로드해 주세요.</p>
                     </>
                   )}
                 </R.InPic>
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  ref={(el) => (stepPicRef.current[index] = el)}
-                  onChange={(e) => handleStepPicChange(index, e)}
-                />
-                <R.Explanation
-                  value={stepDescriptions[index]}
-                  onChange={(e) =>
-                    handleStepDescriptionChange(index, e.target.value)
-                  }
-                />
+                <input type="file" accept="image/*" style={{ display: "none" }} ref={(el) => (stepPicRef.current[index] = el)} onChange={(e) => handleStepPicChange(index, e)} />
+                <R.Explanation value={stepDescriptions[index]} onChange={(e) => handleStepDescriptionChange(index, e.target.value)} />
               </R.InputStep>
             </R.StepWrapper>
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddStep}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`/images/Plus_b.svg`} alt="plus" />
           <div>단계 추가</div>
         </R.AddLinkBtn>
 

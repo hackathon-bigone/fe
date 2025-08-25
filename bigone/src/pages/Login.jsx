@@ -80,14 +80,10 @@ const Login = ({ setLoginAuth }) => {
         setId("");
         setPw("");
       } else if (status >= 500) {
-        setErrorMsg(
-          "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        );
+        setErrorMsg("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       } else if (!status) {
         // 네트워크/혼합콘텐츠/CORS/프록시 문제 등으로 response 자체가 없는 경우
-        setErrorMsg(
-          "서버에 연결할 수 없습니다. 네트워크/프록시 설정을 확인하세요."
-        );
+        setErrorMsg("서버에 연결할 수 없습니다. 네트워크/프록시 설정을 확인하세요.");
       } else {
         setErrorMsg(serverMsg || genericMsg);
       }
@@ -106,11 +102,7 @@ const Login = ({ setLoginAuth }) => {
         }}
       >
         <img src={`${process.env.PUBLIC_URL}/images/Id.svg`} />
-        <input
-          placeholder="아이디"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        ></input>
+        <input placeholder="아이디" value={id} onChange={(e) => setId(e.target.value)}></input>
       </L.Input>
       <L.Input
         style={{
@@ -118,18 +110,8 @@ const Login = ({ setLoginAuth }) => {
         }}
       >
         <img src={`${process.env.PUBLIC_URL}/images/Password.svg`} />
-        <input
-          placeholder="비밀번호(8자 이상)"
-          type={pwType.type}
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-        ></input>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/${
-            pwType.visible ? "Eye-open.svg" : "Eye-off.svg"
-          }`}
-          onClick={handlePasswordType}
-        />
+        <input placeholder="비밀번호(8자 이상)" type={pwType.type} value={pw} onChange={(e) => setPw(e.target.value)}></input>
+        <img src={`${process.env.PUBLIC_URL}/images/${pwType.visible ? "Eye-open.svg" : "Eye-off.svg"}`} onClick={handlePasswordType} />
       </L.Input>
       <L.ErrorMsg visible={!!errorMsg}>{errorMsg}</L.ErrorMsg>
       <L.LoginBtn
