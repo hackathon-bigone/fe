@@ -29,7 +29,7 @@ const ComP = () => {
   const token = localStorage.getItem("access_token");
 
   const goBack = () => navigate(`/my`);
-  const goRec = () => navigate(`/my/comment/recipe`);
+  const goRec = () => navigate(`/my/comment`);
   const goDetail = (id) => navigate(`/purchase/detail/${id}`);
 
   const [comments, setComments] = useState([]);
