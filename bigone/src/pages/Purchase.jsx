@@ -30,6 +30,8 @@ const Purchase = () => {
     navigate(`/refrigerator`);
   };
 
+  const goScrap = () => navigate(`/my/scrap`);
+
   const [scrappedMap, setScrappedMap] = useState({});
   const token = localStorage.getItem("access_token");
   const [component, setComponent] = useState([]);
@@ -115,7 +117,7 @@ const Purchase = () => {
       <P.Header>
         <P.Title>공동구매</P.Title>
         <P.Icons>
-          <img id="scrap" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" />
+          <img id="scrap" src={`${process.env.PUBLIC_URL}/images/star_w.svg`} alt="star" onClick={goScrap} />
           <img id="write" src={`${process.env.PUBLIC_URL}/images/pencil_w.svg`} alt="pencil" onClick={goWrite} />
         </P.Icons>
       </P.Header>
@@ -148,15 +150,13 @@ const Purchase = () => {
             };
 
             return (
-              <P.Component key={item.groupbuyId}>
+              <P.Component key={item.groupbuyId} onClick={() => goDetail(item.groupbuyId)}>
                 <P.Img>
                   <img src={`https://43-203-179-188.sslip.io/uploads/r?key=${item.mainImageUrl}`} alt="image" />
                 </P.Img>
                 <P.ImformBox>
                   <P.CTitle>
-                    <div id="title" onClick={() => goDetail(item.groupbuyId)}>
-                      {item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}
-                    </div>
+                    <div id="title">{item.groupbuyTitle.length > 22 ? item.groupbuyTitle.slice(0, 22) + "..." : item.groupbuyTitle}</div>
                     <img id="scrap" src={`${process.env.PUBLIC_URL}/images/${scrapped ? "star_y" : "star_w"}.svg`} alt="scrap" onClick={() => handleScrapClick(item.groupbuyId)} />
                   </P.CTitle>
                   <P.Detail>
