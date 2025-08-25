@@ -13,7 +13,7 @@ const MENUS = [
       { label: "댓글 단 게시물", path: "/my/comment" },
       { label: "스크랩", path: "/my/scrap" },
       { label: "Q&A", path: "/my/question" },
-      { label: "신고", path: "/my/inform" },
+      { label: "신고", path: "/my/report" },
       { label: "로그아웃", path: "/my" },
     ],
   },
@@ -85,12 +85,7 @@ const Menu = () => {
   return (
     <M.Container>
       <M.Header>
-        <img
-          id="back"
-          src={`${process.env.PUBLIC_URL}/images/back.svg`}
-          alt="back"
-          onClick={goBack}
-        />
+        <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={goBack} />
         <div>전체 메뉴</div>
       </M.Header>
       <M.Body>
@@ -101,16 +96,8 @@ const Menu = () => {
               const active = idx === activeIdx;
               const icon = active ? m.icon.active : m.icon.inactive;
               return (
-                <M.Item
-                  key={m.key}
-                  ref={(el) => (itemRefs.current[idx] = el)}
-                  onClick={() => handleSelect(idx)}
-                  $active={active}
-                >
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/${icon}`}
-                    alt={m.label}
-                  />
+                <M.Item key={m.key} ref={(el) => (itemRefs.current[idx] = el)} onClick={() => handleSelect(idx)} $active={active}>
+                  <img src={`${process.env.PUBLIC_URL}/images/${icon}`} alt={m.label} />
                   <div>{m.label}</div>
                 </M.Item>
               );
