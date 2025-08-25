@@ -3,39 +3,56 @@ import { useNavigate, useLocation } from "react-router-dom";
 import * as E from "../styles/StyledScanRes";
 import axios from "axios";
 
-// 개발환경에서 CRA 프록시(setupProxy.js) 사용을 권장: 절대URL 대신 상대경로
-const API_BASE = "https://43-203-179-188.sslip.io/foodbox";
+const API_URL = "https://43-203-179-188.sslip.io/foodbox/ocr/save";
 
 const ScanRes = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-
-  // ScanCom에서 넘겨준 스캔 결과 (예: [{name:"복숭아", quantity:1}, ...])
   const scannedItems = Array.isArray(state?.items) ? state.items : [];
 
-  const [showModal, setShowModal] = useState(false);
+  const [inputs, setInputs] = useState([]);
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  // 인풋 행: { name, quantity, date }
-  const [inputs, setInputs] = useState([{ name: "", quantity: "", date: "" }]);
-
-  // 스캔 결과로 초기값 채우기
+  // ✅ 처음 진입 시 서버에 저장 요청 후 응답 받아오기
   useEffect(() => {
-    if (!scannedItems.length) return;
+    const saveAndLoad = async () => {
+      if (!scannedItems.length) return;
 
-    const prefilled = scannedItems.map((it) => ({
-      name: String(it?.name ?? "").trim(),
-      // 인풋은 문자열이 다루기 편함
-      quantity: it?.quantity != null ? String(it.quantity) : "",
-      date: "",
-    }));
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("로그인이 필요합니다.");
 
-    // 마지막에 “빈 줄 하나” 추가해서 사용자가 더 입력할 수 있게
-    setInputs([...prefilled, { name: "", quantity: "", date: "" }]);
+        const response = await axios.post(API_URL, scannedItems, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log("[✅ 저장 후 응답 데이터]", response.data);
+
+        const formatted = response.data.map((item) => ({
+          name: item.name,
+          quantity: String(item.quantity),
+          date: item.expiryDate ?? "",
+        }));
+
+        setInputs([...formatted, { name: "", quantity: "", date: "" }]);
+      } catch (err) {
+        console.error("❌ 저장 실패:", err);
+        setErrorMsg(
+          err?.response?.data?.message ||
+            err?.message ||
+            "데이터를 불러오는 데 실패했습니다."
+        );
+      }
+    };
+
+    saveAndLoad();
   }, [scannedItems]);
 
-  // 뒤로가기(모달)
   const goBack = () => setShowModal(true);
   const handleConfirm = () => {
     setShowModal(false);
@@ -59,7 +76,6 @@ const ScanRes = () => {
     setInputs((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // 첫 행이 모두 채워졌는지 체크(이 규칙은 기존 UX 유지)
   const isFirstRowFilled = useMemo(() => {
     const first = inputs[0] || { name: "", quantity: "", date: "" };
     return (
@@ -69,14 +85,12 @@ const ScanRes = () => {
     );
   }, [inputs]);
 
-  // 숫자만 뽑기: "3개", "02", " 5 " 모두 OK
   const extractNumber = (str) => {
     if (typeof str !== "string") return 0;
     const m = str.trim().match(/^\d+/);
     return m ? parseInt(m[0], 10) : 0;
   };
 
-  // 저장(POST)
   const handleSave = async () => {
     if (!isFirstRowFilled || saving) return;
 
@@ -85,34 +99,28 @@ const ScanRes = () => {
 
     try {
       const token = localStorage.getItem("access_token");
-      if (!token)
-        throw new Error("로그인 토큰이 없습니다. 다시 로그인해 주세요.");
+      if (!token) throw new Error("로그인이 필요합니다.");
 
-      // 완전히 빈 줄은 제외하고, 서버 규격에 맞게 변환
       const payload = inputs
         .filter((row) => (row.name || row.quantity || row.date).trim() !== "")
         .map((row) => ({
           name: row.name.trim(),
           quantity: extractNumber(row.quantity),
-          // 빈 문자열이면 null 전송 (백엔드가 null 허용)
           expiryDate: row.date.trim() === "" ? null : row.date.trim(),
         }));
 
-      if (payload.length === 0) {
-        throw new Error("보낼 데이터가 없습니다.");
-      }
+      console.log("[💾 저장 요청 payload]", payload);
 
-      await axios.post(`${API_BASE}`, payload, {
+      await axios.post(API_URL, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      // 성공 시 이전 화면으로 (필요시 원하는 경로로 변경)
-      navigate(-1);
+      navigate("/refrigerator/ingredients");
     } catch (err) {
-      console.error(err);
+      console.error("[❌ 저장 중 오류]", err);
       setErrorMsg(
         err?.response?.data?.message ||
           err?.message ||
@@ -143,6 +151,15 @@ const ScanRes = () => {
 
         <E.List>
           {inputs.map((item, index) => {
+            const isFilled =
+              item.name.trim() !== "" &&
+              item.quantity.trim() !== "" &&
+              item.date.trim() !== "";
+
+            // "유효한 항목만" + "마지막 줄은 항상 남기기"
+            const isLast = index === inputs.length - 1;
+            if (!isFilled && !isLast) return null;
+
             const hasInput =
               item.name.trim() !== "" ||
               item.quantity.trim() !== "" ||
