@@ -354,7 +354,7 @@ const ReEdit = () => {
           </R.LinkWrapper>
         ))}
         <R.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img id="plusLink" src={`/images/Plus_B.svg`} alt="plus" />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>링크 추가</div>
         </R.AddLinkBtn>
 
@@ -369,7 +369,7 @@ const ReEdit = () => {
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddingredientsBtn}>
-          <img id="plusLink" src={`/images/Plus_B.svg`} alt="plus" />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>재료 추가</div>
         </R.AddLinkBtn>
 
@@ -415,7 +415,7 @@ const ReEdit = () => {
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddStep}>
-          <img id="plusLink" src={`/images/Plus_B.svg`} alt="plus" />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>단계 추가</div>
         </R.AddLinkBtn>
 

@@ -21,7 +21,7 @@ const Comment = ({ commentId, username, date, comment, children, onReply, parent
     <B.Comment style={{ display: "block" }}>
       <div id="profile-wrapper" style={{ display: "flex", alignItems: "center" }}>
         <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-        <img id="cat" src={`/images/profile.png`} alt="cat" />
+        <img id="cat" src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="cat" />
       </div>
 
       <div id="comment-wrapper">
