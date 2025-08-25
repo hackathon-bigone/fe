@@ -22,6 +22,7 @@ const formatDate = (val) => {
 
 const ComW = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
 
   const goBack = () => {
     navigate(`/my`);
@@ -35,11 +36,13 @@ const ComW = () => {
     navigate(`/recipe/detail/${postId}`);
   };
 
-  const token = localStorage.getItem("access_token");
   const [comments, setComments] = useState([]); // 내가 쓴 댓글
   const [recipes, setRecipes] = useState({}); // {postId: recipeData}
 
-  // ✅ 스크랩 상태 관리
+  // ✅ 좋아요 상태
+  const [likedMap, setLikedMap] = useState({});
+
+  // ✅ 스크랩 상태
   const SCRAP_STORAGE_KEY = `recipe_scraps_${(token || "guest").slice(-12)}`;
   const [scrappedMap, setScrappedMap] = useState(() => {
     try {
@@ -50,10 +53,9 @@ const ComW = () => {
     }
   });
 
-  // 요청 중복 방지
-  const [pending, setPending] = useState({});
+  const [pending, setPending] = useState({}); // 스크랩 API 중복 방지
 
-  // localStorage 동기화
+  // localStorage 스크랩 동기화
   useEffect(() => {
     try {
       localStorage.setItem(SCRAP_STORAGE_KEY, JSON.stringify(scrappedMap));
@@ -62,14 +64,13 @@ const ComW = () => {
 
   // 스크랩 토글 함수
   const handleScrapToggle = async (e, postId) => {
-    e.stopPropagation(); // 카드 클릭 이벤트 막기
+    e.stopPropagation();
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
     if (pending[postId]) return;
 
-    // 낙관적 업데이트
     setPending((p) => ({ ...p, [postId]: true }));
     setScrappedMap((m) => ({ ...m, [postId]: !m[postId] }));
 
@@ -81,8 +82,7 @@ const ComW = () => {
       console.log("✅ 스크랩 상태 변경 완료");
     } catch (err) {
       console.error("❌ 스크랩 토글 실패:", err);
-      // 실패 시 롤백
-      setScrappedMap((m) => ({ ...m, [postId]: !m[postId] }));
+      setScrappedMap((m) => ({ ...m, [postId]: !m[postId] })); // 실패 시 롤백
     } finally {
       setPending((p) => ({ ...p, [postId]: false }));
     }
@@ -91,8 +91,6 @@ const ComW = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token");
-
         // 1. 내가 쓴 댓글 목록
         const commentRes = await axios.get(
           `${API_BASE}mypage/comments/recipe`,
@@ -100,27 +98,51 @@ const ComW = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setComments(commentRes.data);
-        console.log("✅ 댓글 목록:", commentRes.data);
+
+        // ✅ 댓글 중복 제거: boardId 기준으로 unique 필터링
+        const uniqueComments = commentRes.data.filter(
+          (c, index, self) =>
+            self.findIndex((v) => v.boardId === c.boardId) === index
+        );
+        setComments(uniqueComments);
+        console.log("✅ 중복 제거된 댓글 목록:", uniqueComments);
 
         // 2. 전체 레시피 목록
         const recipeRes = await axios.get(`${API_BASE}recipe`);
         const recipeArray = recipeRes.data.boards || [];
-
         const recipeMap = {};
         recipeArray.forEach((recipe) => {
           recipeMap[recipe.postId] = recipe;
         });
         setRecipes(recipeMap);
-
         console.log("✅ 레시피 매핑 완료:", recipeMap);
+
+        // 3. 좋아요 상태 불러오기
+        if (token && recipeArray.length > 0) {
+          const likedStatus = {};
+          await Promise.all(
+            recipeArray.map(async (recipe) => {
+              try {
+                const detailRes = await axios.get(
+                  `${API_BASE}recipe/${recipe.postId}`,
+                  { headers: { Authorization: `Bearer ${token}` } }
+                );
+                likedStatus[recipe.postId] =
+                  !!detailRes.data.likedByCurrentUser;
+              } catch {
+                likedStatus[recipe.postId] = false;
+              }
+            })
+          );
+          setLikedMap(likedStatus);
+        }
       } catch (err) {
         console.error("❌ 데이터 가져오기 실패:", err);
       }
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   return (
     <W.Container>
@@ -149,7 +171,7 @@ const ComW = () => {
           </W.EmptyWrapper>
         ) : (
           comments.map((comment) => {
-            const recipe = recipes[comment.boardId]; // boardId == postId
+            const recipe = recipes[comment.boardId];
             return (
               <W.Component
                 key={comment.commentId}
@@ -173,7 +195,7 @@ const ComW = () => {
                     <W.Scrap>
                       <img
                         src={`${process.env.PUBLIC_URL}/images/${
-                          scrappedMap[comment.boardId] ? "star_y" : "star_w"
+                          scrappedMap[comment.boardId] ? "star_w" : "star_y"
                         }.svg`}
                         alt="scrap"
                         onClick={(e) => handleScrapToggle(e, comment.boardId)}
@@ -191,10 +213,19 @@ const ComW = () => {
                   </W.Up>
                   <W.Down>
                     <W.Icons>
+                      {/* ✅ 좋아요 상태 연동 (조회 전용) */}
                       <img
                         id="heart"
-                        src={`${process.env.PUBLIC_URL}/images/heart_w.svg`}
+                        src={`${process.env.PUBLIC_URL}/images/${
+                          likedMap[comment.boardId]
+                            ? "heart_b.png"
+                            : "heart_w.svg"
+                        }`}
                         alt="heart"
+                        style={{
+                          cursor: "default", // 클릭 비활성화
+                          opacity: likedMap[comment.boardId] ? 1 : 0.6,
+                        }}
                       />
                       <div id="hnum">{recipe?.likeCount ?? 0}</div>
                       <img
@@ -206,8 +237,6 @@ const ComW = () => {
                     </W.Icons>
                     <W.Date>{formatDate(comment.createdAt)}</W.Date>
                   </W.Down>
-
-                  {/* <W.Content>내 댓글: {comment.content}</W.Content> */}
                 </W.Detail>
               </W.Component>
             );

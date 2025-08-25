@@ -132,7 +132,13 @@ export const Image = styled.div`
   height: 90px;
   flex-shrink: 0;
   border-radius: 5px;
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
+
+  img {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 5px;
+  }
 `;
 
 export const Detail = styled.div`
@@ -140,6 +146,7 @@ export const Detail = styled.div`
   flex-direction: column;
   gap: 24px;
   margin-left: 20px;
+  justify-content: space-between;
 `;
 
 export const Up = styled.div`
@@ -155,7 +162,7 @@ export const CTitle = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 167px;
+  width: 240px;
 `;
 
 export const Scrap = styled.div`
