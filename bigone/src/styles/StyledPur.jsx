@@ -269,6 +269,9 @@ export const D_State = styled.div`
   font-weight: 400;
   line-height: normal;
   padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const D_Date = styled.div`
