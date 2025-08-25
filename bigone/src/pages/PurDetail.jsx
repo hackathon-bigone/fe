@@ -171,6 +171,7 @@ const P_Detail = () => {
             <img id="cat" src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="cat" />
             <div id="profile_inform">
               <div id="username">{component.authorName}</div>
+
               <div
                 style={{
                   display: "flex",
