@@ -320,7 +320,14 @@ const Home = () => {
                 src={`${process.env.PUBLIC_URL}/images/alarm.png`}
                 alt="alarm"
               />
-              <div id="date">{foodbox.dlabel || "D-"}</div>
+              <div
+                id="date"
+                style={{
+                  color: foodbox.dlabel === "안전" ? "#00B40F" : "#FF4F26",
+                }}
+              >
+                {foodbox.dlabel || "D-"}
+              </div>
             </H.BDown>
           ) : (
             // 로그인 안 된 경우 null.png를 absolute로 크게 띄움
@@ -346,7 +353,11 @@ const Home = () => {
         <H.PTitle>인기 레시피</H.PTitle>
         <H.List>
           {recipeList.map((recipe, index) => (
-            <H.Component key={recipe.postId}>
+            <H.Component
+              key={recipe.postId}
+              onClick={() => navigate(`/recipe/detail/${recipe.postId}`)} // ✅ 상세 페이지로 이동
+              style={{ cursor: "pointer" }} // 클릭 가능한 UI로
+            >
               <H.Top>{index + 1}</H.Top>
               <H.PDetail>
                 <H.Image>
@@ -361,7 +372,6 @@ const Home = () => {
                       objectFit: "cover",
                     }}
                     onError={(e) => {
-                      // ✅ 실패 시 즉시 플레이스홀더로 대체
                       e.currentTarget.src = `data:image/svg+xml;utf8,${encodeURIComponent(
                         svg
                       )}`;
@@ -377,7 +387,10 @@ const Home = () => {
                           scrappedMap[recipe.postId] ? "star_y" : "star_w"
                         }.svg`}
                         alt="scrap"
-                        onClick={(e) => handleScrapToggle(e, recipe.postId)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // ✅ 부모 onClick(상세 페이지 이동) 막기
+                          handleScrapToggle(e, recipe.postId);
+                        }}
                         style={{
                           cursor: "pointer",
                           opacity: pending[recipe.postId] ? 0.6 : 1,
@@ -395,7 +408,10 @@ const Home = () => {
                             : "heart_w.svg"
                         }`}
                         alt={likedMap[recipe.postId] ? "좋아요 취소" : "좋아요"}
-                        onClick={(e) => handleLikeToggle(e, recipe.postId)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // ✅ 상세 이동 막기
+                          handleLikeToggle(e, recipe.postId);
+                        }}
                         style={{
                           cursor: "pointer",
                           opacity: likePending[recipe.postId] ? 0.6 : 1,

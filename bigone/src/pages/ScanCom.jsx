@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as E from "../styles/StyledSCom";
 
 const ScanCom = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const items = state?.items ?? []; // ✅ Scan에서 전달된 결과
+  const items = state?.items ?? [];
 
   const goResult = () => {
-    navigate(`/refrigerator/ingredients/receipt/scan/result`, {
+    navigate("/refrigerator/ingredients/receipt/scan/result", {
       state: { items },
     });
   };
