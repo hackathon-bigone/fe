@@ -20,14 +20,11 @@ const Inform = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://43-203-179-188.sslip.io/mypage/notice`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`https://43-203-179-188.sslip.io/mypage/notice`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setNotice(response.data);
       } catch (error) {
         console.log("Error fetching data: ", error);
@@ -40,13 +37,7 @@ const Inform = () => {
     <I.Container>
       <I.Header>
         <I.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            style={{ cursor: "pointer" }}
-            onClick={goBack}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" style={{ cursor: "pointer" }} onClick={goBack} />
           <I.Title>공지사항</I.Title>
         </I.Icons>
       </I.Header>
@@ -54,11 +45,7 @@ const Inform = () => {
         {notice.map((item, idx) => (
           <I.InformWrapper key={idx} onClick={() => goDetail(item.notice_id)}>
             <I.InformTitle>{item.title}</I.InformTitle>
-            <I.InformContent>
-              {item.body.length > 50
-                ? item.body.slice(0, 50) + "..."
-                : item.body}
-            </I.InformContent>
+            <I.InformContent>{item.body.length > 50 ? item.body.slice(0, 50) + "..." : item.body}</I.InformContent>
             <I.Date>{item.displayDate}</I.Date>
           </I.InformWrapper>
         ))}

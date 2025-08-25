@@ -29,11 +29,7 @@ const PurWrite = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const isActive =
-    title.length > 0 &&
-    member.length > 0 &&
-    detail.length > 0 &&
-    links.every((link) => link.trim().length > 0); // 모든 공동구매 링크가 채워져야 동작하도록 구현
+  const isActive = title.length > 0 && member.length > 0 && detail.length > 0 && links.every((link) => link.trim().length > 0); // 모든 공동구매 링크가 채워져야 동작하도록 구현
 
   const getUniqueFileName = (file) => {
     const timestamp = Date.now();
@@ -71,12 +67,7 @@ const PurWrite = () => {
       setSaving(true);
 
       if (!pic) throw new Error("이미지를 선택해주세요.");
-      if (
-        !title ||
-        !member ||
-        !detail ||
-        !links.every((link) => link.trim().length > 0)
-      ) {
+      if (!title || !member || !detail || !links.every((link) => link.trim().length > 0)) {
         throw new Error("모든 필드를 올바르게 입력해주세요.");
       }
 
@@ -135,13 +126,7 @@ const PurWrite = () => {
     <P.Container>
       <P.Header>
         <P.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            onClick={modalOpen}
-            style={{ cursor: "pointer" }}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
           <P.Title>공동구매 글쓰기</P.Title>
         </P.Icons>
       </P.Header>
@@ -162,44 +147,24 @@ const PurWrite = () => {
               />
             ) : (
               <>
-                <img
-                  id="plus"
-                  src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                  alt="plus"
-                />
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                 <p>게시물의 대표 사진을 업로드해 주세요.</p>
               </>
             )}
           </P.InPic>
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          />
+          <input type="file" accept="image/*" style={{ display: "none" }} ref={fileInputRef} onChange={handleFileChange} />
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>제목</P.InTitle>
-          <P.Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></P.Input>
+          <P.Input value={title} onChange={(e) => setTitle(e.target.value)}></P.Input>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>모집인원</P.InTitle>
-          <P.Input
-            placeholder="0명"
-            value={member}
-            onChange={(e) => setMember(e.target.value)}
-          ></P.Input>
+          <P.Input placeholder="0명" value={member} onChange={(e) => setMember(e.target.value)}></P.Input>
         </P.InputWrapper>
         <P.InputWrapper>
           <P.InTitle>상세 설명</P.InTitle>
-          <P.Textarea
-            value={detail}
-            onChange={(e) => setDetail(e.target.value)}
-          ></P.Textarea>
+          <P.Textarea value={detail} onChange={(e) => setDetail(e.target.value)}></P.Textarea>
         </P.InputWrapper>
 
         {links.map((linkValue, index) => (
@@ -222,24 +187,13 @@ const PurWrite = () => {
                 }}
                 style={{ width: links.length > 1 ? "300px" : "350px" }} // 2개 이상이면 줄임
               />
-              {links.length > 1 && (
-                <P.DeleteIcon
-                  src={`${process.env.PUBLIC_URL}/images/delete_o.svg`}
-                  alt="delete"
-                  onClick={() => handleRemoveInput(index)}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
+              {links.length > 1 && <P.DeleteIcon src={`${process.env.PUBLIC_URL}/images/delete_o.svg`} alt="delete" onClick={() => handleRemoveInput(index)} style={{ cursor: "pointer" }} />}
             </div>
           </P.LinkWrapper>
         ))}
 
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>링크 추가</div>
         </P.AddLinkBtn>
         <P.UploadBtn

@@ -102,20 +102,14 @@ const ReEdit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://43-203-179-188.sslip.io/recipe/${user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`https://43-203-179-188.sslip.io/recipe/${user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = response.data;
-        console.log(
-          "Fetched Data in JSON format:",
-          JSON.stringify(data, null, 2)
-        ); // JSON 출력
+        console.log("Fetched Data in JSON format:", JSON.stringify(data, null, 2)); // JSON 출력
         setMainPic(data.mainImageUrl);
 
         setTitle(data.title || "");
@@ -159,19 +153,10 @@ const ReEdit = () => {
     fetchData();
   }, [user_id, token]);
 
-  const isActive =
-    title.length > 0 &&
-    amount.length > 0 &&
-    detail.length > 0 &&
-    time.length > 0 &&
-    links.every((link) => link.trim().length > 0);
+  const isActive = title.length > 0 && amount.length > 0 && detail.length > 0 && time.length > 0 && links.every((link) => link.trim().length > 0);
 
   const handlCategoryClick = (category) => {
-    setIsSelected((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+    setIsSelected((prev) => (prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]));
   };
 
   const onClickAddLinkBtn = () => {
@@ -230,19 +215,12 @@ const ReEdit = () => {
   const handleSave = async () => {
     try {
       if (!mainPic) throw new Error("대표사진을 선택해주세요.");
-      if (
-        !title ||
-        !amount ||
-        !time ||
-        !detail ||
-        !links.every((link) => link.trim().length > 0)
-      ) {
+      if (!title || !amount || !time || !detail || !links.every((link) => link.trim().length > 0)) {
         throw new Error("모든 필드를 올바르게 입력해주세요.");
       }
 
       // 대표 이미지 업로드
-      const mainImageKey =
-        typeof mainPic === "string" ? mainPic : await uploadImage(mainPic);
+      const mainImageKey = typeof mainPic === "string" ? mainPic : await uploadImage(mainPic);
 
       // 단계별 이미지 업로드
       const uploadedStepKeys = [];
@@ -256,9 +234,7 @@ const ReEdit = () => {
       }
 
       // 카테고리 변환
-      const categoriesPayload = isSelected.map(
-        (cat) => categoryMapping[cat] || cat
-      );
+      const categoriesPayload = isSelected.map((cat) => categoryMapping[cat] || cat);
       const timeNumber = parseInt(time, 10);
 
       // payload 구성
@@ -282,16 +258,12 @@ const ReEdit = () => {
 
       console.log("PATCH payload:", payload);
 
-      await axios.patch(
-        `https://43-203-179-188.sslip.io/recipe/${user_id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await axios.patch(`https://43-203-179-188.sslip.io/recipe/${user_id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       goRecipe();
     } catch (error) {
@@ -303,13 +275,7 @@ const ReEdit = () => {
     <R.Container>
       <R.Header>
         <R.Icons>
-          <img
-            id="back"
-            src={`${process.env.PUBLIC_URL}/images/back.svg`}
-            alt="back"
-            onClick={modalOpen}
-            style={{ cursor: "pointer" }}
-          />
+          <img id="back" src={`${process.env.PUBLIC_URL}/images/back.svg`} alt="back" onClick={modalOpen} style={{ cursor: "pointer" }} />
           <R.Title>게시물 수정</R.Title>
         </R.Icons>
       </R.Header>
@@ -336,51 +302,29 @@ const ReEdit = () => {
               />
             ) : (
               <>
-                <img
-                  id="plus"
-                  src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                  alt="plus"
-                />
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                 <p>게시물의 대표 사진을 업로드해 주세요.</p>
               </>
             )}
           </R.InPic>
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            ref={mainPicRef}
-            onChange={handleMainPicChange}
-          />
+          <input type="file" accept="image/*" style={{ display: "none" }} ref={mainPicRef} onChange={handleMainPicChange} />
         </R.InputWrapper>
 
         {/* 제목 */}
         <R.InputWrapper>
           <R.InTitle>제목</R.InTitle>
-          <R.Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></R.Input>
+          <R.Input value={title} onChange={(e) => setTitle(e.target.value)}></R.Input>
         </R.InputWrapper>
 
         {/* 양 & 시간 */}
         <R.TwinInputWrapper>
           <R.InputWrapper>
             <R.InTitle>양</R.InTitle>
-            <R.Input
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              style={{ width: "170px" }}
-              placeholder="0인분"
-            ></R.Input>
+            <R.Input value={amount} onChange={(e) => setAmount(e.target.value)} style={{ width: "170px" }} placeholder="0인분"></R.Input>
           </R.InputWrapper>
           <R.InputWrapper>
             <R.InTitle>소요시간</R.InTitle>
-            <R.Input
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              style={{ width: "170px" }}
-            ></R.Input>
+            <R.Input value={time} onChange={(e) => setTime(e.target.value)} style={{ width: "170px" }}></R.Input>
           </R.InputWrapper>
         </R.TwinInputWrapper>
 
@@ -389,11 +333,7 @@ const ReEdit = () => {
           <R.InTitle>카테고리 (선택)</R.InTitle>
           <R.CategoryWrapper>
             {categories.map((cat) => (
-              <R.Category
-                key={cat}
-                $selected={isSelected.includes(cat)}
-                onClick={() => handlCategoryClick(cat)}
-              >
+              <R.Category key={cat} $selected={isSelected.includes(cat)} onClick={() => handlCategoryClick(cat)}>
                 {cat}
               </R.Category>
             ))}
@@ -403,28 +343,18 @@ const ReEdit = () => {
         {/* 상세 설명 */}
         <R.InputWrapper>
           <R.InTitle>상세 설명</R.InTitle>
-          <R.Textarea
-            value={detail}
-            onChange={(e) => setDetail(e.target.value)}
-          ></R.Textarea>
+          <R.Textarea value={detail} onChange={(e) => setDetail(e.target.value)}></R.Textarea>
         </R.InputWrapper>
 
         {/* 링크 */}
         {links.map((linkValue, index) => (
           <R.LinkWrapper key={index}>
             {index === 0 && <R.InTitle>레시피 링크</R.InTitle>}
-            <R.Input
-              value={linkValue}
-              onChange={(e) => handleLinkChange(index, e.target.value)}
-            />
+            <R.Input value={linkValue} onChange={(e) => handleLinkChange(index, e.target.value)} />
           </R.LinkWrapper>
         ))}
         <R.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>링크 추가</div>
         </R.AddLinkBtn>
 
@@ -433,31 +363,13 @@ const ReEdit = () => {
           <R.InTitle>재료 정보</R.InTitle>
           {ingredients.map((ing, index) => (
             <R.TwinInputWrapper key={index}>
-              <R.Input
-                value={ing.name}
-                onChange={(e) =>
-                  handleIngredientChange(index, "name", e.target.value)
-                }
-                style={{ width: "170px" }}
-                placeholder="재료명"
-              ></R.Input>
-              <R.Input
-                value={ing.amount}
-                onChange={(e) =>
-                  handleIngredientChange(index, "amount", e.target.value)
-                }
-                style={{ width: "170px" }}
-                placeholder="수량(0개)"
-              ></R.Input>
+              <R.Input value={ing.name} onChange={(e) => handleIngredientChange(index, "name", e.target.value)} style={{ width: "170px" }} placeholder="재료명"></R.Input>
+              <R.Input value={ing.amount} onChange={(e) => handleIngredientChange(index, "amount", e.target.value)} style={{ width: "170px" }} placeholder="수량(0개)"></R.Input>
             </R.TwinInputWrapper>
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddingredientsBtn}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>재료 추가</div>
         </R.AddLinkBtn>
 
@@ -467,11 +379,7 @@ const ReEdit = () => {
           {stepPic.map((step, index) => (
             <R.StepWrapper key={index}>
               <R.InputStep onClick={() => handleDeleteStep(index)}>
-                <img
-                  id="delete"
-                  src={`${process.env.PUBLIC_URL}/images/Delete.svg`}
-                  alt="delete"
-                />
+                <img id="delete" src={`${process.env.PUBLIC_URL}/images/Delete.svg`} alt="delete" />
                 <div id="step">STEP {index + 1}</div>
                 <R.InPic
                   onClick={() => handleStepPicClick(index)}
@@ -495,38 +403,19 @@ const ReEdit = () => {
                     />
                   ) : (
                     <>
-                      <img
-                        id="plus"
-                        src={`${process.env.PUBLIC_URL}/images/Plus.svg`}
-                        alt="plus"
-                      />
+                      <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                       <p>해당 단계의 레시피 사진을 업로드해 주세요.</p>
                     </>
                   )}
                 </R.InPic>
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  ref={(el) => (stepPicRef.current[index] = el)}
-                  onChange={(e) => handleStepPicChange(index, e)}
-                />
-                <R.Explanation
-                  value={stepDescriptions[index]}
-                  onChange={(e) =>
-                    handleStepDescriptionChange(index, e.target.value)
-                  }
-                />
+                <input type="file" accept="image/*" style={{ display: "none" }} ref={(el) => (stepPicRef.current[index] = el)} onChange={(e) => handleStepPicChange(index, e)} />
+                <R.Explanation value={stepDescriptions[index]} onChange={(e) => handleStepDescriptionChange(index, e.target.value)} />
               </R.InputStep>
             </R.StepWrapper>
           ))}
         </R.InputWrapper>
         <R.AddLinkBtn onClick={onClickAddStep}>
-          <img
-            id="plusLink"
-            src={`${process.env.PUBLIC_URL}/images/Plus_b.svg`}
-            alt="plus"
-          />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>단계 추가</div>
         </R.AddLinkBtn>
 

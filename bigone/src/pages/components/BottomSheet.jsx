@@ -4,7 +4,7 @@ import CommentList from "./CommentList";
 import axios from "axios";
 
 const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
-  const apiUrl = type === "recipe" ? `http://43.203.179.188/recipe/${targetId}/comments` : `http://43.203.179.188/groupbuys/${targetId}/comments`;
+  const apiUrl = type === "recipe" ? `https://43-203-179-188.sslip.io/recipe/${targetId}/comments` : `https://43-203-179-188.sslip.io/groupbuys/${targetId}/comments`;
 
   const [input, setInput] = useState("");
   const [isValid, setIsValid] = useState(false);
@@ -79,7 +79,7 @@ const BottomSheet = ({ isOpen, onClose, comments, type, targetId }) => {
         <B.CommentBar>
           <B.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-            <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
+            <img id="cat" src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="cat" />
           </B.Profile>
 
           <B.CommentInput>
