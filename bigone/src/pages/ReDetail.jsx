@@ -195,7 +195,7 @@ const R_Detail = () => {
         <R.Wrapper style={{ marginTop: "30px", marginBottom: "20px" }}>
           <R.Profile>
             <img id="circle" src={`${process.env.PUBLIC_URL}/images/Circle.svg`} alt="circle" />
-            <img id="cat" src={`${process.env.PUBLIC_URL}/images/Profile.png`} alt="cat" />
+            <img id="cat" src={`${process.env.PUBLIC_URL}/images/profile.png`} alt="cat" />
             <div id="profile_inform">
               <div id="username">{component.authorName}</div>
               <div
