@@ -304,7 +304,7 @@ const PurEdit = () => {
         ))}
 
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img id="plusLink" src={`/images/Plus_B.svg`} alt="plus" />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>링크 추가</div>
         </P.AddLinkBtn>
         <P.UploadBtn

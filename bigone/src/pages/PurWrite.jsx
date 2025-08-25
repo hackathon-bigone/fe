@@ -147,7 +147,7 @@ const PurWrite = () => {
               />
             ) : (
               <>
-                <img id="plus" src={`/images/Plus.svg`} alt="plus" />
+                <img id="plus" src={`${process.env.PUBLIC_URL}/images/Plus.svg`} alt="plus" />
                 <p>게시물의 대표 사진을 업로드해 주세요.</p>
               </>
             )}
@@ -193,7 +193,7 @@ const PurWrite = () => {
         ))}
 
         <P.AddLinkBtn onClick={onClickAddLinkBtn}>
-          <img id="plusLink" src={`/images/Plus_B.svg`} alt="plus" />
+          <img id="plusLink" src={`${process.env.PUBLIC_URL}/images/Plus_B.svg`} alt="plus" />
           <div>링크 추가</div>
         </P.AddLinkBtn>
         <P.UploadBtn
