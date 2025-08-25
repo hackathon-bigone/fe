@@ -320,7 +320,7 @@ const ReEdit = () => {
         <R.TwinInputWrapper>
           <R.InputWrapper>
             <R.InTitle>양</R.InTitle>
-            <R.Input value={amount} onChange={(e) => setAmount(e.target.value)} style={{ width: "170px" }} placeholder="0인분"></R.Input>
+            <R.Input value="1인분" onChange={(e) => setAmount(e.target.value)} style={{ width: "170px" }} placeholder="0인분"></R.Input>
           </R.InputWrapper>
           <R.InputWrapper>
             <R.InTitle>소요시간</R.InTitle>
