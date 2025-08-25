@@ -396,7 +396,7 @@ export const Declar = styled.div`
 
 export const Nav = styled.div`
   width: 390px;
-  height: 104px;
+  height: 64px;
   flex-shrink: 0;
   background: #fff;
   box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.25);
@@ -407,7 +407,7 @@ export const Nav = styled.div`
   align-items: center;
   z-index: 1000;
   padding-top: 15px;
-  padding-bottom: 43px;
+  padding-bottom: 13px;
   padding-left: 20px;
   padding-right: 20px;
   gap: 50px;
